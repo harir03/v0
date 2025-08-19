@@ -1,0 +1,10 @@
+# VS Code temporary file
+tempCodeRunnerFile.python
+
+# Screenshot folder (optional, see explanation)
+screenshots/
+
+# Python specific files
+__pycache__/
+venv/
+*.pyc
