@@ -96,6 +96,8 @@ pip install selenium schedule psutil requests
       "comments_per_session": 5,
       "enabled": true,
       "headless": false,
+      "user_agent": null,
+      "window_size": null,
       "proxies": {
         "primary": "http://user:pass@proxy:port",
         "backups": ["http://user:pass@backup1:port"]
@@ -103,6 +105,11 @@ pip install selenium schedule psutil requests
       "schedule": {
         "days": ["monday", "wednesday", "friday"],
         "times": ["09:00", "15:00"]
+      },
+      "behavior": {
+        "like_probability": 0.1,
+        "scroll_probability": 0.15,
+        "read_probability": 0.05
       }
     }
   ]
@@ -121,8 +128,19 @@ pip install selenium schedule psutil requests
 | `comments_per_session` | Max comments per run | 5 |
 | `enabled` | Account active status | true/false |
 | `headless` | Run without UI | true/false |
+| `user_agent` | Custom user agent (null = random) | null or "Mozilla/5.0..." |
+| `window_size` | Browser window size (null = random) | null or "1920,1080" |
 | `proxies` | Proxy configuration | See above |
 | `schedule` | When to run | See above |
+| `behavior` | Behavioral randomization settings | See below |
+
+### Behavioral Configuration
+
+| Parameter | Description | Range | Default |
+|-----------|-------------|-------|---------|
+| `like_probability` | Chance to like instead of comment | 0.0-1.0 | 0.1 |
+| `scroll_probability` | Chance to scroll/read instead of comment | 0.0-1.0 | 0.15 |
+| `read_probability` | Chance to just read instead of comment | 0.0-1.0 | 0.05 |
 
 ## 🎮 Usage
 
@@ -165,9 +183,17 @@ python3 v1.py
 - **Adaptive Throttling**: Automatically adjusts based on system load
 
 ### Proxy Management
-- **Health Checking**: Tests proxy connectivity before use
+- **Enhanced Health Checking**: Tests both connectivity and LinkedIn accessibility
+- **LinkedIn-Specific Validation**: Verifies proxies can reach LinkedIn endpoints
 - **Automatic Rotation**: Switches to backup proxies on failure
 - **Direct Fallback**: Uses direct connection if all proxies fail
+
+### Anti-Detection & Security
+- **Browser Fingerprinting**: Randomized user agents and window sizes
+- **Human-like Timing**: 1-15 minute random jitter on all scheduled times
+- **Behavioral Randomization**: Mix of commenting, liking, scrolling, and reading
+- **IP Diversity**: Proxy rotation prevents single IP footprint detection
+- **Adaptive Patterns**: Variable timing and actions mimic human behavior
 
 ### Self-Healing Protocol
 - **Heartbeat Monitoring**: Detects unresponsive accounts
@@ -176,10 +202,13 @@ python3 v1.py
 - **Mode Switching**: Switches to visible mode after headless failures
 
 ### Security Measures
-- **Anti-Detection**: Built-in anti-automation detection measures
-- **Human-like Patterns**: Random delays and natural behavior
+- **Advanced Anti-Detection**: Multiple layers of automation hiding
+- **Randomized Browser Fingerprints**: Unique user agents and window sizes per account
+- **Human-like Behavioral Patterns**: Variable actions beyond just commenting
+- **Intelligent Timing Jitter**: 1-15 minute randomization on all schedules
 - **Profile Isolation**: Complete separation between accounts
 - **Session Persistence**: Reuses existing login sessions
+- **Proxy Validation**: LinkedIn-specific connectivity testing
 
 ## 📊 Monitoring & Debugging
 
