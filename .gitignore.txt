@@ -31,4 +31,4 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
-*.swo
+*.swo__pycache__/
