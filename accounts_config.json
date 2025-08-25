@@ -1,0 +1,40 @@
+{
+  "accounts": [
+    {
+      "name": "Demo Account 1",
+      "profile_directory": "Profile 1",
+      "browser_path": "/usr/bin/google-chrome",
+      "user_data_dir": "~/.config/google-chrome",
+      "search_queries": ["AI development", "machine learning", "software engineering"],
+      "comments_per_session": 3,
+      "enabled": true,
+      "headless": false,
+      "proxies": {
+        "primary": null,
+        "backups": []
+      },
+      "schedule": {
+        "days": ["monday", "wednesday", "friday"],
+        "times": ["09:00", "14:00"]
+      }
+    },
+    {
+      "name": "Demo Account 2",
+      "profile_directory": "Profile 2", 
+      "browser_path": "/usr/bin/google-chrome",
+      "user_data_dir": "~/.config/google-chrome",
+      "search_queries": ["cloud computing", "DevOps", "automation"],
+      "comments_per_session": 2,
+      "enabled": false,
+      "headless": false,
+      "proxies": {
+        "primary": null,
+        "backups": []
+      },
+      "schedule": {
+        "days": ["tuesday", "thursday"],
+        "times": ["10:00", "16:00"]
+      }
+    }
+  ]
+}
