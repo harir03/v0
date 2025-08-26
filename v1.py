@@ -28,6 +28,31 @@ ACCOUNTS_CONFIG_FILE = "accounts_config.json"
 SCHEDULER_CONFIG_FILE = "scheduler_config.json"
 LOGS_DIR = "logs"
 
+# --- Browser Fingerprinting Lists ---
+COMMON_USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15"
+]
+
+COMMON_WINDOW_SIZES = [
+    "1920,1080",
+    "1440,900", 
+    "1366,768",
+    "1536,864",
+    "1280,720",
+    "1600,900",
+    "1024,768",
+    "1280,800"
+]
+
 # Create necessary directories
 for directory in ["screenshots", "logs", "account_histories"]:
     if not os.path.exists(directory):
@@ -244,16 +269,27 @@ class ProxyHealthChecker:
         self.timeout = timeout
     
     def check_proxy_health(self, proxy_url):
-        """Check if a proxy is healthy and working"""
+        """Check if a proxy is healthy and can access LinkedIn"""
         if not proxy_url:
             return True  # No proxy means direct connection
         
         try:
             proxies = {'http': proxy_url, 'https': proxy_url}
+            
+            # First check basic connectivity
             response = requests.get('https://httpbin.org/ip', 
                                   proxies=proxies, 
                                   timeout=self.timeout)
-            return response.status_code == 200
+            if response.status_code != 200:
+                return False
+            
+            # Then check LinkedIn accessibility specifically
+            linkedin_response = requests.get('https://www.linkedin.com/robots.txt', 
+                                           proxies=proxies, 
+                                           timeout=self.timeout,
+                                           headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'})
+            return linkedin_response.status_code == 200
+            
         except Exception as e:
             print(f"⚠️ Proxy health check failed for {proxy_url}: {e}")
             return False
@@ -574,10 +610,23 @@ class LinkedInBotScheduler:
             
             for day in days:
                 for time_str in times:
+                    # Create a job with human jitter
                     getattr(schedule.every(), day.lower()).at(time_str).do(
-                        self.run_account_job, account
+                        self.run_account_job_with_jitter, account
                     )
-                    self.logger.info(f"📅 Scheduled {account['name']} for {day} at {time_str}")
+                    self.logger.info(f"📅 Scheduled {account['name']} for {day} at {time_str} (with human jitter)")
+    
+    def run_account_job_with_jitter(self, account_config):
+        """Run account job with human-like timing jitter"""
+        account_name = account_config["name"]
+        
+        # Add human jitter (1-15 minutes)
+        jitter_seconds = random.uniform(60, 900)  # 1 to 15 minutes
+        self.logger.info(f"🎭 {account_name} adding human jitter: {jitter_seconds/60:.1f} minutes")
+        time.sleep(jitter_seconds)
+        
+        # Now run the actual job
+        self.run_account_job(account_config)
     
     def run_account_job(self, account_config):
         """Run a single account automation job"""
@@ -594,7 +643,7 @@ class LinkedInBotScheduler:
             self.logger.warning(f"⚠️ System resources low (CPU: {health['cpu_percent']}%, RAM: {health['memory_percent']}%), delaying {account_name}")
             return
         
-        # Add random delay to avoid simultaneous starts
+        # Add additional random delay to avoid simultaneous starts
         delay = random.uniform(0, 300)
         self.logger.info(f"⏳ {account_name} starting in {delay:.1f} seconds...")
         time.sleep(delay)
@@ -767,6 +816,19 @@ class LinkedInAccountAutomator:
                 options.add_argument("--headless")
                 self.logger.info(f"🔇 Running {self.account_name} in headless mode")
             
+            # Randomized browser fingerprinting
+            user_agent = self.account_config.get("user_agent")
+            if not user_agent:
+                user_agent = random.choice(COMMON_USER_AGENTS)
+                self.logger.info(f"🎭 Using random user agent for {self.account_name}")
+            
+            window_size = self.account_config.get("window_size")
+            if not window_size:
+                window_size = random.choice(COMMON_WINDOW_SIZES)
+                self.logger.info(f"📐 Using random window size for {self.account_name}: {window_size}")
+            
+            options.add_argument(f"--user-agent={user_agent}")
+            
             # Proxy configuration
             proxy_config = self.account_config.get("proxies", {})
             healthy_proxy = self.proxy_checker.get_healthy_proxy(proxy_config)
@@ -776,15 +838,17 @@ class LinkedInAccountAutomator:
             elif proxy_config.get("primary") or proxy_config.get("backups"):
                 self.logger.warning(f"⚠️ No healthy proxy found for {self.account_name}, using direct connection")
             
-            # Account-specific window position to avoid overlap
+            # Set window size and position
+            width, height = window_size.split(',')
             account_index = hash(self.account_name) % 4
             window_x = account_index * 200
             window_y = account_index * 100
             options.add_argument(f"--window-position={window_x},{window_y}")
+            options.add_argument(f"--window-size={width},{height}")
             
             service = Service()
             driver = webdriver.Chrome(service=service, options=options)
-            driver.maximize_window()
+            # Don't maximize window to preserve our random size
             
             self.logger.info(f"✅ Created browser instance for {self.account_name}")
             return driver
@@ -904,14 +968,36 @@ class LinkedInAccountAutomator:
                     self.scheduler.update_heartbeat(self.account_name)
                 
                 try:
-                    success = self.process_single_post(post_element)
-                    if success:
-                        comments_made += 1
-                        
-                        # Random delay between comments
-                        delay = random.uniform(60, 180)
-                        self.logger.info(f"⏳ Waiting {delay:.1f} seconds before next comment...")
-                        time.sleep(delay)
+                    # Behavioral randomization - sometimes do other actions instead of commenting
+                    behavior_config = self.account_config.get("behavior", {})
+                    like_prob = behavior_config.get("like_probability", 0.1)
+                    scroll_prob = behavior_config.get("scroll_probability", 0.15)
+                    read_prob = behavior_config.get("read_probability", 0.05)
+                    
+                    action_roll = random.random()
+                    
+                    if action_roll < like_prob:
+                        # Like the post instead of commenting
+                        self.like_post(post_element)
+                        self.logger.info(f"👍 Liked post instead of commenting")
+                    elif action_roll < like_prob + scroll_prob:
+                        # Scroll and read instead of commenting
+                        self.scroll_and_read(post_element)
+                        self.logger.info(f"📖 Scrolled and read instead of commenting")
+                    elif action_roll < like_prob + scroll_prob + read_prob:
+                        # Just read the post (pause longer)
+                        self.read_post(post_element)
+                        self.logger.info(f"👁️ Read post instead of commenting")
+                    else:
+                        # Normal commenting behavior
+                        success = self.process_single_post(post_element)
+                        if success:
+                            comments_made += 1
+                    
+                    # Random delay between actions (human-like)
+                    delay = random.uniform(30, 120)
+                    self.logger.info(f"⏳ Waiting {delay:.1f} seconds before next action...")
+                    time.sleep(delay)
                         
                 except Exception as e:
                     self.logger.error(f"⚠️ Error processing post: {e}")
@@ -1054,6 +1140,73 @@ class LinkedInAccountAutomator:
             
         except Exception as e:
             self.logger.error(f"⚠️ Error commenting on post: {e}")
+            return False
+    
+    def like_post(self, post_element):
+        """Like a post instead of commenting"""
+        try:
+            like_selectors = [
+                ".//button[contains(@aria-label, 'Like') or contains(@aria-label, 'like')]",
+                ".//button[contains(@class, 'react-button')]//span[contains(text(), 'Like')]//ancestor::button",
+                ".//button[contains(@data-control-name, 'like')]"
+            ]
+            
+            for selector in like_selectors:
+                try:
+                    like_button = post_element.find_element(By.XPATH, selector)
+                    if like_button.is_displayed():
+                        self.driver.execute_script("arguments[0].click();", like_button)
+                        time.sleep(random.uniform(1, 3))
+                        return True
+                except:
+                    continue
+            return False
+        except Exception as e:
+            self.logger.error(f"⚠️ Error liking post: {e}")
+            return False
+    
+    def scroll_and_read(self, post_element):
+        """Scroll and read a post (simulate reading behavior)"""
+        try:
+            # Scroll to post
+            self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", post_element)
+            time.sleep(random.uniform(2, 4))
+            
+            # Simulate reading time based on content length
+            try:
+                text_length = len(post_element.text)
+                read_time = min(max(text_length / 200, 3), 15)  # 3-15 seconds based on length
+                time.sleep(read_time)
+            except:
+                time.sleep(random.uniform(3, 8))
+            
+            # Small scroll movement to simulate engagement
+            scroll_amount = random.randint(100, 300)
+            self.driver.execute_script(f"window.scrollBy(0, {scroll_amount});")
+            time.sleep(random.uniform(1, 2))
+            
+            return True
+        except Exception as e:
+            self.logger.error(f"⚠️ Error in scroll and read: {e}")
+            return False
+    
+    def read_post(self, post_element):
+        """Just read a post (longer pause to simulate reading)"""
+        try:
+            # Scroll to post and focus on it
+            self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", post_element)
+            
+            # Simulate careful reading with variable timing
+            try:
+                text_length = len(post_element.text)
+                read_time = min(max(text_length / 150, 5), 20)  # 5-20 seconds based on length
+                time.sleep(read_time)
+            except:
+                time.sleep(random.uniform(5, 12))
+            
+            return True
+        except Exception as e:
+            self.logger.error(f"⚠️ Error in read post: {e}")
             return False
 
 # --- Main Menu System ---

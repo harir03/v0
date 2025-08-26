@@ -9,6 +9,8 @@
       "comments_per_session": 3,
       "enabled": true,
       "headless": false,
+      "user_agent": null,
+      "window_size": null,
       "proxies": {
         "primary": null,
         "backups": []
@@ -16,6 +18,11 @@
       "schedule": {
         "days": ["monday", "wednesday", "friday"],
         "times": ["09:00", "14:00"]
+      },
+      "behavior": {
+        "like_probability": 0.1,
+        "scroll_probability": 0.15,
+        "read_probability": 0.05
       }
     },
     {
@@ -27,6 +34,8 @@
       "comments_per_session": 2,
       "enabled": false,
       "headless": false,
+      "user_agent": null,
+      "window_size": null,
       "proxies": {
         "primary": null,
         "backups": []
@@ -34,6 +43,11 @@
       "schedule": {
         "days": ["tuesday", "thursday"],
         "times": ["10:00", "16:00"]
+      },
+      "behavior": {
+        "like_probability": 0.2,
+        "scroll_probability": 0.1,
+        "read_probability": 0.1
       }
     }
   ]
