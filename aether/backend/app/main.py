@@ -3,11 +3,25 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .api.v1.api import api_router
 from .core.config import settings
+from .core.middleware import (
+    MonitoringMiddleware,
+    RateLimitMiddleware,
+    SecurityHeadersMiddleware,
+    ErrorHandlingMiddleware
+)
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    description="Production-ready AI Agents Platform API",
+    version="1.0.0"
 )
+
+# Add middleware (order matters - first added is outermost)
+app.add_middleware(ErrorHandlingMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(RateLimitMiddleware, calls_per_minute=100)
+app.add_middleware(MonitoringMiddleware)
 
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:
@@ -26,9 +40,6 @@ async def root():
     return {
         "message": "Aether Agents API", 
         "version": "1.0.0",
-        "docs": "/docs"
+        "docs": f"{settings.API_V1_STR}/docs",
+        "health": f"{settings.API_V1_STR}/health"
     }
-
-@app.get("/health")
-async def health_check():
-    return {"status": "healthy"}

@@ -90,9 +90,13 @@ class AgentService:
         db: Session, 
         agent_id: str, 
         task: Dict[str, Any],
-        user_id: str
+        user_id: str,
+        async_execution: bool = True
     ) -> Dict[str, Any]:
         """Execute a task using the specified agent"""
+        from ..tasks.agent_tasks import execute_agent_task
+        from ..services.monitoring import monitoring_service
+        
         agent = db.query(Agent).filter(Agent.id == agent_id).first()
         if not agent:
             raise ValueError(f"Agent {agent_id} not found")
@@ -103,77 +107,110 @@ class AgentService:
             agent_id=agent_id,
             user_id=user_id,
             task_input=task,
-            status="running"
+            status="pending"
         )
         db.add(execution)
-        
-        # Update agent statistics
-        agent.execution_count += 1
-        agent.last_execution = datetime.utcnow()
-        agent.status = "active"
-        
         db.commit()
+        db.refresh(execution)
         
-        try:
-            # Simulate agent execution
-            start_time = datetime.utcnow()
-            await asyncio.sleep(1)  # Simulate processing time
+        # Log the execution start
+        monitoring_service.log_user_activity(
+            user_id=user_id,
+            action="execute_agent",
+            resource_type="agent",
+            resource_id=agent_id,
+            metadata={"execution_id": execution.id}
+        )
+        
+        if async_execution:
+            # Execute asynchronously using Celery
+            task_result = execute_agent_task.delay(
+                agent_id=agent_id,
+                execution_id=execution.id,
+                task_input=task
+            )
             
-            # Mock response based on agent type
-            if agent.type == "customer_support":
-                result = {
-                    "response": "I've analyzed the customer inquiry and generated a response.",
-                    "confidence": 0.95,
-                    "actions_taken": [
-                        "analyzed_sentiment", 
-                        "searched_knowledge_base", 
-                        "generated_response"
-                    ]
-                }
-            elif agent.type == "coding":
-                result = {
-                    "code_generated": "// Example generated code\\nfunction handleTask() {\\n  return 'Task completed';\\n}",
-                    "language": "javascript",
-                    "confidence": 0.88
-                }
-            elif agent.type == "workflow":
-                result = {
-                    "workflow_steps": [
-                        {"step": 1, "action": "process_input", "status": "completed"},
-                        {"step": 2, "action": "analyze_data", "status": "completed"},
-                        {"step": 3, "action": "generate_output", "status": "completed"}
-                    ],
-                    "output": {"processed": True, "result": "Workflow executed successfully"}
-                }
-            else:
+            return {
+                "execution_id": execution.id,
+                "task_id": task_result.id,
+                "status": "queued",
+                "message": "Agent execution queued for processing"
+            }
+        else:
+            # Execute synchronously (for testing/debugging)
+            try:
+                start_time = datetime.utcnow()
+                
+                # Update execution status
+                execution.status = "running"
+                agent.status = "active"
+                db.commit()
+                
+                # Simple mock execution for synchronous mode
+                await asyncio.sleep(1)  # Simulate processing time
+                
                 result = {
                     "message": f"Task executed by {agent.name}",
                     "task_type": task.get("type", "unknown"),
-                    "status": "completed"
+                    "status": "completed",
+                    "execution_mode": "synchronous"
                 }
-            
-            # Update execution with results
-            end_time = datetime.utcnow()
-            execution_time = (end_time - start_time).total_seconds() * 1000
-            
-            execution.task_output = result
-            execution.status = "completed"
-            execution.execution_time_ms = int(execution_time)
-            execution.completed_at = end_time
-            
-            agent.status = "inactive"
-            
-            db.commit()
-            db.refresh(execution)
-            
-            return result
-            
-        except Exception as e:
-            # Handle execution error
-            execution.status = "failed"
-            execution.error_message = str(e)
-            execution.completed_at = datetime.utcnow()
-            agent.status = "error"
-            
-            db.commit()
-            raise e
+                
+                # Update execution with results
+                end_time = datetime.utcnow()
+                execution_time = (end_time - start_time).total_seconds() * 1000
+                
+                execution.task_output = result
+                execution.status = "completed"
+                execution.execution_time_ms = int(execution_time)
+                execution.completed_at = end_time
+                
+                # Update agent statistics
+                agent.execution_count += 1
+                agent.last_execution = datetime.utcnow()
+                agent.status = "inactive"
+                
+                db.commit()
+                
+                # Log successful execution
+                monitoring_service.log_agent_execution(
+                    agent_id=agent_id,
+                    agent_type=agent.type,
+                    status="completed",
+                    duration=execution_time / 1000,
+                    user_id=user_id
+                )
+                
+                return result
+                
+            except Exception as e:
+                # Handle execution error
+                execution.status = "failed"
+                execution.error_message = str(e)
+                execution.completed_at = datetime.utcnow()
+                agent.status = "error"
+                
+                db.commit()
+                
+                # Log failed execution
+                monitoring_service.log_agent_execution(
+                    agent_id=agent_id,
+                    agent_type=agent.type,
+                    status="failed",
+                    duration=0,
+                    user_id=user_id,
+                    error=str(e)
+                )
+                
+                raise e
+    
+    @classmethod
+    async def get_execution_status(
+        cls,
+        db: Session,
+        execution_id: str
+    ) -> Optional[AgentExecution]:
+        """Get the status of an agent execution"""
+        return db.query(AgentExecution).filter(
+            AgentExecution.id == execution_id
+        ).first()
