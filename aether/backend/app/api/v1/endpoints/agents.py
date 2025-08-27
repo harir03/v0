@@ -24,8 +24,17 @@ async def create_agent(agent: AgentCreate, current_user: Dict[str, Any] = Depend
     
     log_security_event("create_agent", current_user.get("sub"), {"agent_name": agent_data.get("name")})
     
+    # Create sanitized agent object
+    from app.schemas.agent import AgentCreate
+    sanitized_agent = AgentCreate(
+        name=agent_data["name"],
+        description=agent_data.get("description"),
+        type=agent_data["type"],
+        configuration=agent_data.get("configuration", {})
+    )
+    
     # Create agent with user context
-    return await AgentService.create_agent(agent, user_id=current_user.get("sub"))
+    return await AgentService.create_agent(sanitized_agent, user_id=current_user.get("sub"))
 
 @router.get("/{agent_id}", response_model=Agent)
 async def get_agent(agent_id: str, current_user: Dict[str, Any] = Depends(require_auth)):

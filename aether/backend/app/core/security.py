@@ -101,9 +101,35 @@ def validate_input(data: Dict[str, Any], required_fields: list = None, max_lengt
     sanitized_data = {}
     for key, value in data.items():
         if isinstance(value, str):
-            # Basic HTML/script tag removal
-            sanitized_value = value.replace("<script>", "").replace("</script>", "")
+            # More aggressive HTML/script tag removal and escaping
+            sanitized_value = value
+            
+            # Remove script tags completely
+            import re
+            sanitized_value = re.sub(r'<script[^>]*>.*?</script>', '', sanitized_value, flags=re.IGNORECASE | re.DOTALL)
+            sanitized_value = re.sub(r'<script[^>]*>', '', sanitized_value, flags=re.IGNORECASE)
+            sanitized_value = re.sub(r'</script>', '', sanitized_value, flags=re.IGNORECASE)
+            
+            # Remove other potentially dangerous tags
+            dangerous_tags = ['iframe', 'object', 'embed', 'form', 'input', 'textarea', 'button', 'select']
+            for tag in dangerous_tags:
+                sanitized_value = re.sub(f'<{tag}[^>]*>.*?</{tag}>', '', sanitized_value, flags=re.IGNORECASE | re.DOTALL)
+                sanitized_value = re.sub(f'<{tag}[^>]*>', '', sanitized_value, flags=re.IGNORECASE)
+                sanitized_value = re.sub(f'</{tag}>', '', sanitized_value, flags=re.IGNORECASE)
+            
+            # Remove javascript: and vbscript: protocols
+            sanitized_value = re.sub(r'javascript\s*:', '', sanitized_value, flags=re.IGNORECASE)
+            sanitized_value = re.sub(r'vbscript\s*:', '', sanitized_value, flags=re.IGNORECASE)
+            
+            # Remove event handlers
+            event_handlers = ['onload', 'onclick', 'onmouseover', 'onerror', 'onsubmit', 'onchange', 'onkeydown', 'onkeyup']
+            for handler in event_handlers:
+                sanitized_value = re.sub(f'{handler}\s*=\s*["\'][^"\']*["\']', '', sanitized_value, flags=re.IGNORECASE)
+                sanitized_value = re.sub(f'{handler}\s*=\s*[^\\s>]+', '', sanitized_value, flags=re.IGNORECASE)
+            
+            # Basic HTML escaping for remaining brackets
             sanitized_value = sanitized_value.replace("<", "&lt;").replace(">", "&gt;")
+            
             sanitized_data[key] = sanitized_value.strip()
         else:
             sanitized_data[key] = value
