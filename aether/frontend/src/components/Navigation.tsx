@@ -9,6 +9,7 @@ export default function Navigation() {
   const navItems = [
     { name: 'Features', href: '#features' },
     { name: 'Demo', href: '#demo' },
+    { name: 'Vivid AI', href: '/vivid-ai' },
     { name: 'Pricing', href: '#pricing' },
     { name: 'Docs', href: '/docs' },
   ]

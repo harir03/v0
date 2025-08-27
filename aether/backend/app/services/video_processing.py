@@ -25,6 +25,7 @@ from app.schemas.video import (
     AIDirectorRequest,
     AestheticDiscoveryRequest
 )
+from app.services.content_moderation import content_moderation
 
 
 class VideoProcessingService:
@@ -90,15 +91,36 @@ class VideoProcessingService:
     
     async def upload_video(self, file_data: bytes, filename: str, content_type: str, user_id: str) -> VideoAsset:
         """Upload and store a video file"""
+        
+        # Check rate limits
+        rate_check = await content_moderation.check_rate_limits(user_id, 'video_upload')
+        if not rate_check['allowed']:
+            raise ValueError(f"Rate limit exceeded: {rate_check['message']}")
+        
         video_id = str(uuid.uuid4())
         file_extension = Path(filename).suffix.lower()
         
         # Create secure file path
         file_path = self.storage_path / f"{video_id}{file_extension}"
         
-        # Save file
+        # Save file temporarily for content analysis
         with open(file_path, "wb") as f:
             f.write(file_data)
+        
+        # Content moderation - check for inappropriate content
+        moderation_result = await content_moderation.moderate_video_content(str(file_path), user_id)
+        
+        if not moderation_result['approved']:
+            # Remove the file and reject upload
+            os.remove(file_path)
+            violation_details = moderation_result.get('violations', [])
+            raise ValueError(f"Content rejected: {violation_details}")
+        
+        # Deepfake detection
+        deepfake_result = await content_moderation.detect_deepfake(str(file_path))
+        if deepfake_result['flagged']:
+            os.remove(file_path)
+            raise ValueError("Potential deepfake content detected")
         
         # Extract video metadata
         metadata = await self._extract_video_metadata(file_path)
@@ -106,12 +128,23 @@ class VideoProcessingService:
         # Generate thumbnail
         thumbnail_url = await self._generate_thumbnail(file_path, video_id)
         
+        # Apply watermark for traceability
+        watermarked_path = self.storage_path / f"{video_id}_watermarked{file_extension}"
+        watermark_result = await content_moderation.apply_watermark(str(file_path), str(watermarked_path))
+        
+        # Use watermarked version if watermarking was successful
+        final_path = watermarked_path if watermark_result['watermarked'] else file_path
+        if watermark_result['watermarked'] and file_path != watermarked_path:
+            # Copy original to watermarked path (in production, actual watermarking would occur)
+            import shutil
+            shutil.copy2(file_path, watermarked_path)
+        
         # Create video asset
         video_asset = VideoAsset(
             id=video_id,
             user_id=user_id,
             filename=filename,
-            file_path=str(file_path),
+            file_path=str(final_path),
             file_size=len(file_data),
             content_type=content_type,
             metadata=metadata,
@@ -131,11 +164,26 @@ class VideoProcessingService:
         parameters: Dict[str, Any]
     ) -> VideoProcessingJob:
         """Submit a video processing job"""
+        
+        # Check rate limits
+        rate_check = await content_moderation.check_rate_limits(user_id, 'video_process')
+        if not rate_check['allowed']:
+            raise ValueError(f"Rate limit exceeded: {rate_check['message']}")
+        
         job_id = str(uuid.uuid4())
         
         # Validate source video exists
         if source_video_id not in self.videos:
             raise ValueError(f"Source video {source_video_id} not found")
+        
+        # Content moderation for AI Director prompts
+        if mode == VideoProcessingMode.AI_DIRECTOR:
+            creative_prompt = parameters.get('creative_prompt', '')
+            if creative_prompt:
+                moderation_result = await content_moderation.moderate_text_content(creative_prompt, user_id)
+                if not moderation_result['approved']:
+                    violation_details = moderation_result.get('violations', [])
+                    raise ValueError(f"Prompt rejected: {violation_details}")
         
         # Create processing job
         job = VideoProcessingJob(

@@ -75,8 +75,9 @@ export default function HeroSection() {
           variants={itemVariants}
         >
           Aether Agents is the no-code/low-code platform that empowers anyone to build 
-          sophisticated AI agents. Move beyond simple automation with agentic coding 
-          and revolutionary prompt-to-interface builders.
+          sophisticated AI agents. Move beyond simple automation with agentic coding, 
+          revolutionary prompt-to-interface builders, and now featuring <strong className="text-purple-400">Vivid AI</strong> - 
+          the ultimate AI-powered video editing platform.
         </motion.p>
 
         <motion.div
@@ -86,6 +87,12 @@ export default function HeroSection() {
           <button className="bg-gradient-to-r from-aether-blue to-aether-purple text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-2xl hover:shadow-aether-blue/50 transition-all duration-300 transform hover:scale-105 animate-glow">
             Start Building Free
           </button>
+          <a 
+            href="/vivid-ai"
+            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105"
+          >
+            Try Vivid AI ✨
+          </a>
           <button className="border-2 border-aether-blue text-aether-blue px-8 py-4 rounded-lg font-semibold text-lg hover:bg-aether-blue hover:text-white transition-all duration-300 transform hover:scale-105">
             Watch Demo
           </button>
