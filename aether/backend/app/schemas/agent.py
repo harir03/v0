@@ -8,6 +8,9 @@ class AgentType(str, Enum):
     CODING = "coding"
     CUSTOMER_SUPPORT = "customer_support"
     DATA_ANALYSIS = "data_analysis"
+    AUTOMATION = "automation"
+    COMMUNICATION = "communication"
+    ANALYSIS = "analysis"
     CUSTOM = "custom"
 
 class AgentStatus(str, Enum):

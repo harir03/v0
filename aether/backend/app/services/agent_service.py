@@ -12,7 +12,7 @@ class AgentService:
     _agents: Dict[str, Dict] = {}
     
     @classmethod
-    async def create_agent(cls, agent_data) -> Dict[str, Any]:
+    async def create_agent(cls, agent_data, user_id: str) -> Dict[str, Any]:
         """Create a new agent"""
         agent_id = str(uuid.uuid4())
         agent = {
@@ -22,7 +22,7 @@ class AgentService:
             "type": agent_data.type,
             "configuration": agent_data.configuration,
             "status": "inactive",
-            "user_id": "demo_user",  # TODO: Get from authentication
+            "user_id": user_id,
             "created_at": datetime.utcnow().isoformat(),
             "updated_at": datetime.utcnow().isoformat(),
             "execution_count": 0,
@@ -34,21 +34,30 @@ class AgentService:
     @classmethod
     async def list_agents(cls, user_id: Optional[str] = None) -> List[Dict[str, Any]]:
         """List all agents for a user"""
-        # Filter by user_id in production
+        if user_id:
+            return [agent for agent in cls._agents.values() if agent.get("user_id") == user_id]
         return list(cls._agents.values())
     
     @classmethod
-    async def get_agent(cls, agent_id: str) -> Optional[Dict[str, Any]]:
+    async def get_agent(cls, agent_id: str, user_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
         """Get a specific agent by ID"""
-        return cls._agents.get(agent_id)
+        agent = cls._agents.get(agent_id)
+        if agent and user_id and agent.get("user_id") != user_id:
+            return None  # Don't allow access to other users' agents
+        return agent
     
     @classmethod
-    async def update_agent(cls, agent_id: str, agent_update) -> Optional[Dict[str, Any]]:
+    async def update_agent(cls, agent_id: str, agent_update, user_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
         """Update an existing agent"""
         if agent_id not in cls._agents:
             return None
         
         agent = cls._agents[agent_id]
+        
+        # Check user ownership
+        if user_id and agent.get("user_id") != user_id:
+            return None
+        
         update_data = agent_update.dict(exclude_unset=True)
         
         for field, value in update_data.items():
@@ -59,26 +68,37 @@ class AgentService:
         return agent
     
     @classmethod
-    async def delete_agent(cls, agent_id: str) -> bool:
+    async def delete_agent(cls, agent_id: str, user_id: Optional[str] = None) -> bool:
         """Delete an agent"""
-        if agent_id in cls._agents:
-            del cls._agents[agent_id]
-            return True
-        return False
+        if agent_id not in cls._agents:
+            return False
+        
+        agent = cls._agents[agent_id]
+        
+        # Check user ownership
+        if user_id and agent.get("user_id") != user_id:
+            return False
+        
+        del cls._agents[agent_id]
+        return True
     
     @classmethod
-    async def execute_agent(cls, agent_id: str, task: Dict[str, Any]) -> Dict[str, Any]:
+    async def execute_agent(cls, agent_id: str, task: Dict[str, Any], user_id: Optional[str] = None) -> Dict[str, Any]:
         """Execute a task using the specified agent"""
         agent = cls._agents.get(agent_id)
         if not agent:
             raise ValueError(f"Agent {agent_id} not found")
+        
+        # Check user ownership
+        if user_id and agent.get("user_id") != user_id:
+            raise ValueError(f"Agent {agent_id} not accessible")
         
         # Update execution statistics
         agent["execution_count"] += 1
         agent["last_execution"] = datetime.utcnow().isoformat()
         agent["status"] = "active"
         
-        # Simulate agent execution
+        # Simulate agent execution (improved async handling)
         await asyncio.sleep(1)  # Simulate processing time
         
         # Mock response based on agent type
