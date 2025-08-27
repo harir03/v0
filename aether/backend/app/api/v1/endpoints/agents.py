@@ -66,7 +66,7 @@ async def delete_agent(agent_id: str, current_user: Dict[str, Any] = Depends(req
 
 @router.post("/{agent_id}/execute")
 async def execute_agent(agent_id: str, task: dict, current_user: Dict[str, Any] = Depends(require_auth)):
-    """Execute a task using the specified agent"""
+    """Execute a task using the specified agent (async execution)"""
     # Validate task input
     task_data = validate_input(
         task,
@@ -81,9 +81,23 @@ async def execute_agent(agent_id: str, task: dict, current_user: Dict[str, Any] 
     
     result = await AgentService.execute_agent(agent_id, task_data, user_id=current_user.get("sub"))
     
-    log_security_event("agent_execution_completed", current_user.get("sub"), {
+    log_security_event("agent_execution_submitted", current_user.get("sub"), {
         "agent_id": agent_id,
+        "task_id": result.get("task_id"),
         "task_type": task_data.get("type")
     })
     
     return {"result": result}
+
+@router.get("/tasks/{task_id}")
+async def get_task_status(task_id: str, current_user: Dict[str, Any] = Depends(require_auth)):
+    """Get the status of an async task"""
+    task_status = await AgentService.get_task_status(task_id, user_id=current_user.get("sub"))
+    if not task_status:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return task_status
+
+@router.get("/execution/queue-status")
+async def get_queue_status(current_user: Dict[str, Any] = Depends(require_auth)):
+    """Get execution queue status"""
+    return await AgentService.get_execution_queue_status()
