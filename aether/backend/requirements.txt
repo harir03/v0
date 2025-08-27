@@ -17,3 +17,9 @@ httpx==0.25.2
 python-dotenv==1.0.0
 pytest==7.4.3
 pytest-asyncio==0.21.1
+
+# Video processing dependencies for Vivid AI
+opencv-python==4.8.1.78
+Pillow==10.1.0
+moviepy==1.0.3
+ffmpeg-python==0.2.0
