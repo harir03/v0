@@ -32,7 +32,8 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": "aether-agents-api"}
+    """Health check endpoint - minimal information disclosure"""
+    return {"status": "healthy"}
 
 if __name__ == "__main__":
     import uvicorn

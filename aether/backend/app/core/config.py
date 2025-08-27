@@ -6,8 +6,8 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
-    # 60 minutes * 24 hours * 8 days = 8 days
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
+    # 60 minutes * 24 hours = 24 hours (more secure than 8 days)
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24
     SERVER_NAME: str = "Aether Agents API"
     SERVER_HOST: AnyHttpUrl = "http://localhost"
     
@@ -29,10 +29,10 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "Aether Agents"
     
-    # Database
+    # Database - Use environment variables for security
     POSTGRES_SERVER: str = "localhost"
     POSTGRES_USER: str = "aether_user"
-    POSTGRES_PASSWORD: str = "aether_password"
+    POSTGRES_PASSWORD: str = "CHANGE_ME_IN_PRODUCTION"
     POSTGRES_DB: str = "aether_agents"
     SQLALCHEMY_DATABASE_URI: Optional[str] = None
 
@@ -53,9 +53,9 @@ class Settings(BaseSettings):
     EMAILS_FROM_EMAIL: Optional[str] = None
     EMAILS_FROM_NAME: Optional[str] = None
 
-    # First superuser
+    # First superuser - Change in production!
     FIRST_SUPERUSER: str = "admin@aether-agents.com"
-    FIRST_SUPERUSER_PASSWORD: str = "changeme"
+    FIRST_SUPERUSER_PASSWORD: str = "CHANGE_ME_IN_PRODUCTION"
     
     # Security
     ALGORITHM: str = "HS256"

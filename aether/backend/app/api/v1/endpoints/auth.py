@@ -11,7 +11,7 @@ fake_users_db = {
     "admin@aether-agents.com": {
         "id": "admin_user_id",
         "email": "admin@aether-agents.com",
-        "hashed_password": get_password_hash("changeme"),
+        "hashed_password": get_password_hash("CHANGE_ME_IN_PRODUCTION_SECURE_ADMIN_PASSWORD"),
         "full_name": "Admin User",
         "is_active": True
     }
@@ -51,7 +51,7 @@ async def login(login_data: LoginRequest):
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    access_token_expires = timedelta(minutes=60 * 24 * 8)  # 8 days
+    access_token_expires = timedelta(minutes=60 * 24)  # 24 hours (more secure than 8 days)
     access_token = create_access_token(
         data={"sub": user["id"], "email": user["email"]}, expires_delta=access_token_expires
     )
@@ -85,7 +85,7 @@ async def register(register_data: RegisterRequest):
     fake_users_db[register_data.email] = new_user
     
     # Generate access token
-    access_token_expires = timedelta(minutes=60 * 24 * 8)  # 8 days
+    access_token_expires = timedelta(minutes=60 * 24)  # 24 hours (more secure than 8 days)
     access_token = create_access_token(
         data={"sub": user_id, "email": register_data.email}, expires_delta=access_token_expires
     )

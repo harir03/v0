@@ -5,24 +5,40 @@ services:
   postgres:
     image: postgres:15
     environment:
-      POSTGRES_USER: aether_user
-      POSTGRES_PASSWORD: aether_password
-      POSTGRES_DB: aether_agents
+      POSTGRES_USER: ${POSTGRES_USER:-aether_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-please_change_this_password}
+      POSTGRES_DB: ${POSTGRES_DB:-aether_agents}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    # Remove port exposure for security - only accessible within Docker network
+    # ports:
+    #   - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U aether_user -d aether_agents"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aether_user} -d ${POSTGRES_DB:-aether_agents}"]
       interval: 10s
       timeout: 5s
       retries: 5
+    # Security hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+      - DAC_OVERRIDE
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
 
   # Redis Cache
   redis:
     image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    # Remove port exposure for security - only accessible within Docker network
+    # ports:
+    #   - "6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -30,6 +46,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    # Security hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
 
   # Backend API
   backend:
@@ -40,12 +66,13 @@ services:
       - "8000:8000"
     environment:
       - POSTGRES_SERVER=postgres
-      - POSTGRES_USER=aether_user
-      - POSTGRES_PASSWORD=aether_password
-      - POSTGRES_DB=aether_agents
+      - POSTGRES_USER=${POSTGRES_USER:-aether_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-please_change_this_password}
+      - POSTGRES_DB=${POSTGRES_DB:-aether_agents}
       - REDIS_URL=redis://redis:6379
-      - SECRET_KEY=your-super-secret-key-change-in-production
-      - BACKEND_CORS_ORIGINS=http://localhost:3000,http://localhost:3001
+      - SECRET_KEY=${SECRET_KEY:-please_change_this_secret_key_in_production}
+      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS:-http://localhost:3000,http://localhost:3001}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-1440}  # 24 hours default
     depends_on:
       postgres:
         condition: service_healthy
@@ -56,6 +83,19 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    # Security hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
 
   # Frontend
   frontend:
@@ -65,10 +105,20 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
     depends_on:
       backend:
         condition: service_healthy
+    # Security hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
 
 volumes:
   postgres_data:

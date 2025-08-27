@@ -31,11 +31,12 @@ def get_password_hash(password: str) -> str:
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """Create JWT access token"""
+    from datetime import datetime, timezone
     to_encode = data.copy()
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
@@ -124,8 +125,8 @@ def validate_input(data: Dict[str, Any], required_fields: list = None, max_lengt
             # Remove event handlers
             event_handlers = ['onload', 'onclick', 'onmouseover', 'onerror', 'onsubmit', 'onchange', 'onkeydown', 'onkeyup']
             for handler in event_handlers:
-                sanitized_value = re.sub(f'{handler}\s*=\s*["\'][^"\']*["\']', '', sanitized_value, flags=re.IGNORECASE)
-                sanitized_value = re.sub(f'{handler}\s*=\s*[^\\s>]+', '', sanitized_value, flags=re.IGNORECASE)
+                sanitized_value = re.sub(f'{handler}\\s*=\\s*["\'][^"\']*["\']', '', sanitized_value, flags=re.IGNORECASE)
+                sanitized_value = re.sub(f'{handler}\\s*=\\s*[^\\s>]+', '', sanitized_value, flags=re.IGNORECASE)
             
             # Basic HTML escaping for remaining brackets
             sanitized_value = sanitized_value.replace("<", "&lt;").replace(">", "&gt;")
@@ -138,8 +139,9 @@ def validate_input(data: Dict[str, Any], required_fields: list = None, max_lengt
 
 def log_security_event(event_type: str, user_id: str = None, details: Dict[str, Any] = None):
     """Log security events for audit trail"""
+    from datetime import datetime, timezone
     log_entry = {
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "event_type": event_type,
         "user_id": user_id,
         "details": details or {}

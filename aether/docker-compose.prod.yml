@@ -1,0 +1,161 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database - Production Configuration
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/postgres_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_DB: ${POSTGRES_DB:-aether_agents}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # No external port exposure in production
+    networks:
+      - aether-internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $(cat /run/secrets/postgres_user) -d ${POSTGRES_DB:-aether_agents}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Enhanced security for production
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+      - DAC_OVERRIDE
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    secrets:
+      - postgres_user
+      - postgres_password
+    restart: unless-stopped
+
+  # Redis Cache - Production Configuration
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    networks:
+      - aether-internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    restart: unless-stopped
+
+  # Backend API - Production Configuration
+  backend:
+    image: aether-backend:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_SERVER=postgres
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_DB=${POSTGRES_DB:-aether_agents}
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY_FILE=/run/secrets/secret_key
+      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-1440}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - aether-internal
+      - aether-external
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+    secrets:
+      - postgres_user
+      - postgres_password
+      - secret_key
+    restart: unless-stopped
+
+  # Frontend - Production Configuration
+  frontend:
+    image: aether-frontend:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NODE_ENV=production
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - aether-external
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    restart: unless-stopped
+
+networks:
+  aether-internal:
+    driver: bridge
+    internal: true
+  aether-external:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+
+secrets:
+  postgres_user:
+    external: true
+  postgres_password:
+    external: true
+  secret_key:
+    external: true
