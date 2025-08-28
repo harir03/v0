@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, Integer, JSON, Text, Boolean, ForeignKey
+from sqlalchemy import Column, String, DateTime, Integer, JSON, Text, Boolean, ForeignKey, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -22,6 +22,8 @@ class User(Base):
     # Relationships
     agents = relationship("Agent", back_populates="owner")
     interfaces = relationship("Interface", back_populates="creator")
+    video_assets = relationship("VideoAsset", back_populates="owner")
+    video_jobs = relationship("VideoProcessingJob", back_populates="user")
 
 class Agent(Base):
     __tablename__ = "agents"
@@ -92,6 +94,68 @@ class Subscription(Base):
     status = Column(String, default="active")  # active, cancelled, expired
     monthly_tasks_used = Column(Integer, default=0)
     monthly_task_limit = Column(Integer, default=500)
+    billing_cycle_start = Column(DateTime(timezone=True))
+    billing_cycle_end = Column(DateTime(timezone=True))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+# Vivid AI Video Processing Models
+
+class VideoAsset(Base):
+    __tablename__ = "video_assets"
+    
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
+    filename = Column(String, nullable=False)
+    file_path = Column(String, nullable=False)
+    file_size = Column(Integer, nullable=False)
+    content_type = Column(String, nullable=False)
+    metadata = Column(JSON, nullable=False)  # duration, resolution, fps, etc.
+    thumbnail_url = Column(String)
+    preview_url = Column(String)
+    is_public = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    expires_at = Column(DateTime(timezone=True))
+    
+    # Relationships
+    owner = relationship("User", back_populates="video_assets")
+    source_jobs = relationship("VideoProcessingJob", foreign_keys="VideoProcessingJob.source_video_id", back_populates="source_video")
+    output_jobs = relationship("VideoProcessingJob", foreign_keys="VideoProcessingJob.output_video_id", back_populates="output_video")
+
+class VideoProcessingJob(Base):
+    __tablename__ = "video_processing_jobs"
+    
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
+    mode = Column(String, nullable=False)  # style_synthesis, ai_director, aesthetic_discovery
+    status = Column(String, default="pending")  # pending, uploading, processing, completed, failed, cancelled
+    source_video_id = Column(String, ForeignKey("video_assets.id"), nullable=False)
+    output_video_id = Column(String, ForeignKey("video_assets.id"))
+    parameters = Column(JSON, default=dict)  # mode-specific parameters
+    progress = Column(JSON)  # current progress information
+    viral_prediction = Column(JSON)  # viral potential prediction
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    completed_at = Column(DateTime(timezone=True))
+    error_message = Column(Text)
+    processing_time_seconds = Column(Float)
+    
+    # Relationships
+    user = relationship("User", back_populates="video_jobs")
+    source_video = relationship("VideoAsset", foreign_keys=[source_video_id], back_populates="source_jobs")
+    output_video = relationship("VideoAsset", foreign_keys=[output_video_id], back_populates="output_jobs")
+
+class VideoSubscription(Base):
+    __tablename__ = "video_subscriptions"
+    
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
+    tier = Column(String, nullable=False)  # free, creator_pro, studio_pro, enterprise
+    status = Column(String, default="active")  # active, cancelled, expired
+    monthly_videos_used = Column(Integer, default=0)
+    monthly_video_limit = Column(Integer, default=5)  # varies by tier
+    storage_used_mb = Column(Integer, default=0)
+    storage_limit_mb = Column(Integer, default=1000)  # varies by tier
     billing_cycle_start = Column(DateTime(timezone=True))
     billing_cycle_end = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
