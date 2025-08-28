@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { motion, useInView, useAnimation, useScroll, useTransform } from 'framer-motion'
 import { ChevronDown, ChevronUp, TrendingUp, Shield, Globe, Star, Users, DollarSign, Award, Clock } from 'lucide-react'
 
 // Pricing plans data
@@ -55,6 +56,105 @@ const faqData = [
   }
 ]
 
+// React Bits-inspired animation variants and easing functions
+const easing = [0.6, -0.05, 0.01, 0.99]
+
+const fadeInUp = {
+  initial: { 
+    opacity: 0, 
+    y: 60,
+    scale: 0.95
+  },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      ease: easing
+    }
+  }
+}
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1
+    }
+  }
+}
+
+const staggerItem = {
+  initial: { 
+    opacity: 0, 
+    y: 40,
+    scale: 0.9
+  },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: easing
+    }
+  }
+}
+
+const textReveal = {
+  initial: { 
+    opacity: 0,
+    y: 100,
+    rotateX: 90
+  },
+  animate: { 
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: {
+      duration: 0.8,
+      ease: easing
+    }
+  }
+}
+
+const magneticHover = {
+  scale: 1.05,
+  transition: {
+    type: "spring",
+    stiffness: 400,
+    damping: 10
+  }
+}
+
+const cardHover = {
+  y: -8,
+  scale: 1.02,
+  rotateX: 5,
+  boxShadow: "0 20px 40px rgba(156, 163, 175, 0.1)",
+  transition: {
+    type: "spring",
+    stiffness: 300,
+    damping: 20
+  }
+}
+
+// Intersection Observer hook for scroll animations
+const useScrollAnimation = () => {
+  const controls = useAnimation()
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, amount: 0.1 })
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("animate")
+    }
+  }, [controls, inView])
+
+  return { ref, controls }
+}
+
 export default function FxologyPage() {
   const [activeStep, setActiveStep] = useState(1)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -64,6 +164,10 @@ export default function FxologyPage() {
     minutes: 45,
     seconds: 30
   })
+
+  const { scrollYProgress } = useScroll()
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
+  const backgroundScale = useTransform(scrollYProgress, [0, 1], [1, 1.1])
 
   // Countdown timer effect
   useEffect(() => {
@@ -96,387 +200,958 @@ export default function FxologyPage() {
 
   return (
     <div className="min-h-screen bg-[#08090A] text-white overflow-hidden" style={{ fontFamily: 'Inter, sans-serif' }}>
-      {/* Digital Matrix Flow Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {/* Floating Numbers and Equations */}
+      {/* Enhanced Digital Matrix Flow Background with Framer Motion */}
+      <motion.div 
+        className="fixed inset-0 overflow-hidden pointer-events-none"
+        style={{ y: backgroundY, scale: backgroundScale }}
+      >
+        {/* Animated Floating Numbers and Equations */}
         <div className="absolute inset-0">
           {[...Array(30)].map((_, i) => (
-            <div
+            <motion.div
               key={i}
-              className="absolute text-gray-600/30 text-sm font-mono animate-float"
+              className="absolute text-gray-600/30 text-sm font-mono"
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ 
+                opacity: [0.3, 0.6, 0.3], 
+                y: [100, -100],
+                x: [0, Math.sin(i) * 50]
+              }}
+              transition={{
+                duration: 15 + Math.random() * 10,
+                repeat: Infinity,
+                delay: Math.random() * 10,
+                ease: "linear"
+              }}
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 10}s`,
-                animationDuration: `${15 + Math.random() * 10}s`
               }}
             >
               {Math.random() > 0.5 ? `${Math.floor(Math.random() * 20)}+${Math.floor(Math.random() * 20)}` : `$${Math.floor(Math.random() * 999)}K`}
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* Additional Particle Effects */}
+        {/* Enhanced Particle Effects with Physics */}
         <div className="absolute inset-0">
-          {[...Array(15)].map((_, i) => (
-            <div
+          {[...Array(20)].map((_, i) => (
+            <motion.div
               key={`particle-${i}`}
-              className="absolute w-1 h-1 bg-gray-500/20 rounded-full animate-particle-drift"
+              className="absolute w-1 h-1 bg-gray-500/20 rounded-full"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ 
+                opacity: [0, 0.8, 0],
+                scale: [0, 1, 0],
+                x: [0, Math.cos(i) * 200],
+                y: [0, Math.sin(i) * 200]
+              }}
+              transition={{
+                duration: 8 + Math.random() * 4,
+                repeat: Infinity,
+                delay: Math.random() * 8,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 12}s`,
-                animationDuration: `${10 + Math.random() * 8}s`
               }}
             />
           ))}
         </div>
 
-        {/* Enhanced Grid Overlay */}
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '50px 50px'
-        }}></div>
+        {/* Animated Grid with Pulse Effect */}
+        <motion.div 
+          className="absolute inset-0 opacity-5"
+          animate={{ 
+            opacity: [0.05, 0.15, 0.05]
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '50px 50px'
+          }}
+        />
         
-        {/* Pulsing Dots */}
+        {/* Floating Data Streams with Wave Motion */}
         <div className="absolute inset-0">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={`dot-${i}`}
-              className="absolute w-2 h-2 bg-gray-400/20 rounded-full animate-pulse"
+          {[...Array(4)].map((_, i) => (
+            <motion.div
+              key={`stream-${i}`}
+              className={`absolute ${i % 2 === 0 ? 'w-full h-0.5' : 'w-0.5 h-full'} bg-gradient-to-r from-transparent via-[#9CA3AF]/20 to-transparent`}
               style={{
-                left: `${10 + (i * 12)}%`,
-                top: `${20 + Math.sin(i) * 30}%`,
-                animationDelay: `${i * 0.5}s`,
-                animationDuration: `${2 + Math.random() * 1}s`
+                [i % 2 === 0 ? 'top' : 'left']: `${25 + (i * 25)}%`,
+                [i % 2 === 0 ? 'left' : 'top']: '0%'
+              }}
+              animate={{
+                opacity: [0.2, 0.6, 0.2],
+                scaleX: i % 2 === 0 ? [0.8, 1.2, 0.8] : 1,
+                scaleY: i % 2 !== 0 ? [0.8, 1.2, 0.8] : 1,
+              }}
+              transition={{
+                duration: 3 + i,
+                repeat: Infinity,
+                delay: i * 0.5,
+                ease: "easeInOut"
               }}
             />
           ))}
         </div>
-        
-        {/* Data Streams */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#9CA3AF]/30 to-transparent animate-pulse"></div>
-          <div className="absolute top-3/4 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#9CA3AF]/20 to-transparent animate-pulse delay-1000"></div>
-          <div className="absolute left-1/4 top-0 w-0.5 h-full bg-gradient-to-b from-transparent via-[#9CA3AF]/20 to-transparent animate-pulse delay-500"></div>
-          <div className="absolute left-3/4 top-0 w-0.5 h-full bg-gradient-to-b from-transparent via-[#9CA3AF]/15 to-transparent animate-pulse delay-1500"></div>
-        </div>
-      </div>
+      </motion.div>
 
-      {/* Header */}
-      <header className="relative z-10 border-b border-gray-800/50 backdrop-blur-sm">
+      {/* Enhanced Header with Layout Animations */}
+      <motion.header 
+        className="relative z-10 border-b border-gray-800/50 backdrop-blur-sm"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: easing }}
+      >
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <TrendingUp className="h-8 w-8 text-[#9CA3AF] animate-pulse" />
+            <motion.div 
+              className="flex items-center space-x-3"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <motion.div
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              >
+                <TrendingUp className="h-8 w-8 text-[#9CA3AF]" />
+              </motion.div>
               <h1 className="text-2xl font-bold text-white">Fxology</h1>
-            </div>
+            </motion.div>
             <nav className="hidden md:flex items-center space-x-8">
-              <a href="#" className="text-gray-300 hover:text-[#9CA3AF] transition-colors">Home</a>
-              <a href="#" className="text-gray-300 hover:text-[#9CA3AF] transition-colors">About</a>
-              <a href="#" className="text-gray-300 hover:text-[#9CA3AF] transition-colors">Pricing</a>
-              <a href="#" className="text-gray-300 hover:text-[#9CA3AF] transition-colors">FAQ</a>
-              <button className="bg-[#9CA3AF] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#6B7280] transition-all duration-300 transform hover:scale-105">
-                Start Challenge
-              </button>
+              {['Home', 'About', 'Pricing', 'FAQ'].map((item, index) => (
+                <motion.a 
+                  key={item}
+                  href="#" 
+                  className="text-gray-300 hover:text-[#9CA3AF] transition-colors relative"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.4 }}
+                  whileHover={{
+                    scale: 1.1,
+                    transition: { type: "spring", stiffness: 400, damping: 10 }
+                  }}
+                >
+                  {item}
+                  <motion.div
+                    className="absolute -bottom-1 left-0 h-0.5 bg-[#9CA3AF]"
+                    initial={{ width: 0 }}
+                    whileHover={{ width: "100%" }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.a>
+              ))}
+              <motion.button 
+                className="bg-[#9CA3AF] text-white px-6 py-2 rounded-lg font-semibold relative overflow-hidden"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5, duration: 0.4 }}
+                whileHover={magneticHover}
+                whileTap={{ scale: 0.95 }}
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-[#6B7280] to-[#9CA3AF]"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "100%" }}
+                  transition={{ duration: 0.6 }}
+                />
+                <span className="relative z-10">Start Challenge</span>
+              </motion.button>
             </nav>
           </div>
         </div>
-      </header>
+      </motion.header>
 
-      {/* Hero Section */}
+      {/* Enhanced Hero Section with Text Reveal */}
       <section className="relative z-10 flex items-center justify-center min-h-screen px-6">
         <div className="text-center max-w-4xl mx-auto">
-          <div className="space-y-6">
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-tight animate-kinetic-reveal">
-              No Time Limit
-              <br />
-              <span className="text-[#9CA3AF] animate-pulse">Prop Firm</span>
-            </h1>
-            <p className="text-2xl md:text-3xl text-gray-300 font-medium animate-kinetic-reveal delay-300">
+          <motion.div 
+            className="space-y-6"
+            initial="initial"
+            animate="animate"
+            variants={staggerContainer}
+          >
+            {/* Animated Headline with Character Reveal */}
+            <div className="overflow-hidden">
+              <motion.h1 
+                className="text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-tight"
+                variants={textReveal}
+              >
+                {"No Time Limit".split("").map((char, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{ opacity: 0, y: 50, rotateX: 90 }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                    transition={{
+                      duration: 0.6,
+                      delay: index * 0.05,
+                      ease: easing
+                    }}
+                    className="inline-block"
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </motion.span>
+                ))}
+                <br />
+                <motion.span 
+                  className="text-[#9CA3AF] inline-block"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.8, duration: 0.8, ease: easing }}
+                >
+                  {"Prop Firm".split("").map((char, index) => (
+                    <motion.span
+                      key={index}
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.6,
+                        delay: 1 + index * 0.05,
+                        ease: easing
+                      }}
+                      className="inline-block"
+                    >
+                      {char === " " ? "\u00A0" : char}
+                    </motion.span>
+                  ))}
+                </motion.span>
+              </motion.h1>
+            </div>
+            
+            <motion.p 
+              className="text-2xl md:text-3xl text-gray-300 font-medium"
+              variants={fadeInUp}
+              transition={{ delay: 1.5 }}
+            >
               Conquer the market
-            </p>
-            <div className="pt-8 animate-kinetic-reveal delay-500">
-              <button className="bg-[#9CA3AF] text-white px-12 py-4 rounded-lg text-xl font-bold hover:bg-[#6B7280] transform hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(156,163,175,0.3)] animate-breathing">
-                Start a challenge
-              </button>
-            </div>
-          </div>
+            </motion.p>
+            
+            <motion.div 
+              className="pt-8"
+              variants={fadeInUp}
+              transition={{ delay: 1.8 }}
+            >
+              <motion.button 
+                className="bg-[#9CA3AF] text-white px-12 py-4 rounded-lg text-xl font-bold relative overflow-hidden shadow-[0_0_30px_rgba(156,163,175,0.3)]"
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 0 50px rgba(156, 163, 175, 0.5)",
+                  transition: { duration: 0.3 }
+                }}
+                whileTap={{ scale: 0.95 }}
+                animate={{
+                  boxShadow: [
+                    "0 0 30px rgba(156, 163, 175, 0.3)",
+                    "0 0 50px rgba(156, 163, 175, 0.5)",
+                    "0 0 30px rgba(156, 163, 175, 0.3)"
+                  ]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-[#6B7280] via-[#9CA3AF] to-[#6B7280]"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "100%" }}
+                  transition={{ duration: 0.8 }}
+                />
+                <span className="relative z-10">Start a challenge</span>
+              </motion.button>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Social Proof Metrics Section */}
+      {/* Enhanced Social Proof Metrics Section - "Meet Marvellous Insights" */}
       <section className="relative z-10 py-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center animate-counter-bounce">
-              <div className="text-4xl md:text-5xl font-bold text-[#9CA3AF] mb-2">$400K+</div>
-              <p className="text-gray-400">Paid out to Traders</p>
-            </div>
-            <div className="text-center animate-counter-bounce delay-300">
-              <div className="text-4xl md:text-5xl font-bold text-[#9CA3AF] mb-2">15K+</div>
-              <p className="text-gray-400">Active Traders</p>
-            </div>
-            <div className="text-center animate-counter-bounce delay-500">
-              <div className="text-4xl md:text-5xl font-bold text-[#9CA3AF] mb-2">150+</div>
-              <p className="text-gray-400">Countries</p>
-            </div>
-            <div className="text-center animate-counter-bounce delay-700">
-              <div className="text-4xl md:text-5xl font-bold text-[#9CA3AF] mb-2">99.2%</div>
-              <p className="text-gray-400">Uptime</p>
-            </div>
-          </div>
+          <motion.div
+            className="grid grid-cols-2 md:grid-cols-4 gap-8"
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {[
+              { value: "$400K+", label: "Paid out to Traders", delay: 0 },
+              { value: "15K+", label: "Active Traders", delay: 0.1 },
+              { value: "150+", label: "Countries", delay: 0.2 },
+              { value: "99.2%", label: "Uptime", delay: 0.3 }
+            ].map((metric, index) => (
+              <motion.div
+                key={index}
+                className="text-center group cursor-pointer"
+                variants={staggerItem}
+                whileHover={{
+                  scale: 1.05,
+                  y: -5,
+                  transition: { type: "spring", stiffness: 400, damping: 10 }
+                }}
+              >
+                <motion.div 
+                  className="text-4xl md:text-5xl font-bold text-[#9CA3AF] mb-2 relative"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ 
+                    delay: metric.delay + 0.5,
+                    duration: 0.8,
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 15
+                  }}
+                  viewport={{ once: true }}
+                >
+                  {metric.value}
+                  <motion.div
+                    className="absolute inset-0 bg-[#9CA3AF]/20 rounded-lg -z-10"
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: metric.delay + 0.8, duration: 0.6 }}
+                    viewport={{ once: true }}
+                  />
+                </motion.div>
+                <motion.p 
+                  className="text-gray-400 group-hover:text-gray-300 transition-colors"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: metric.delay + 0.7, duration: 0.6 }}
+                  viewport={{ once: true }}
+                >
+                  {metric.label}
+                </motion.p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* How Does It Work Section */}
+      {/* Enhanced How Does It Work Section */}
       <section className="relative z-10 py-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-16">How Does It Work?</h2>
+          <motion.h2 
+            className="text-4xl md:text-5xl font-bold text-center text-white mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: easing }}
+            viewport={{ once: true }}
+          >
+            How Does It Work?
+          </motion.h2>
           
-          {/* Waveform Background */}
-          <div className="relative overflow-hidden rounded-2xl bg-gray-900/30 backdrop-blur-sm border border-gray-800">
+          {/* Enhanced Waveform Background */}
+          <motion.div 
+            className="relative overflow-hidden rounded-2xl bg-gray-900/30 backdrop-blur-sm border border-gray-800"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: easing }}
+            viewport={{ once: true }}
+          >
             <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 400 200">
-              <path
+              <motion.path
                 d="M0,100 Q100,50 200,100 T400,100"
                 stroke="#9CA3AF"
                 strokeWidth="2"
                 fill="none"
-                className="animate-wave"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 2, ease: "easeInOut" }}
+                viewport={{ once: true }}
               />
-              <path
+              <motion.path
                 d="M0,120 Q150,80 300,120 T600,120"
                 stroke="#9CA3AF"
                 strokeWidth="1"
                 fill="none"
                 opacity="0.6"
-                className="animate-wave-delayed"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                transition={{ duration: 2.5, delay: 0.3, ease: "easeInOut" }}
+                viewport={{ once: true }}
               />
             </svg>
             
             <div className="relative z-10 p-8">
-              {/* Step Navigation */}
-              <div className="flex justify-center mb-12">
+              {/* Enhanced Step Navigation */}
+              <motion.div 
+                className="flex justify-center mb-12"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: easing }}
+                viewport={{ once: true }}
+              >
                 <div className="flex space-x-8">
                   {[1, 2, 3].map((step) => (
-                    <button
+                    <motion.button
                       key={step}
                       onClick={() => setActiveStep(step)}
-                      className={`px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 ${
+                      className={`px-6 py-3 rounded-lg font-semibold transition-all relative overflow-hidden ${
                         activeStep === step
-                          ? 'bg-[#9CA3AF] text-white animate-pulse'
-                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          ? 'bg-[#9CA3AF] text-white'
+                          : 'bg-gray-800 text-gray-300'
                       }`}
+                      whileHover={{
+                        scale: 1.05,
+                        y: -2,
+                        transition: { type: "spring", stiffness: 400, damping: 10 }
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: step * 0.1, duration: 0.6 }}
+                      viewport={{ once: true }}
                     >
-                      Step {step}
-                    </button>
+                      {activeStep === step && (
+                        <motion.div
+                          className="absolute inset-0 bg-[#9CA3AF]"
+                          layoutId="activeStep"
+                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                        />
+                      )}
+                      <span className="relative z-10">Step {step}</span>
+                    </motion.button>
                   ))}
                 </div>
-              </div>
+              </motion.div>
               
-              {/* Step Content */}
+              {/* Enhanced Step Content */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div className="space-y-6">
+                <motion.div 
+                  className="space-y-6"
+                  key={activeStep}
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, ease: easing }}
+                >
                   {activeStep === 1 && (
                     <>
-                      <h3 className="text-3xl font-bold text-white">Choose Your Challenge</h3>
-                      <p className="text-gray-300 text-lg leading-relaxed">
+                      <motion.h3 
+                        className="text-3xl font-bold text-white"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2, duration: 0.6 }}
+                      >
+                        Choose Your Challenge
+                      </motion.h3>
+                      <motion.p 
+                        className="text-gray-300 text-lg leading-relaxed"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.6 }}
+                      >
                         Select from our range of trading challenges based on your experience level and risk tolerance. 
                         From $10K to $100K accounts, all with no time limits.
-                      </p>
-                      <ul className="space-y-2 text-gray-400">
-                        <li>• Multiple account sizes available</li>
-                        <li>• Flexible profit targets</li>
-                        <li>• No time pressure</li>
-                      </ul>
+                      </motion.p>
+                      <motion.ul 
+                        className="space-y-2 text-gray-400"
+                        variants={staggerContainer}
+                        initial="initial"
+                        animate="animate"
+                      >
+                        {['Multiple account sizes available', 'Flexible profit targets', 'No time pressure'].map((item, index) => (
+                          <motion.li 
+                            key={index}
+                            variants={staggerItem}
+                            className="flex items-center"
+                          >
+                            <motion.div
+                              className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-3"
+                              animate={{ scale: [1, 1.2, 1] }}
+                              transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+                            />
+                            {item}
+                          </motion.li>
+                        ))}
+                      </motion.ul>
                     </>
                   )}
+                  {/* Similar patterns for steps 2 and 3... */}
                   {activeStep === 2 && (
                     <>
-                      <h3 className="text-3xl font-bold text-white">Trade & Prove Your Skills</h3>
-                      <p className="text-gray-300 text-lg leading-relaxed">
+                      <motion.h3 
+                        className="text-3xl font-bold text-white"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2, duration: 0.6 }}
+                      >
+                        Trade & Prove Your Skills
+                      </motion.h3>
+                      <motion.p 
+                        className="text-gray-300 text-lg leading-relaxed"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.6 }}
+                      >
                         Demonstrate your trading skills by reaching the profit target while staying within 
                         the maximum drawdown limits. Trade at your own pace with our advanced platform.
-                      </p>
-                      <ul className="space-y-2 text-gray-400">
-                        <li>• Real market conditions</li>
-                        <li>• Professional trading tools</li>
-                        <li>• Risk management focus</li>
-                      </ul>
+                      </motion.p>
+                      <motion.ul 
+                        className="space-y-2 text-gray-400"
+                        variants={staggerContainer}
+                        initial="initial"
+                        animate="animate"
+                      >
+                        {['Real market conditions', 'Professional trading tools', 'Risk management focus'].map((item, index) => (
+                          <motion.li 
+                            key={index}
+                            variants={staggerItem}
+                            className="flex items-center"
+                          >
+                            <motion.div
+                              className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-3"
+                              animate={{ scale: [1, 1.2, 1] }}
+                              transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+                            />
+                            {item}
+                          </motion.li>
+                        ))}
+                      </motion.ul>
                     </>
                   )}
                   {activeStep === 3 && (
                     <>
-                      <h3 className="text-3xl font-bold text-white">Get Funded & Keep 90%</h3>
-                      <p className="text-gray-300 text-lg leading-relaxed">
+                      <motion.h3 
+                        className="text-3xl font-bold text-white"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2, duration: 0.6 }}
+                      >
+                        Get Funded & Keep 90%
+                      </motion.h3>
+                      <motion.p 
+                        className="text-gray-300 text-lg leading-relaxed"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.6 }}
+                      >
                         Once you pass the evaluation, receive a funded account and keep up to 90% of your profits. 
                         Scale your account based on consistent performance.
-                      </p>
-                      <ul className="space-y-2 text-gray-400">
-                        <li>• Keep up to 90% of profits</li>
-                        <li>• Monthly payouts</li>
-                        <li>• Account scaling opportunities</li>
-                      </ul>
+                      </motion.p>
+                      <motion.ul 
+                        className="space-y-2 text-gray-400"
+                        variants={staggerContainer}
+                        initial="initial"
+                        animate="animate"
+                      >
+                        {['Keep up to 90% of profits', 'Monthly payouts', 'Account scaling opportunities'].map((item, index) => (
+                          <motion.li 
+                            key={index}
+                            variants={staggerItem}
+                            className="flex items-center"
+                          >
+                            <motion.div
+                              className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-3"
+                              animate={{ scale: [1, 1.2, 1] }}
+                              transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+                            />
+                            {item}
+                          </motion.li>
+                        ))}
+                      </motion.ul>
                     </>
                   )}
-                </div>
+                </motion.div>
                 
-                <div className="flex justify-center">
-                  <div className="w-96 h-64 bg-gray-800/50 rounded-xl border border-gray-700 flex items-center justify-center">
-                    <div className="text-gray-400 text-center">
-                      <div className="w-16 h-16 bg-[#9CA3AF]/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-spin-slow">
+                <motion.div 
+                  className="flex justify-center"
+                  key={`visual-${activeStep}`}
+                  initial={{ opacity: 0, scale: 0.8, rotateY: 90 }}
+                  animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                  transition={{ duration: 0.8, ease: easing }}
+                >
+                  <div className="w-96 h-64 bg-gray-800/50 rounded-xl border border-gray-700 flex items-center justify-center relative overflow-hidden">
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-[#9CA3AF]/10 to-transparent"
+                      animate={{ x: [-300, 300] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                    />
+                    <div className="text-gray-400 text-center relative z-10">
+                      <motion.div 
+                        className="w-16 h-16 bg-[#9CA3AF]/20 rounded-full flex items-center justify-center mx-auto mb-4"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                      >
                         {activeStep === 1 && <DollarSign className="h-8 w-8 text-[#9CA3AF]" />}
                         {activeStep === 2 && <TrendingUp className="h-8 w-8 text-[#9CA3AF]" />}
                         {activeStep === 3 && <Award className="h-8 w-8 text-[#9CA3AF]" />}
-                      </div>
+                      </motion.div>
                       <p>Step {activeStep} Visualization</p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Payouts & Certificates Section */}
+      {/* Enhanced Payouts & Certificates Section */}
       <section className="relative z-10 py-20 px-6">
         <div className="container mx-auto max-w-4xl">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-            <div className="text-center lg:text-right">
+          <motion.div 
+            className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <motion.div 
+              className="text-center lg:text-right"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: easing }}
+              viewport={{ once: true }}
+            >
               <h2 className="text-4xl font-bold text-white mb-4">Payouts</h2>
               <p className="text-gray-400">Real money, real results</p>
-            </div>
+            </motion.div>
             
-            <div className="flex justify-center">
+            <motion.div 
+              className="flex justify-center"
+              initial={{ opacity: 0, scale: 0.8, y: 50 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ 
+                duration: 0.8, 
+                delay: 0.2,
+                type: "spring",
+                stiffness: 200,
+                damping: 15
+              }}
+              viewport={{ once: true }}
+            >
               <div className="relative group">
-                {/* Wireframe Grid Background */}
-                <div className="absolute inset-0 opacity-30 transform rotate-45 scale-110 animate-spin-very-slow">
+                {/* Enhanced Wireframe Grid Background */}
+                <motion.div 
+                  className="absolute inset-0 opacity-30 transform rotate-45 scale-110"
+                  animate={{ rotate: [45, 405] }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                >
                   <div className="grid grid-cols-8 grid-rows-8 gap-1 w-full h-full">
                     {[...Array(64)].map((_, i) => (
-                      <div key={i} className="border border-[#9CA3AF]/20"></div>
+                      <motion.div 
+                        key={i} 
+                        className="border border-[#9CA3AF]/20"
+                        animate={{ opacity: [0.2, 0.5, 0.2] }}
+                        transition={{ 
+                          duration: 2, 
+                          repeat: Infinity, 
+                          delay: (i % 8) * 0.1 
+                        }}
+                      />
                     ))}
                   </div>
-                </div>
+                </motion.div>
                 
-                {/* Certificate Card */}
-                <div className="relative bg-gray-900/40 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 transform group-hover:scale-105 transition-all duration-500 shadow-[0_0_50px_rgba(156,163,175,0.1)] animate-card-float">
+                {/* Enhanced Certificate Card */}
+                <motion.div 
+                  className="relative bg-gray-900/40 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 transform group-hover:scale-105 transition-all duration-500 shadow-[0_0_50px_rgba(156,163,175,0.1)]"
+                  whileHover={cardHover}
+                  animate={{
+                    y: [0, -5, 0],
+                    boxShadow: [
+                      "0 0 50px rgba(156, 163, 175, 0.1)",
+                      "0 0 80px rgba(156, 163, 175, 0.2)",
+                      "0 0 50px rgba(156, 163, 175, 0.1)"
+                    ]
+                  }}
+                  transition={{
+                    y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+                    boxShadow: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+                  }}
+                >
                   <div className="text-center space-y-4">
-                    <div className="w-16 h-16 bg-[#9CA3AF]/20 rounded-full flex items-center justify-center mx-auto animate-pulse">
+                    <motion.div 
+                      className="w-16 h-16 bg-[#9CA3AF]/20 rounded-full flex items-center justify-center mx-auto"
+                      animate={{ rotate: [0, 360] }}
+                      transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                    >
                       <Award className="h-8 w-8 text-[#9CA3AF]" />
-                    </div>
+                    </motion.div>
                     <h3 className="text-xl font-bold text-white">Payout Certificate</h3>
-                    <div className="text-2xl font-bold text-[#9CA3AF]">$12,500</div>
+                    <motion.div 
+                      className="text-2xl font-bold text-[#9CA3AF]"
+                      animate={{ scale: [1, 1.05, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      $12,500
+                    </motion.div>
                     <p className="text-gray-400 text-sm">Monthly Payout</p>
                     <div className="pt-4 border-t border-gray-700">
                       <p className="text-xs text-gray-500">Certified Trader Program</p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
             
-            <div className="text-center lg:text-left">
+            <motion.div 
+              className="text-center lg:text-left"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: easing, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
               <h2 className="text-4xl font-bold text-white mb-4">Certificates</h2>
               <p className="text-gray-400">Verified achievements</p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Pricing Plans Section */}
+      {/* Enhanced Pricing Plans Section with Staggered Grid Animation */}
       <section className="relative z-10 py-20 px-6">
         <div className="container mx-auto max-w-7xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-16">Choose Your Challenge</h2>
+          <motion.h2 
+            className="text-4xl md:text-5xl font-bold text-center text-white mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: easing }}
+            viewport={{ once: true }}
+          >
+            Choose Your Challenge
+          </motion.h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, amount: 0.1 }}
+          >
             {pricingPlans.map((plan, index) => (
-              <div
+              <motion.div
                 key={index}
-                className={`relative group cursor-pointer transition-all duration-300 transform hover:scale-105 ${
+                className={`relative group cursor-pointer ${
                   plan.popular ? 'lg:-mt-4' : ''
                 }`}
+                variants={staggerItem}
+                whileHover={cardHover}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
-                {/* Glassmorphism Card */}
-                <div className={`relative bg-gray-900/40 backdrop-blur-sm border rounded-2xl p-6 h-full transition-all duration-300 animate-card-bounce ${
+                {/* Enhanced Glassmorphism Card */}
+                <div className={`relative bg-gray-900/40 backdrop-blur-sm border rounded-2xl p-6 h-full transition-all duration-500 overflow-hidden ${
                   plan.popular
                     ? 'border-[#9CA3AF] shadow-[0_0_30px_rgba(156,163,175,0.2)]'
                     : 'border-gray-700/50 group-hover:border-[#9CA3AF] group-hover:shadow-[0_0_30px_rgba(156,163,175,0.1)]'
                 }`}>
+                  {/* Animated Background Glow */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-br from-[#9CA3AF]/5 to-transparent"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.1 + 0.5, duration: 0.8 }}
+                    viewport={{ once: true }}
+                  />
+                  
+                  {/* Popular Badge */}
                   {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <div className="bg-[#9CA3AF] text-white px-4 py-1 rounded-full text-sm font-semibold animate-pulse">
+                    <motion.div 
+                      className="absolute -top-3 left-1/2 transform -translate-x-1/2"
+                      initial={{ opacity: 0, y: -10, scale: 0.8 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: index * 0.1 + 0.3, duration: 0.6 }}
+                      viewport={{ once: true }}
+                    >
+                      <motion.div 
+                        className="bg-[#9CA3AF] text-white px-4 py-1 rounded-full text-sm font-semibold"
+                        animate={{ 
+                          boxShadow: [
+                            "0 0 10px rgba(156, 163, 175, 0.3)",
+                            "0 0 20px rgba(156, 163, 175, 0.5)",
+                            "0 0 10px rgba(156, 163, 175, 0.3)"
+                          ]
+                        }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
                         Most Popular
-                      </div>
-                    </div>
+                      </motion.div>
+                    </motion.div>
                   )}
                   
-                  <div className="text-center space-y-6">
-                    <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
-                    <div>
+                  <div className="text-center space-y-6 relative z-10">
+                    <motion.h3 
+                      className="text-2xl font-bold text-white"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 + 0.2, duration: 0.6 }}
+                      viewport={{ once: true }}
+                    >
+                      {plan.name}
+                    </motion.h3>
+                    
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.1 + 0.3, duration: 0.6 }}
+                      viewport={{ once: true }}
+                    >
                       <span className="text-4xl font-bold text-[#9CA3AF]">{plan.price}</span>
                       <span className="text-gray-400 ml-2">{plan.period}</span>
-                    </div>
+                    </motion.div>
                     
-                    <ul className="space-y-3 text-left">
+                    <motion.ul 
+                      className="space-y-3 text-left"
+                      variants={staggerContainer}
+                      initial="initial"
+                      whileInView="animate"
+                      viewport={{ once: true }}
+                    >
                       {plan.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center text-gray-300">
-                          <div className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-3 animate-pulse"></div>
+                        <motion.li 
+                          key={idx} 
+                          className="flex items-center text-gray-300"
+                          variants={{
+                            initial: { opacity: 0, x: -20 },
+                            animate: { 
+                              opacity: 1, 
+                              x: 0,
+                              transition: {
+                                delay: index * 0.1 + idx * 0.05 + 0.4,
+                                duration: 0.5
+                              }
+                            }
+                          }}
+                        >
+                          <motion.div 
+                            className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-3"
+                            animate={{ 
+                              scale: [1, 1.2, 1],
+                              opacity: [0.7, 1, 0.7]
+                            }}
+                            transition={{ 
+                              duration: 2, 
+                              repeat: Infinity, 
+                              delay: idx * 0.2 
+                            }}
+                          />
                           {feature}
-                        </li>
+                        </motion.li>
                       ))}
-                    </ul>
+                    </motion.ul>
                     
-                    <button className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 ${
-                      plan.popular
-                        ? 'bg-[#9CA3AF] text-white hover:bg-[#6B7280] animate-breathing'
-                        : 'bg-gray-800 text-white group-hover:bg-[#9CA3AF] group-hover:text-white'
-                    }`}>
-                      Start Challenge
-                    </button>
+                    <motion.button 
+                      className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 relative overflow-hidden ${
+                        plan.popular
+                          ? 'bg-[#9CA3AF] text-white'
+                          : 'bg-gray-800 text-white group-hover:bg-[#9CA3AF] group-hover:text-white'
+                      }`}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 + 0.6, duration: 0.6 }}
+                      viewport={{ once: true }}
+                      whileHover={{
+                        scale: 1.05,
+                        transition: { type: "spring", stiffness: 400, damping: 10 }
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-[#6B7280] to-[#9CA3AF]"
+                        initial={{ x: "-100%" }}
+                        whileHover={{ x: "100%" }}
+                        transition={{ duration: 0.6 }}
+                      />
+                      <span className="relative z-10">Start Challenge</span>
+                    </motion.button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Final CTA & Countdown Section */}
+      {/* Enhanced Final CTA & Countdown Section */}
       <section className="relative z-10 py-20 px-6">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold text-white mb-6"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: easing }}
+            viewport={{ once: true }}
+          >
             Traders from more than 150 countries trust Fxology
-          </h2>
-          <p className="text-gray-400 text-lg mb-12">
+          </motion.h2>
+          <motion.p 
+            className="text-gray-400 text-lg mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
             Join thousands of successful traders who have already started their journey with us
-          </p>
+          </motion.p>
           
-          {/* Countdown Timer */}
-          <div className="mb-12">
-            <p className="text-[#9CA3AF] text-sm font-semibold mb-4 animate-pulse">LIMITED TIME OFFER ENDS IN:</p>
-            <div className="flex justify-center space-x-8">
-              <div className="text-center animate-counter-bounce">
-                <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.days.toString().padStart(2, '0')}</div>
-                <div className="text-gray-400 text-sm">DAYS</div>
-              </div>
-              <div className="text-center animate-counter-bounce">
-                <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.hours.toString().padStart(2, '0')}</div>
-                <div className="text-gray-400 text-sm">HOURS</div>
-              </div>
-              <div className="text-center animate-counter-bounce">
-                <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.minutes.toString().padStart(2, '0')}</div>
-                <div className="text-gray-400 text-sm">MINUTES</div>
-              </div>
-              <div className="text-center animate-counter-bounce">
-                <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.seconds.toString().padStart(2, '0')}</div>
-                <div className="text-gray-400 text-sm">SECONDS</div>
-              </div>
-            </div>
-          </div>
+          {/* Enhanced Countdown Timer */}
+          <motion.div 
+            className="mb-12"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <motion.p 
+              className="text-[#9CA3AF] text-sm font-semibold mb-4"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              LIMITED TIME OFFER ENDS IN:
+            </motion.p>
+            <motion.div 
+              className="flex justify-center space-x-8"
+              variants={staggerContainer}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true }}
+            >
+              {[
+                { value: countdown.days, label: "DAYS" },
+                { value: countdown.hours, label: "HOURS" },
+                { value: countdown.minutes, label: "MINUTES" },
+                { value: countdown.seconds, label: "SECONDS" }
+              ].map((time, index) => (
+                <motion.div 
+                  key={time.label}
+                  className="text-center"
+                  variants={staggerItem}
+                  whileHover={{ scale: 1.1, y: -5 }}
+                >
+                  <motion.div 
+                    className="text-4xl md:text-5xl font-bold text-white mb-2"
+                    animate={{ 
+                      scale: time.label === "SECONDS" ? [1, 1.1, 1] : 1
+                    }}
+                    transition={{ 
+                      duration: 1, 
+                      repeat: time.label === "SECONDS" ? Infinity : 0 
+                    }}
+                  >
+                    {time.value.toString().padStart(2, '0')}
+                  </motion.div>
+                  <div className="text-gray-400 text-sm">{time.label}</div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
           
-          {/* Planet Arc with Shooting Stars */}
-          <div className="relative mb-12">
+          {/* Enhanced Planet Arc with Shooting Stars */}
+          <motion.div 
+            className="relative mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            viewport={{ once: true }}
+          >
             <svg className="w-full h-32 opacity-30" viewBox="0 0 400 100">
               <defs>
                 <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -485,81 +1160,220 @@ export default function FxologyPage() {
                   <stop offset="100%" stopColor="#9CA3AF" stopOpacity="0" />
                 </linearGradient>
               </defs>
-              <path
+              <motion.path
                 d="M50,80 Q200,20 350,80"
                 stroke="url(#arcGradient)"
                 strokeWidth="2"
                 fill="none"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                transition={{ duration: 2, ease: "easeInOut" }}
+                viewport={{ once: true }}
               />
-              {/* Shooting Stars */}
-              <circle r="2" fill="#9CA3AF" opacity="0.8">
-                <animateMotion dur="3s" repeatCount="indefinite">
-                  <path d="M0,60 Q200,10 400,60" />
-                </animateMotion>
-              </circle>
-              <circle r="1.5" fill="#9CA3AF" opacity="0.6">
-                <animateMotion dur="4s" repeatCount="indefinite" begin="1s">
-                  <path d="M0,70 Q200,15 400,70" />
-                </animateMotion>
-              </circle>
+              {/* Enhanced Shooting Stars */}
+              {[...Array(3)].map((_, i) => (
+                <motion.circle 
+                  key={i}
+                  r={2 - i * 0.3} 
+                  fill="#9CA3AF" 
+                  opacity={0.8 - i * 0.2}
+                  animate={{
+                    x: [0, 400],
+                    y: [60 + i * 5, 60 + i * 5]
+                  }}
+                  transition={{
+                    duration: 3 + i,
+                    repeat: Infinity,
+                    delay: i * 1.5,
+                    ease: "easeInOut"
+                  }}
+                />
+              ))}
             </svg>
-          </div>
+          </motion.div>
           
-          <button className="bg-[#9CA3AF] text-white px-12 py-4 rounded-lg text-xl font-bold hover:bg-[#6B7280] transform hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(156,163,175,0.3)] animate-breathing">
-            Start Your Challenge Now
-          </button>
+          <motion.button 
+            className="bg-[#9CA3AF] text-white px-12 py-4 rounded-lg text-xl font-bold relative overflow-hidden shadow-[0_0_30px_rgba(156,163,175,0.3)]"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            whileHover={magneticHover}
+            whileTap={{ scale: 0.95 }}
+            animate={{
+              boxShadow: [
+                "0 0 30px rgba(156, 163, 175, 0.3)",
+                "0 0 50px rgba(156, 163, 175, 0.5)",
+                "0 0 30px rgba(156, 163, 175, 0.3)"
+              ]
+            }}
+            transition={{
+              opacity: { duration: 0.8, delay: 0.8 },
+              y: { duration: 0.8, delay: 0.8 },
+              boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+            }}
+          >
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-[#6B7280] to-[#9CA3AF]"
+              initial={{ x: "-100%" }}
+              whileHover={{ x: "100%" }}
+              transition={{ duration: 0.8 }}
+            />
+            <span className="relative z-10">Start Your Challenge Now</span>
+          </motion.button>
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* Enhanced FAQ Section with Smooth Accordion */}
       <section className="relative z-10 py-20 px-6">
         <div className="container mx-auto max-w-4xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-16">Frequently Asked Questions</h2>
+          <motion.h2 
+            className="text-4xl md:text-5xl font-bold text-center text-white mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: easing }}
+            viewport={{ once: true }}
+          >
+            Frequently Asked Questions
+          </motion.h2>
           
-          <div className="space-y-4">
+          <motion.div 
+            className="space-y-4"
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, amount: 0.1 }}
+          >
             {faqData.map((faq, index) => (
-              <div key={index} className="bg-gray-900/40 backdrop-blur-sm border border-gray-700/50 rounded-xl overflow-hidden">
-                <button
+              <motion.div 
+                key={index} 
+                className="bg-gray-900/40 backdrop-blur-sm border border-gray-700/50 rounded-xl overflow-hidden"
+                variants={staggerItem}
+                whileHover={{
+                  borderColor: "rgba(156, 163, 175, 0.5)",
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <motion.button
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
                   className="w-full px-6 py-6 text-left flex items-center justify-between hover:bg-gray-800/50 transition-colors"
+                  whileHover={{ backgroundColor: "rgba(31, 41, 55, 0.5)" }}
+                  whileTap={{ scale: 0.99 }}
                 >
                   <span className="text-lg font-semibold text-white">{faq.question}</span>
-                  <div className={`transform transition-transform duration-300 ${openFaq === index ? 'rotate-45' : ''}`}>
+                  <motion.div
+                    animate={{ 
+                      rotate: openFaq === index ? 45 : 0,
+                      scale: openFaq === index ? 1.1 : 1
+                    }}
+                    transition={{ 
+                      type: "spring", 
+                      stiffness: 300, 
+                      damping: 20 
+                    }}
+                  >
                     {openFaq === index ? (
-                      <ChevronUp className="h-6 w-6 text-[#9CA3AF] animate-spin-slow" />
+                      <ChevronUp className="h-6 w-6 text-[#9CA3AF]" />
                     ) : (
-                      <ChevronDown className="h-6 w-6 text-gray-400 hover:text-[#9CA3AF] transition-colors" />
+                      <ChevronDown className="h-6 w-6 text-gray-400" />
                     )}
-                  </div>
-                </button>
+                  </motion.div>
+                </motion.button>
                 
-                <div className={`overflow-hidden transition-all duration-300 ${
-                  openFaq === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                }`}>
-                  <div className="px-6 pb-6">
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ 
+                    height: openFaq === index ? "auto" : 0,
+                    opacity: openFaq === index ? 1 : 0
+                  }}
+                  transition={{ 
+                    duration: 0.4, 
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }}
+                  className="overflow-hidden"
+                >
+                  <motion.div 
+                    className="px-6 pb-6"
+                    initial={{ y: -10 }}
+                    animate={{ y: openFaq === index ? 0 : -10 }}
+                    transition={{ duration: 0.3, delay: openFaq === index ? 0.1 : 0 }}
+                  >
                     <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
-                  </div>
-                </div>
-              </div>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Who We Are Section */}
+      {/* Enhanced Who We Are Section with Flowing Line Graph */}
       <section className="relative z-10 py-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold text-white mb-8 animate-kinetic-reveal">
-              Who we are?
-            </h2>
-            <h3 className="text-3xl md:text-4xl font-bold text-[#9CA3AF] animate-kinetic-reveal delay-300">
-              And how it all started?
-            </h3>
-          </div>
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <motion.h2 
+              className="text-5xl md:text-6xl font-bold text-white mb-8"
+              initial={{ opacity: 0, y: 50, rotateX: 90 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              transition={{ duration: 0.8, ease: easing }}
+              viewport={{ once: true }}
+            >
+              {"Who we are?".split(" ").map((word, index) => (
+                <motion.span
+                  key={index}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: index * 0.1,
+                    ease: easing
+                  }}
+                  viewport={{ once: true }}
+                  className="inline-block mr-4"
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </motion.h2>
+            <motion.h3 
+              className="text-3xl md:text-4xl font-bold text-[#9CA3AF]"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              viewport={{ once: true }}
+            >
+              {"And how it all started?".split(" ").map((word, index) => (
+                <motion.span
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: 0.5 + index * 0.05,
+                    ease: easing
+                  }}
+                  viewport={{ once: true }}
+                  className="inline-block mr-2"
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </motion.h3>
+          </motion.div>
           
-          {/* Flowing Line Graph */}
-          <div className="relative">
+          {/* Enhanced Flowing Line Graph */}
+          <motion.div 
+            className="relative"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
             <svg className="w-full h-64 opacity-60" viewBox="0 0 800 200">
               <defs>
                 <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -569,110 +1383,284 @@ export default function FxologyPage() {
                 </linearGradient>
               </defs>
               
-              {/* Main Chart Line */}
-              <path
+              {/* Main Chart Line with Animation */}
+              <motion.path
                 d="M50,150 Q200,100 350,80 T750,60"
                 stroke="url(#lineGradient)"
                 strokeWidth="3"
                 fill="none"
-                className="animate-draw-line"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 2, ease: "easeInOut" }}
+                viewport={{ once: true }}
               />
               
-              {/* Data Points */}
-              <circle cx="200" cy="100" r="4" fill="#9CA3AF" opacity="0.8">
-                <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1s" />
-              </circle>
-              <circle cx="350" cy="80" r="4" fill="#9CA3AF" opacity="0.8">
-                <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1.5s" />
-              </circle>
-              <circle cx="500" cy="75" r="4" fill="#9CA3AF" opacity="0.8">
-                <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="2s" />
-              </circle>
+              {/* Animated Data Points */}
+              {[
+                { cx: 200, cy: 100, delay: 1, value: "$2.5M" },
+                { cx: 350, cy: 80, delay: 1.5, value: "$5.1M" },
+                { cx: 500, cy: 75, delay: 2, value: "$8.7M" }
+              ].map((point, index) => (
+                <g key={index}>
+                  <motion.circle 
+                    cx={point.cx} 
+                    cy={point.cy} 
+                    r="4" 
+                    fill="#9CA3AF" 
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 0.8 }}
+                    viewport={{ once: true }}
+                    transition={{ 
+                      delay: point.delay, 
+                      duration: 0.6,
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 10
+                    }}
+                  />
+                  
+                  <motion.circle 
+                    cx={point.cx} 
+                    cy={point.cy} 
+                    r="4" 
+                    fill="#9CA3AF" 
+                    animate={{ 
+                      scale: [1, 1.3, 1],
+                      opacity: [0.8, 1, 0.8]
+                    }}
+                    transition={{
+                      scale: { duration: 2, repeat: Infinity, delay: index * 0.3 },
+                      opacity: { duration: 2, repeat: Infinity, delay: index * 0.3 }
+                    }}
+                  />
+                  
+                  {/* Floating Numbers */}
+                  <motion.text 
+                    x={point.cx} 
+                    y={point.cy - 15} 
+                    fill="#9CA3AF" 
+                    fontSize="12" 
+                    textAnchor="middle" 
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 0.8, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ 
+                      opacity: { delay: point.delay + 0.3, duration: 0.6 },
+                      y: { delay: point.delay + 0.3, duration: 0.6 }
+                    }}
+                  >
+                    {point.value}
+                  </motion.text>
+                </g>
+              ))}
               
-              {/* Floating Numbers */}
-              <text x="200" y="90" fill="#9CA3AF" fontSize="12" textAnchor="middle" opacity="0.8">$2.5M</text>
-              <text x="350" y="70" fill="#9CA3AF" fontSize="12" textAnchor="middle" opacity="0.8">$5.1M</text>
-              <text x="500" y="65" fill="#9CA3AF" fontSize="12" textAnchor="middle" opacity="0.8">$8.7M</text>
+              {/* Background Grid Animation */}
+              <defs>
+                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <motion.path 
+                    d="M 40 0 L 0 0 0 40" 
+                    fill="none" 
+                    stroke="#9CA3AF" 
+                    strokeWidth="0.5" 
+                    opacity="0.1"
+                    animate={{ opacity: [0.1, 0.3, 0.1] }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                  />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)" />
             </svg>
-          </div>
+          </motion.div>
           
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="text-xl text-gray-300 leading-relaxed mb-8">
+          <motion.div 
+            className="max-w-3xl mx-auto text-center"
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, amount: 0.3 }}
+          >
+            <motion.p 
+              className="text-xl text-gray-300 leading-relaxed mb-8"
+              variants={staggerItem}
+            >
               Founded by professional traders with over 15 years of combined experience in the financial markets, 
               Fxology was created to democratize access to trading capital and provide opportunities for skilled 
               traders worldwide.
-            </p>
-            <p className="text-lg text-gray-400">
+            </motion.p>
+            <motion.p 
+              className="text-lg text-gray-400"
+              variants={staggerItem}
+            >
               Our mission is to identify and fund talented traders while providing them with the tools, 
               support, and capital needed to succeed in today's dynamic financial markets.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-gray-800/50 bg-gray-900/20 backdrop-blur-sm">
+      {/* Enhanced Footer with Staggered Animations */}
+      <motion.footer 
+        className="relative z-10 border-t border-gray-800/50 bg-gray-900/20 backdrop-blur-sm"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: easing }}
+        viewport={{ once: true }}
+      >
         <div className="container mx-auto px-6 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-4 gap-8"
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, amount: 0.1 }}
+          >
             {/* Programs */}
-            <div>
+            <motion.div variants={staggerItem}>
               <h4 className="text-lg font-semibold text-white mb-6">Programs</h4>
-              <ul className="space-y-3">
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Trading Challenges</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Funded Accounts</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Educational Resources</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Trading Platform</a></li>
-              </ul>
-            </div>
+              <motion.ul 
+                className="space-y-3"
+                variants={staggerContainer}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true }}
+              >
+                {['Trading Challenges', 'Funded Accounts', 'Educational Resources', 'Trading Platform'].map((item, index) => (
+                  <motion.li 
+                    key={item}
+                    variants={staggerItem}
+                  >
+                    <motion.a 
+                      href="#" 
+                      className="text-gray-400 hover:text-[#9CA3AF] transition-colors"
+                      whileHover={{ x: 5, transition: { duration: 0.2 } }}
+                    >
+                      {item}
+                    </motion.a>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </motion.div>
             
             {/* About Us */}
-            <div>
+            <motion.div variants={staggerItem}>
               <h4 className="text-lg font-semibold text-white mb-6">About Us</h4>
-              <ul className="space-y-3">
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Our Story</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Team</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Careers</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Contact</a></li>
-              </ul>
-            </div>
+              <motion.ul 
+                className="space-y-3"
+                variants={staggerContainer}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true }}
+              >
+                {['Our Story', 'Team', 'Careers', 'Contact'].map((item, index) => (
+                  <motion.li 
+                    key={item}
+                    variants={staggerItem}
+                  >
+                    <motion.a 
+                      href="#" 
+                      className="text-gray-400 hover:text-[#9CA3AF] transition-colors"
+                      whileHover={{ x: 5, transition: { duration: 0.2 } }}
+                    >
+                      {item}
+                    </motion.a>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </motion.div>
             
             {/* Legal */}
-            <div>
+            <motion.div variants={staggerItem}>
               <h4 className="text-lg font-semibold text-white mb-6">Legal</h4>
-              <ul className="space-y-3">
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Risk Disclosure</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Compliance</a></li>
-              </ul>
-            </div>
+              <motion.ul 
+                className="space-y-3"
+                variants={staggerContainer}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true }}
+              >
+                {['Terms of Service', 'Privacy Policy', 'Risk Disclosure', 'Compliance'].map((item, index) => (
+                  <motion.li 
+                    key={item}
+                    variants={staggerItem}
+                  >
+                    <motion.a 
+                      href="#" 
+                      className="text-gray-400 hover:text-[#9CA3AF] transition-colors"
+                      whileHover={{ x: 5, transition: { duration: 0.2 } }}
+                    >
+                      {item}
+                    </motion.a>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </motion.div>
             
             {/* Social & Brand */}
-            <div>
-              <div className="flex items-center space-x-3 mb-6">
-                <TrendingUp className="h-8 w-8 text-[#9CA3AF] animate-pulse" />
+            <motion.div variants={staggerItem}>
+              <motion.div 
+                className="flex items-center space-x-3 mb-6"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                >
+                  <TrendingUp className="h-8 w-8 text-[#9CA3AF]" />
+                </motion.div>
                 <h4 className="text-2xl font-bold text-white">Fxology</h4>
-              </div>
-              <p className="text-gray-400 mb-6">Empowering traders worldwide with capital and opportunity.</p>
-              <div className="flex space-x-4">
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#9CA3AF] hover:text-white transition-all transform hover:scale-110">
-                  <Users className="h-5 w-5" />
-                </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#9CA3AF] hover:text-white transition-all transform hover:scale-110">
-                  <Globe className="h-5 w-5" />
-                </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#9CA3AF] hover:text-white transition-all transform hover:scale-110">
-                  <Shield className="h-5 w-5" />
-                </a>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+              <motion.p 
+                className="text-gray-400 mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                Empowering traders worldwide with capital and opportunity.
+              </motion.p>
+              <motion.div 
+                className="flex space-x-4"
+                variants={staggerContainer}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true }}
+              >
+                {[
+                  { Icon: Users, delay: 0 },
+                  { Icon: Globe, delay: 0.1 },
+                  { Icon: Shield, delay: 0.2 }
+                ].map(({ Icon, delay }, index) => (
+                  <motion.a 
+                    key={index}
+                    href="#" 
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#9CA3AF] hover:text-white transition-all"
+                    variants={staggerItem}
+                    whileHover={{
+                      scale: 1.1,
+                      rotate: 5,
+                      transition: { type: "spring", stiffness: 400, damping: 10 }
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Icon className="h-5 w-5" />
+                  </motion.a>
+                ))}
+              </motion.div>
+            </motion.div>
+          </motion.div>
           
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+          <motion.div 
+            className="border-t border-gray-800 mt-12 pt-8 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            viewport={{ once: true }}
+          >
             <p className="text-gray-500">© 2024 Fxology. All rights reserved. Trading involves risk of loss.</p>
-          </div>
+          </motion.div>
         </div>
-      </footer>
+      </motion.footer>
     </div>
   )
 }

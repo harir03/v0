@@ -38,6 +38,17 @@ module.exports = {
         'bounce-slow': 'bounce 2s infinite',
         'glow': 'glow 2s ease-in-out infinite alternate',
         'float': 'float 6s ease-in-out infinite',
+        'spin-slow': 'spin 8s linear infinite',
+        'spin-very-slow': 'spin 20s linear infinite',
+        'breathing': 'breathing 3s ease-in-out infinite',
+        'kinetic-reveal': 'kinetic-reveal 1s ease-out forwards',
+        'counter-bounce': 'counter-bounce 1s ease-out forwards',
+        'wave': 'wave 3s ease-in-out infinite',
+        'wave-delayed': 'wave 3s ease-in-out infinite 1s',
+        'card-float': 'card-float 6s ease-in-out infinite',
+        'card-bounce': 'card-bounce 0.6s ease-out forwards',
+        'particle-drift': 'particle-drift 12s linear infinite',
+        'draw-line': 'draw-line 2s ease-in-out forwards',
       },
       fontFamily: {
         'inter': ['Inter', 'sans-serif'],
@@ -55,6 +66,42 @@ module.exports = {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-20px)' }
+        },
+        breathing: {
+          '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+          '50%': { transform: 'scale(1.05)', opacity: '0.8' }
+        },
+        'kinetic-reveal': {
+          '0%': { opacity: '0', transform: 'translateY(30px) rotateX(90deg)' },
+          '100%': { opacity: '1', transform: 'translateY(0) rotateX(0)' }
+        },
+        'counter-bounce': {
+          '0%': { opacity: '0', transform: 'translateY(50px) scale(0.3)' },
+          '60%': { opacity: '1', transform: 'translateY(-10px) scale(1.1)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' }
+        },
+        wave: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '50%': { transform: 'translateX(10px)' }
+        },
+        'card-float': {
+          '0%, 100%': { transform: 'translateY(0px) rotateX(0deg)' },
+          '50%': { transform: 'translateY(-10px) rotateX(5deg)' }
+        },
+        'card-bounce': {
+          '0%': { opacity: '0', transform: 'scale(0.8) translateY(30px)' },
+          '60%': { transform: 'scale(1.05) translateY(-5px)' },
+          '100%': { opacity: '1', transform: 'scale(1) translateY(0)' }
+        },
+        'particle-drift': {
+          '0%': { transform: 'translate(0, 100vh) scale(0)', opacity: '0' },
+          '10%': { opacity: '1' },
+          '90%': { opacity: '1' },
+          '100%': { transform: 'translate(0, -100vh) scale(1)', opacity: '0' }
+        },
+        'draw-line': {
+          '0%': { strokeDasharray: '0 1000' },
+          '100%': { strokeDasharray: '1000 0' }
         }
       }
     },
