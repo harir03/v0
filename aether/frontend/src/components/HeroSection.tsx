@@ -27,9 +27,9 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-white overflow-hidden">
-      {/* Simple gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-gray-50"></div>
+    <section className="relative min-h-screen flex items-center justify-center bg-background overflow-hidden">
+      {/* Sophisticated gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-inspiration-light to-inspiration-beige"></div>
       
       {/* Content */}
       <motion.div
@@ -39,57 +39,57 @@ export default function HeroSection() {
         animate="visible"
       >
         <motion.div variants={itemVariants}>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight text-gray-900">
+          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight tracking-tight text-primary">
             Build Agents That
             <br />
-            <span className="text-gray-600">Think, Create, and Code</span>
+            <span className="text-secondary">Think, Create, and Code</span>
           </h1>
         </motion.div>
 
         <motion.p
-          className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed font-normal"
+          className="text-xl md:text-2xl text-muted mb-16 max-w-4xl mx-auto leading-relaxed font-light"
           variants={itemVariants}
         >
           Aether Agents is the no-code/low-code platform that empowers anyone to build 
           sophisticated AI agents. Move beyond simple automation with agentic coding, 
           revolutionary prompt-to-interface builders, and now featuring{' '}
-          <span className="font-semibold text-gray-900">Vivid AI</span>{' '}
+          <span className="font-medium text-primary">Vivid AI</span>{' '}
           - the ultimate AI-powered video editing platform.
         </motion.p>
 
         <motion.div
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+          className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-20"
           variants={itemVariants}
         >
-          <button className="bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors duration-200 min-w-[200px]">
+          <button className="bg-primary text-background px-10 py-5 rounded-xl font-medium text-lg hover:bg-secondary transition-all duration-300 min-w-[220px] shadow-lg hover:shadow-xl">
             Start Building Free
           </button>
           <a 
             href="/vivid-ai"
-            className="bg-accent text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-600 transition-colors duration-200 min-w-[200px]"
+            className="bg-muted text-background px-10 py-5 rounded-xl font-medium text-lg hover:bg-inspiration-olive transition-all duration-300 min-w-[220px] shadow-lg hover:shadow-xl"
           >
             Try Vivid AI ✨
           </a>
-          <button className="border border-gray-300 text-gray-700 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors duration-200 min-w-[200px]">
+          <button className="border-2 border-border bg-card text-primary px-10 py-5 rounded-xl font-medium text-lg hover:bg-background hover:border-muted transition-all duration-300 min-w-[220px] shadow-lg hover:shadow-xl">
             Watch Demo
           </button>
         </motion.div>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-3xl mx-auto"
           variants={itemVariants}
         >
-          <div className="text-center">
-            <div className="text-4xl font-bold text-gray-900 mb-2">2M+</div>
-            <div className="text-sm text-gray-600 font-medium">Tasks Automated</div>
+          <div className="text-center bg-card rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="text-5xl font-bold text-primary mb-3">2M+</div>
+            <div className="text-base text-muted font-medium tracking-wide">Tasks Automated</div>
           </div>
-          <div className="text-center">
-            <div className="text-4xl font-bold text-gray-900 mb-2">500+</div>
-            <div className="text-sm text-gray-600 font-medium">Active Agents</div>
+          <div className="text-center bg-card rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="text-5xl font-bold text-primary mb-3">500+</div>
+            <div className="text-base text-muted font-medium tracking-wide">Active Agents</div>
           </div>
-          <div className="text-center">
-            <div className="text-4xl font-bold text-gray-900 mb-2">99.9%</div>
-            <div className="text-sm text-gray-600 font-medium">Uptime</div>
+          <div className="text-center bg-card rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="text-5xl font-bold text-primary mb-3">99.9%</div>
+            <div className="text-base text-muted font-medium tracking-wide">Uptime</div>
           </div>
         </motion.div>
       </motion.div>

@@ -9,33 +9,42 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Clean, minimal color palette inspired by modern SaaS design
-        'primary': '#171717', // Clean dark text
-        'secondary': '#525252', // Subtle text
-        'muted': '#a3a3a3', // Muted text
-        'border': '#e5e5e5', // Light borders
-        'background': '#ffffff', // Clean white background
-        'card': '#fafafa', // Subtle card background
-        'accent': '#3b82f6', // Single clean accent color
-        'success': '#10b981', // Success green
+        // Sophisticated color palette from inspiration image
+        'primary': '#262626', // Dark charcoal for text
+        'secondary': '#595959', // Medium grey for secondary text
+        'muted': '#888C79', // Olive grey for muted elements
+        'border': '#D9D3C7', // Warm beige for borders
+        'background': '#F0F1F2', // Light off-white background
+        'card': '#ffffff', // Pure white for cards
+        'accent': '#262626', // Dark charcoal for accents
+        'success': '#888C79', // Olive grey for success states
         
-        // Keep minimal color variations for legacy compatibility
-        'aether-dark': '#171717',
-        'aether-blue': '#3b82f6',
-        'aether-purple': '#6366f1',
-        'aether-green': '#10b981',
-        'aether-light': '#ffffff',
+        // Sophisticated grey palette from inspiration
+        'inspiration': {
+          'light': '#F0F1F2',  // Light off-white
+          'beige': '#D9D3C7',  // Warm beige  
+          'olive': '#888C79',  // Olive grey
+          'medium': '#595959', // Medium grey
+          'dark': '#262626',   // Dark charcoal
+        },
+        
+        // Legacy compatibility with refined values
+        'aether-dark': '#262626',
+        'aether-blue': '#595959',
+        'aether-purple': '#888C79',
+        'aether-green': '#888C79',
+        'aether-light': '#F0F1F2',
         'aether-gray': {
-          50: '#fafafa',
-          100: '#f5f5f5',
-          200: '#e5e5e5',
-          300: '#d4d4d4',
-          400: '#a3a3a3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
+          50: '#F0F1F2',
+          100: '#E8E9EA',
+          200: '#D9D3C7',
+          300: '#C4C0B8',
+          400: '#888C79',
+          500: '#737370',
+          600: '#595959',
+          700: '#454545',
           800: '#262626',
-          900: '#171717',
+          900: '#1A1A1A',
         }
       },
       backgroundImage: {
