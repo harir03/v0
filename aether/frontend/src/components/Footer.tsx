@@ -54,19 +54,16 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-aether-gray-900 border-t border-aether-blue/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="bg-white border-t border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
-          {/* Brand Section */}
+          {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="relative">
-                <Zap className="h-8 w-8 text-aether-blue" />
-                <div className="absolute inset-0 h-8 w-8 bg-aether-blue/20 rounded-full animate-ping"></div>
-              </div>
-              <span className="text-xl font-bold gradient-text">Aether Agents</span>
+              <Zap className="h-8 w-8 text-gray-900" />
+              <span className="text-xl font-bold text-gray-900">Aether Agents</span>
             </div>
-            <p className="text-aether-gray-400 mb-6 max-w-sm">
+            <p className="text-gray-600 mb-6 max-w-sm">
               The next-generation platform for creating, deploying, and managing AI agents. 
               Build sophisticated automation that thinks, codes, and operates like human employees.
             </p>
@@ -75,22 +72,27 @@ export default function Footer() {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-aether-gray-400 hover:text-aether-blue transition-colors duration-200"
+                  className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
                 >
                   <span className="sr-only">{item.name}</span>
-                  <item.icon className="h-6 w-6" />
+                  <item.icon className="h-5 w-5" />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Product */}
+          {/* Navigation */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Product</h3>
+            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">
+              Product
+            </h3>
             <ul className="space-y-3">
               {navigation.product.map((item) => (
                 <li key={item.name}>
-                  <a href={item.href} className="text-aether-gray-400 hover:text-aether-blue transition-colors duration-200">
+                  <a
+                    href={item.href}
+                    className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                  >
                     {item.name}
                   </a>
                 </li>
@@ -98,13 +100,17 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Company */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Company</h3>
+            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">
+              Company
+            </h3>
             <ul className="space-y-3">
               {navigation.company.map((item) => (
                 <li key={item.name}>
-                  <a href={item.href} className="text-aether-gray-400 hover:text-aether-blue transition-colors duration-200">
+                  <a
+                    href={item.href}
+                    className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                  >
                     {item.name}
                   </a>
                 </li>
@@ -112,13 +118,17 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Resources</h3>
+            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">
+              Resources
+            </h3>
             <ul className="space-y-3">
               {navigation.resources.map((item) => (
                 <li key={item.name}>
-                  <a href={item.href} className="text-aether-gray-400 hover:text-aether-blue transition-colors duration-200">
+                  <a
+                    href={item.href}
+                    className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                  >
                     {item.name}
                   </a>
                 </li>
@@ -126,13 +136,17 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Legal */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Legal</h3>
+            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">
+              Legal
+            </h3>
             <ul className="space-y-3">
               {navigation.legal.map((item) => (
                 <li key={item.name}>
-                  <a href={item.href} className="text-aether-gray-400 hover:text-aether-blue transition-colors duration-200">
+                  <a
+                    href={item.href}
+                    className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                  >
                     {item.name}
                   </a>
                 </li>
@@ -141,35 +155,37 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Newsletter Signup */}
-        <div className="mt-12 pt-8 border-t border-aether-blue/20">
-          <div className="md:flex md:items-center md:justify-between">
-            <div className="mb-4 md:mb-0">
-              <h3 className="text-lg font-semibold text-white mb-2">Stay updated</h3>
-              <p className="text-aether-gray-400">Get the latest news and updates about Aether Agents.</p>
+        {/* Newsletter */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <div className="lg:flex lg:items-center lg:justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Stay updated</h3>
+              <p className="text-gray-600">
+                Get the latest news and updates about Aether Agents.
+              </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 md:max-w-md">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 bg-aether-dark border border-aether-blue/30 rounded-lg px-4 py-2 text-white placeholder-aether-gray-400 focus:outline-none focus:border-aether-blue"
-              />
-              <button className="bg-gradient-to-r from-aether-blue to-aether-purple text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg hover:shadow-aether-blue/50 transition-all duration-200 whitespace-nowrap">
-                Subscribe
-              </button>
+            <div className="mt-6 lg:mt-0 lg:flex-shrink-0">
+              <div className="flex">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="px-4 py-3 border border-gray-300 rounded-l-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent min-w-0 flex-1 sm:min-w-0"
+                />
+                <button className="bg-gray-900 text-white px-6 py-3 rounded-r-lg font-medium hover:bg-gray-800 transition-colors duration-200">
+                  Subscribe
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Bottom */}
-        <div className="mt-8 pt-8 border-t border-aether-blue/20 md:flex md:items-center md:justify-between">
-          <div className="flex space-x-6 md:order-2">
-            <span className="text-aether-gray-400 text-sm">
-              Built with ❤️ for the future of work
-            </span>
+        <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col lg:flex-row justify-between items-center">
+          <div className="text-gray-600 text-sm">
+            Built with ❤️ for the future of work
           </div>
-          <p className="mt-4 text-aether-gray-400 text-sm md:mt-0 md:order-1">
-            &copy; 2024 Aether Agents. All rights reserved.
+          <p className="text-gray-600 text-sm mt-4 lg:mt-0">
+            © 2024 Aether Agents. All rights reserved.
           </p>
         </div>
       </div>

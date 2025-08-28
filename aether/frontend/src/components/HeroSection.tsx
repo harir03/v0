@@ -1,31 +1,15 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import NeuralNetworkAnimation from './NeuralNetworkAnimation'
 
 export default function HeroSection() {
-  const titleRef = useRef<HTMLHeadingElement>(null)
-
-  useEffect(() => {
-    // Text reveal animation
-    if (titleRef.current) {
-      const words = titleRef.current.textContent?.split(' ') || []
-      titleRef.current.innerHTML = words
-        .map((word, index) => `<span class="inline-block" style="animation-delay: ${index * 0.1}s">${word}</span>`)
-        .join(' ')
-      
-      titleRef.current.classList.add('text-reveal')
-    }
-  }, [])
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
       },
     },
   }
@@ -43,14 +27,9 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-aether-dark">
-      {/* Neural Network Background */}
-      <div className="absolute inset-0 z-0">
-        <NeuralNetworkAnimation />
-      </div>
-      
-      {/* Background Grid */}
-      <div className="absolute inset-0 bg-grid opacity-20"></div>
+    <section className="relative min-h-screen flex items-center justify-center bg-white overflow-hidden">
+      {/* Simple gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-gray-50"></div>
       
       {/* Content */}
       <motion.div
@@ -60,72 +39,59 @@ export default function HeroSection() {
         animate="visible"
       >
         <motion.div variants={itemVariants}>
-          <h1
-            ref={titleRef}
-            className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight"
-          >
-            <span className="gradient-text">Build Agents That</span>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight text-gray-900">
+            Build Agents That
             <br />
-            <span className="text-white">Think, Create, and Code</span>
+            <span className="text-gray-600">Think, Create, and Code</span>
           </h1>
         </motion.div>
 
         <motion.p
-          className="text-xl md:text-2xl text-aether-beige mb-8 max-w-4xl mx-auto leading-relaxed"
+          className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed font-normal"
           variants={itemVariants}
         >
           Aether Agents is the no-code/low-code platform that empowers anyone to build 
           sophisticated AI agents. Move beyond simple automation with agentic coding, 
-          revolutionary prompt-to-interface builders, and now featuring <strong className="text-aether-green">Vivid AI</strong> - 
-          the ultimate AI-powered video editing platform.
+          revolutionary prompt-to-interface builders, and now featuring{' '}
+          <span className="font-semibold text-gray-900">Vivid AI</span>{' '}
+          - the ultimate AI-powered video editing platform.
         </motion.p>
 
         <motion.div
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
           variants={itemVariants}
         >
-          <button className="btn-ripple bg-gradient-to-r from-aether-blue to-aether-purple text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-2xl hover:shadow-aether-blue/50 transition-all duration-300 transform hover:scale-105 animate-cyber-glow neon-glow">
+          <button className="bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors duration-200 min-w-[200px]">
             Start Building Free
           </button>
           <a 
             href="/vivid-ai"
-            className="btn-ripple bg-gradient-to-r from-aether-purple to-aether-pink text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-2xl hover:shadow-aether-purple/50 transition-all duration-300 transform hover:scale-105 neon-glow"
+            className="bg-accent text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-600 transition-colors duration-200 min-w-[200px]"
           >
             Try Vivid AI ✨
           </a>
-          <button className="btn-ripple gradient-border border-2 border-aether-blue text-aether-blue px-8 py-4 rounded-lg font-semibold text-lg hover:bg-aether-blue hover:text-white transition-all duration-300 transform hover:scale-105 hover:neon-glow">
+          <button className="border border-gray-300 text-gray-700 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors duration-200 min-w-[200px]">
             Watch Demo
           </button>
         </motion.div>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto"
           variants={itemVariants}
         >
-          <div className="cyber-card p-6 data-stream group">
-            <div className="text-3xl font-bold text-aether-cyan mb-2 transition-all duration-300 group-hover:scale-110">2M+</div>
-            <div className="text-aether-beige">Tasks Automated</div>
+          <div className="text-center">
+            <div className="text-4xl font-bold text-gray-900 mb-2">2M+</div>
+            <div className="text-sm text-gray-600 font-medium">Tasks Automated</div>
           </div>
-          <div className="cyber-card p-6 data-stream group">
-            <div className="text-3xl font-bold text-aether-blue mb-2 transition-all duration-300 group-hover:scale-110">500+</div>
-            <div className="text-aether-beige">Active Agents</div>
+          <div className="text-center">
+            <div className="text-4xl font-bold text-gray-900 mb-2">500+</div>
+            <div className="text-sm text-gray-600 font-medium">Active Agents</div>
           </div>
-          <div className="cyber-card p-6 data-stream group">
-            <div className="text-3xl font-bold text-aether-purple mb-2 transition-all duration-300 group-hover:scale-110">99.9%</div>
-            <div className="text-aether-beige">Uptime</div>
+          <div className="text-center">
+            <div className="text-4xl font-bold text-gray-900 mb-2">99.9%</div>
+            <div className="text-sm text-gray-600 font-medium">Uptime</div>
           </div>
         </motion.div>
-      </motion.div>
-
-      {/* Enhanced scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-      >
-        <div className="w-6 h-10 border-2 border-aether-blue rounded-full flex justify-center neon-glow">
-          <div className="w-1 h-3 bg-gradient-to-b from-aether-cyan to-aether-blue rounded-full mt-2 animate-bounce"></div>
-        </div>
       </motion.div>
     </section>
   )
