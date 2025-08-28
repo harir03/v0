@@ -114,14 +114,14 @@ export default function InteractiveDemo() {
 
         <div className="max-w-4xl mx-auto">
           <motion.div
-            className="bg-aether-gray-900/50 backdrop-blur-sm border border-aether-blue/20 rounded-xl p-8 mb-8"
+            className="cyber-card p-8 mb-8 data-stream"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
             <div className="flex items-center space-x-2 mb-4">
-              <Code className="h-6 w-6 text-aether-blue" />
+              <Code className="h-6 w-6 text-aether-blue neon-glow" />
               <span className="text-lg font-semibold text-white">Instant Interface Builder</span>
             </div>
             
@@ -131,13 +131,13 @@ export default function InteractiveDemo() {
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 placeholder="Describe your agent interface..."
-                className="flex-1 bg-aether-dark border border-aether-blue/30 rounded-lg px-4 py-3 text-white placeholder-aether-gray-400 focus:outline-none focus:border-aether-blue"
+                className="flex-1 bg-aether-darker border border-aether-blue/30 rounded-lg px-4 py-3 text-white placeholder-aether-gray-400 focus:outline-none focus:border-aether-cyan focus:shadow-lg focus:shadow-aether-cyan/20 transition-all duration-300"
                 onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
               />
               <button
                 onClick={handleSubmit}
                 disabled={isGenerating || !userInput.trim()}
-                className="bg-gradient-to-r from-aether-blue to-aether-purple text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg hover:shadow-aether-blue/50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                className="btn-ripple bg-gradient-to-r from-aether-blue to-aether-purple text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg hover:shadow-aether-blue/50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 neon-glow"
               >
                 <Send className="h-4 w-4" />
                 <span>{isGenerating ? 'Generating...' : 'Generate'}</span>
@@ -149,7 +149,7 @@ export default function InteractiveDemo() {
                 <button
                   key={index}
                   onClick={() => setUserInput(command)}
-                  className="text-sm bg-aether-dark border border-aether-blue/30 text-aether-blue px-3 py-1 rounded-full hover:bg-aether-blue/10 transition-colors duration-200"
+                  className="text-sm gradient-border bg-aether-darker border border-aether-blue/30 text-aether-cyan px-3 py-1 rounded-full hover:bg-aether-blue/10 hover:text-aether-blue transition-all duration-200 neon-glow"
                 >
                   {command}
                 </button>
@@ -157,16 +157,16 @@ export default function InteractiveDemo() {
             </div>
           </motion.div>
 
-          {/* Generated Interface Preview */}
+          {/* Enhanced Generated Interface Preview */}
           {(isGenerating || generatedUI) && (
             <motion.div
-              className="bg-aether-gray-900/50 backdrop-blur-sm border border-aether-blue/20 rounded-xl p-8"
+              className="cyber-card p-8 data-stream"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
               <div className="flex items-center space-x-2 mb-6">
-                <div className="w-3 h-3 bg-aether-green rounded-full animate-pulse"></div>
+                <div className="w-3 h-3 bg-aether-cyan rounded-full animate-pulse neon-glow"></div>
                 <span className="text-lg font-semibold text-white">
                   {isGenerating ? 'Generating Interface...' : 'Generated Interface'}
                 </span>
@@ -175,9 +175,9 @@ export default function InteractiveDemo() {
               {isGenerating ? (
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-aether-blue rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-aether-blue rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-2 h-2 bg-aether-blue rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-aether-blue rounded-full animate-bounce neon-glow"></div>
+                    <div className="w-2 h-2 bg-aether-purple rounded-full animate-bounce neon-glow" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-aether-cyan rounded-full animate-bounce neon-glow" style={{ animationDelay: '0.2s' }}></div>
                     <span className="text-aether-gray-300 ml-2">AI is creating your interface...</span>
                   </div>
                   <MockGeneratedInterface prompt="" />

@@ -109,12 +109,12 @@ export default function FeaturesSection() {
               variants={itemVariants}
               className="group relative"
             >
-              <div className="bg-aether-gray-900/50 backdrop-blur-sm border border-aether-blue/20 rounded-xl p-8 h-full hover:border-aether-blue/50 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-aether-blue/20">
-                <div className={`${feature.bgColor} w-16 h-16 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <feature.icon className={`h-8 w-8 ${feature.color}`} />
+              <div className="cyber-card p-8 h-full group-hover:shadow-2xl group-hover:shadow-aether-blue/20 data-stream">
+                <div className={`${feature.bgColor} w-16 h-16 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300 neon-glow`}>
+                  <feature.icon className={`h-8 w-8 ${feature.color} transition-all duration-300 group-hover:animate-pulse`} />
                 </div>
                 
-                <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-aether-blue transition-colors duration-300">
+                <h3 className="text-xl font-semibold text-white mb-4 group-hover:gradient-text transition-all duration-300">
                   {feature.title}
                 </h3>
                 
@@ -122,8 +122,8 @@ export default function FeaturesSection() {
                   {feature.description}
                 </p>
 
-                {/* Hover effect overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-aether-blue/5 to-aether-purple/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                {/* Enhanced hover effect overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-aether-cyan/5 via-aether-blue/5 to-aether-purple/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </div>
             </motion.div>
           ))}
@@ -137,7 +137,7 @@ export default function FeaturesSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
         >
-          <button className="bg-gradient-to-r from-aether-blue to-aether-purple text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-2xl hover:shadow-aether-blue/50 transition-all duration-300 transform hover:scale-105">
+          <button className="btn-ripple bg-gradient-to-r from-aether-blue to-aether-purple text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-2xl hover:shadow-aether-blue/50 transition-all duration-300 transform hover:scale-105 neon-glow">
             Explore All Features
           </button>
         </motion.div>
