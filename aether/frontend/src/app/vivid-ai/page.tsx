@@ -98,20 +98,53 @@ export default function VividAIPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-transparent to-gray-800/20"></div>
       </div>
       
-      {/* Floating Elements */}
+      {/* Enhanced Light Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-2 h-2 bg-gray-500 rounded-full opacity-60 animate-pulse"></div>
-        <div className="absolute top-32 right-32 w-1 h-1 bg-gray-400 rounded-full opacity-80 animate-pulse delay-1000"></div>
-        <div className="absolute bottom-40 left-16 w-3 h-3 bg-gray-600 rounded-full opacity-40 animate-pulse delay-500"></div>
-        <div className="absolute bottom-20 right-20 w-2 h-2 bg-gray-500 rounded-full opacity-50 animate-pulse delay-300"></div>
-        <div className="absolute top-1/2 left-10 w-1 h-1 bg-gray-400 rounded-full opacity-70 animate-pulse delay-700"></div>
-        <div className="absolute top-1/3 right-16 w-2 h-2 bg-gray-600 rounded-full opacity-45 animate-pulse delay-200"></div>
+        {/* Primary Light Nodes */}
+        <div className="absolute top-20 left-20 w-3 h-3 bg-white rounded-full opacity-60 animate-pulse shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
+        <div className="absolute top-32 right-32 w-2 h-2 bg-gray-300 rounded-full opacity-80 animate-pulse delay-1000 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
+        <div className="absolute bottom-40 left-16 w-4 h-4 bg-gray-200 rounded-full opacity-50 animate-pulse delay-500 shadow-[0_0_25px_rgba(255,255,255,0.25)]"></div>
+        <div className="absolute bottom-20 right-20 w-3 h-3 bg-white rounded-full opacity-60 animate-pulse delay-300 shadow-[0_0_18px_rgba(255,255,255,0.3)]"></div>
+        <div className="absolute top-1/2 left-10 w-2 h-2 bg-gray-300 rounded-full opacity-70 animate-pulse delay-700 shadow-[0_0_12px_rgba(255,255,255,0.2)]"></div>
+        <div className="absolute top-1/3 right-16 w-3 h-3 bg-gray-200 rounded-full opacity-55 animate-pulse delay-200 shadow-[0_0_16px_rgba(255,255,255,0.25)]"></div>
+        
+        {/* Additional Light Points */}
+        <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-white rounded-full opacity-40 animate-pulse delay-800 shadow-[0_0_10px_rgba(255,255,255,0.2)]"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-gray-300 rounded-full opacity-50 animate-pulse delay-400 shadow-[0_0_14px_rgba(255,255,255,0.2)]"></div>
+        <div className="absolute top-1/2 right-1/3 w-2 h-2 bg-gray-200 rounded-full opacity-65 animate-pulse delay-600 shadow-[0_0_8px_rgba(255,255,255,0.15)]"></div>
+        
+        {/* Geometric Light Shapes */}
+        <div className="absolute top-1/4 right-1/4 w-8 h-8 border border-gray-400/30 rounded-lg opacity-40 animate-pulse delay-1200 shadow-[0_0_20px_rgba(255,255,255,0.1)]"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-6 h-6 border border-gray-300/40 rounded-full opacity-35 animate-pulse delay-900 shadow-[0_0_15px_rgba(255,255,255,0.1)]"></div>
+        
+        {/* Connecting Light Lines */}
+        <svg className="absolute inset-0 w-full h-full opacity-20">
+          <defs>
+            <linearGradient id="lightGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="rgba(255,255,255,0.1)" />
+              <stop offset="50%" stopColor="rgba(255,255,255,0.3)" />
+              <stop offset="100%" stopColor="rgba(255,255,255,0.1)" />
+            </linearGradient>
+          </defs>
+          <line x1="20%" y1="20%" x2="80%" y2="32%" stroke="url(#lightGradient)" strokeWidth="1" opacity="0.3" className="animate-pulse delay-1000" />
+          <line x1="16%" y1="40%" x2="33%" y2="25%" stroke="url(#lightGradient)" strokeWidth="1" opacity="0.2" className="animate-pulse delay-500" />
+          <line x1="80%" y1="80%" x2="75%" y2="33%" stroke="url(#lightGradient)" strokeWidth="1" opacity="0.25" className="animate-pulse delay-700" />
+        </svg>
       </div>
 
-      {/* Subtle Animated Background */}
+      {/* Enhanced Animated Background with Light Effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-gradient-to-r from-gray-700/5 to-gray-600/5 rounded-full blur-3xl animate-pulse duration-[8s]"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-gradient-to-r from-gray-800/3 to-gray-700/3 rounded-full blur-3xl animate-pulse delay-[4s] duration-[10s]"></div>
+        {/* Large Gradient Orbs */}
+        <div className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-gradient-to-r from-gray-700/8 to-gray-600/8 rounded-full blur-3xl animate-pulse duration-[8s] shadow-[0_0_100px_rgba(255,255,255,0.02)]"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-gradient-to-r from-gray-800/6 to-gray-700/6 rounded-full blur-3xl animate-pulse delay-[4s] duration-[10s] shadow-[0_0_80px_rgba(255,255,255,0.015)]"></div>
+        
+        {/* Medium Glowing Elements */}
+        <div className="absolute top-1/3 right-1/2 w-[400px] h-[400px] bg-gradient-to-r from-white/3 to-gray-300/3 rounded-full blur-2xl animate-pulse delay-[2s] duration-[12s] shadow-[0_0_60px_rgba(255,255,255,0.01)]"></div>
+        <div className="absolute bottom-1/2 left-1/4 w-[300px] h-[300px] bg-gradient-to-r from-gray-200/4 to-white/4 rounded-full blur-2xl animate-pulse delay-[6s] duration-[9s] shadow-[0_0_50px_rgba(255,255,255,0.01)]"></div>
+        
+        {/* Subtle Light Rays */}
+        <div className="absolute top-0 left-1/2 w-[2px] h-[200px] bg-gradient-to-b from-white/10 to-transparent opacity-30 animate-pulse delay-[3s] blur-sm"></div>
+        <div className="absolute bottom-0 right-1/3 w-[1px] h-[150px] bg-gradient-to-t from-gray-300/15 to-transparent opacity-25 animate-pulse delay-[5s] blur-sm"></div>
       </div>
       
       {/* Header */}
