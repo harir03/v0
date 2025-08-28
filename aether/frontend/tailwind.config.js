@@ -14,7 +14,7 @@ module.exports = {
         'aether-darker': '#001122',
         'aether-blue': '#00d9ff',
         'aether-purple': '#6366f1',
-        'aether-green': '#22c55e',
+        'aether-green': '#64748b', // Changed from green to grey
         'aether-orange': '#ff6b35',
         'aether-cyan': '#06ffa5',
         'aether-pink': '#ec4899',

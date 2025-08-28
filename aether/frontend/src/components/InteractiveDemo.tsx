@@ -35,7 +35,7 @@ export default function InteractiveDemo() {
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-white">Customer Support Dashboard</h3>
             <div className="flex space-x-2">
-              <div className="w-3 h-3 bg-aether-green rounded-full"></div>
+              <div className="w-3 h-3 bg-aether-gray-400 rounded-full"></div>
               <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
               <div className="w-3 h-3 bg-red-500 rounded-full"></div>
             </div>
@@ -51,9 +51,9 @@ export default function InteractiveDemo() {
                 <p className="text-sm text-white">Login issues with account verification...</p>
               </div>
               
-              <div className="bg-aether-dark p-3 rounded border-l-4 border-aether-green">
+              <div className="bg-aether-dark p-3 rounded border-l-4 border-aether-gray-400">
                 <div className="flex items-center space-x-2 mb-2">
-                  <Mail className="h-4 w-4 text-aether-green" />
+                  <Mail className="h-4 w-4 text-aether-gray-400" />
                   <span className="text-sm text-aether-gray-300">Ticket #1233 - Resolved</span>
                 </div>
                 <p className="text-sm text-white">Billing question resolved automatically...</p>

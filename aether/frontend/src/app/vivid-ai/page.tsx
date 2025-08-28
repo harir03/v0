@@ -280,7 +280,7 @@ export default function VividAIPage() {
                         <div className="flex items-center justify-between mt-2">
                           <span className={`text-xs px-2 py-1 rounded ${
                             project.status === 'completed' 
-                              ? 'bg-green-500/20 text-green-400'
+                              ? 'bg-gray-500/20 text-gray-400'
                               : 'bg-yellow-500/20 text-yellow-400'
                           }`}>
                             {project.status}
@@ -330,7 +330,7 @@ export default function VividAIPage() {
                 <div className="space-y-2 text-left">
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-400">Visual Appeal</span>
-                    <span className="text-green-400">95%</span>
+                    <span className="text-gray-400">95%</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-400">Trend Alignment</span>
@@ -338,7 +338,7 @@ export default function VividAIPage() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-400">Engagement</span>
-                    <span className="text-green-400">89%</span>
+                    <span className="text-gray-400">89%</span>
                   </div>
                 </div>
               </div>

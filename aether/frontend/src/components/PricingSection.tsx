@@ -66,8 +66,8 @@ export default function PricingSection() {
       price: "Custom",
       description: "For large organizations requiring maximum security and scale",
       icon: Crown,
-      color: "border-aether-green",
-      buttonColor: "bg-gradient-to-r from-aether-green to-aether-blue hover:shadow-lg hover:shadow-aether-green/50",
+      color: "border-aether-gray-400",
+      buttonColor: "bg-gradient-to-r from-aether-gray-400 to-aether-blue hover:shadow-lg hover:shadow-aether-gray-400/50",
       popular: false,
       features: [
         "Unlimited User Seats & Tasks",
@@ -151,8 +151,8 @@ export default function PricingSection() {
 
               <div className="text-center mb-6">
                 <div className="flex justify-center mb-4">
-                  <div className={`p-3 rounded-lg ${plan.color === 'border-aether-blue' ? 'bg-aether-blue/10' : plan.color === 'border-aether-purple' ? 'bg-aether-purple/10' : plan.color === 'border-aether-green' ? 'bg-aether-green/10' : 'bg-aether-gray-700'}`}>
-                    <plan.icon className={`h-8 w-8 ${plan.color === 'border-aether-blue' ? 'text-aether-blue' : plan.color === 'border-aether-purple' ? 'text-aether-purple' : plan.color === 'border-aether-green' ? 'text-aether-green' : 'text-aether-gray-300'}`} />
+                  <div className={`p-3 rounded-lg ${plan.color === 'border-aether-blue' ? 'bg-aether-blue/10' : plan.color === 'border-aether-purple' ? 'bg-aether-purple/10' : plan.color === 'border-aether-gray-400' ? 'bg-aether-gray-400/10' : 'bg-aether-gray-700'}`}>
+                    <plan.icon className={`h-8 w-8 ${plan.color === 'border-aether-blue' ? 'text-aether-blue' : plan.color === 'border-aether-purple' ? 'text-aether-purple' : plan.color === 'border-aether-gray-400' ? 'text-aether-gray-400' : 'text-aether-gray-300'}`} />
                   </div>
                 </div>
                 
@@ -168,7 +168,7 @@ export default function PricingSection() {
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start space-x-3">
-                    <Check className="h-5 w-5 text-aether-green mt-0.5 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-aether-gray-400 mt-0.5 flex-shrink-0" />
                     <span className="text-aether-gray-300 text-sm">{feature}</span>
                   </li>
                 ))}
