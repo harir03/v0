@@ -1,380 +1,621 @@
 "use client"
 
-import { useState, useCallback } from 'react'
-import { Upload, Play, Zap, Sparkles, Brain, Video, Download, Share, Star } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { ChevronDown, ChevronUp, TrendingUp, Shield, Globe, Star, Users, DollarSign, Award, Clock } from 'lucide-react'
 
-// Mock data for demonstration
-const mockProjects = [
+// Pricing plans data
+const pricingPlans = [
   {
-    id: '1',
-    name: 'Travel Vlog - Bali',
-    thumbnail: '/api/placeholder/300/200',
-    duration: '02:34',
-    status: 'completed',
-    mode: 'AI Director',
-    viralScore: 87
+    name: "Starter",
+    price: "$99",
+    period: "one-time",
+    features: ["$10,000 Account", "10% Profit Target", "5% Max Drawdown", "1:100 Leverage"],
+    popular: false
   },
   {
-    id: '2', 
-    name: 'Product Demo',
-    thumbnail: '/api/placeholder/300/200',
-    duration: '01:15',
-    status: 'processing',
-    mode: 'Style Synthesis',
-    viralScore: null
+    name: "Standard", 
+    price: "$199",
+    period: "one-time",
+    features: ["$25,000 Account", "8% Profit Target", "5% Max Drawdown", "1:100 Leverage"],
+    popular: true
   },
   {
-    id: '3',
-    name: 'Wedding Highlights',
-    thumbnail: '/api/placeholder/300/200', 
-    duration: '04:22',
-    status: 'completed',
-    mode: 'Aesthetic Discovery',
-    viralScore: 94
+    name: "Professional",
+    price: "$399", 
+    period: "one-time",
+    features: ["$50,000 Account", "8% Profit Target", "5% Max Drawdown", "1:100 Leverage"],
+    popular: false
+  },
+  {
+    name: "Elite",
+    price: "$799",
+    period: "one-time", 
+    features: ["$100,000 Account", "8% Profit Target", "5% Max Drawdown", "1:100 Leverage"],
+    popular: false
   }
 ]
 
-const aestheticSuggestions = [
+// FAQ data
+const faqData = [
   {
-    id: '1',
-    title: 'Dreamy Nostalgic',
-    description: 'Soft vintage film aesthetic with warm light leaks',
-    thumbnail: '/api/placeholder/200/150',
-    noveltyScore: 0.85
+    question: "What is a prop firm?",
+    answer: "A proprietary trading firm provides capital to traders to trade financial markets in exchange for a share of the profits."
   },
   {
-    id: '2',
-    title: 'Cyberpunk Neon',
-    description: 'Futuristic neon-soaked digital landscape',
-    thumbnail: '/api/placeholder/200/150',
-    noveltyScore: 0.92
+    question: "How does the evaluation work?",
+    answer: "Our evaluation process consists of a single phase where you need to achieve the profit target while staying within the maximum drawdown limits."
   },
   {
-    id: '3',
-    title: 'Golden Hour Magic',
-    description: 'Warm cinematic glow with dramatic shadows',
-    thumbnail: '/api/placeholder/200/150',
-    noveltyScore: 0.78
+    question: "What happens after I pass?",
+    answer: "Once you pass the evaluation, you become a funded trader and can start trading with our capital while keeping up to 90% of the profits."
+  },
+  {
+    question: "Are there any time limits?",
+    answer: "No, we don't have any time limits on our challenges. Trade at your own pace and develop your strategy without pressure."
   }
 ]
 
-export default function VividAIPage() {
-  const [activeMode, setActiveMode] = useState<'style' | 'director' | 'discovery'>('director')
-  const [uploadProgress, setUploadProgress] = useState(0)
-  const [isUploading, setIsUploading] = useState(false)
-  const [selectedVideo, setSelectedVideo] = useState<string | null>(null)
-  const [creativePrompt, setCreativePrompt] = useState('')
+export default function FxologyPage() {
+  const [activeStep, setActiveStep] = useState(1)
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [countdown, setCountdown] = useState({
+    days: 7,
+    hours: 23,
+    minutes: 45,
+    seconds: 30
+  })
 
-  const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      setIsUploading(true)
-      setUploadProgress(0)
-      
-      // Simulate upload progress
-      const interval = setInterval(() => {
-        setUploadProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(interval)
-            setIsUploading(false)
-            return 100
-          }
-          return prev + 10
-        })
-      }, 200)
-    }
+  // Countdown timer effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown(prev => {
+        let { days, hours, minutes, seconds } = prev
+        
+        if (seconds > 0) {
+          seconds--
+        } else if (minutes > 0) {
+          minutes--
+          seconds = 59
+        } else if (hours > 0) {
+          hours--
+          minutes = 59
+          seconds = 59
+        } else if (days > 0) {
+          days--
+          hours = 23
+          minutes = 59
+          seconds = 59
+        }
+        
+        return { days, hours, minutes, seconds }
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
   }, [])
 
-  const handleProcessVideo = useCallback(() => {
-    // This would call the actual API
-    console.log('Processing video with mode:', activeMode)
-    console.log('Creative prompt:', creativePrompt)
-  }, [activeMode, creativePrompt])
-
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Subtle Background Pattern */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/20 via-transparent to-gray-800/20"></div>
-      </div>
-      
-      {/* Enhanced Light Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Primary Light Nodes */}
-        <div className="absolute top-20 left-20 w-3 h-3 bg-white rounded-full opacity-60 animate-pulse shadow-[0_0_20px_rgba(255,255,255,0.3)]"></div>
-        <div className="absolute top-32 right-32 w-2 h-2 bg-gray-300 rounded-full opacity-80 animate-pulse delay-1000 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
-        <div className="absolute bottom-40 left-16 w-4 h-4 bg-gray-200 rounded-full opacity-50 animate-pulse delay-500 shadow-[0_0_25px_rgba(255,255,255,0.25)]"></div>
-        <div className="absolute bottom-20 right-20 w-3 h-3 bg-white rounded-full opacity-60 animate-pulse delay-300 shadow-[0_0_18px_rgba(255,255,255,0.3)]"></div>
-        <div className="absolute top-1/2 left-10 w-2 h-2 bg-gray-300 rounded-full opacity-70 animate-pulse delay-700 shadow-[0_0_12px_rgba(255,255,255,0.2)]"></div>
-        <div className="absolute top-1/3 right-16 w-3 h-3 bg-gray-200 rounded-full opacity-55 animate-pulse delay-200 shadow-[0_0_16px_rgba(255,255,255,0.25)]"></div>
+    <div className="min-h-screen bg-[#08090A] text-white overflow-hidden" style={{ fontFamily: 'Inter, sans-serif' }}>
+      {/* Digital Matrix Flow Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {/* Floating Numbers and Equations */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-gray-600/30 text-sm font-mono animate-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 10}s`,
+                animationDuration: `${15 + Math.random() * 10}s`
+              }}
+            >
+              {Math.random() > 0.5 ? `${Math.floor(Math.random() * 20)}+${Math.floor(Math.random() * 20)}` : `$${Math.floor(Math.random() * 999)}K`}
+            </div>
+          ))}
+        </div>
         
-        {/* Additional Light Points */}
-        <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-white rounded-full opacity-40 animate-pulse delay-800 shadow-[0_0_10px_rgba(255,255,255,0.2)]"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-gray-300 rounded-full opacity-50 animate-pulse delay-400 shadow-[0_0_14px_rgba(255,255,255,0.2)]"></div>
-        <div className="absolute top-1/2 right-1/3 w-2 h-2 bg-gray-200 rounded-full opacity-65 animate-pulse delay-600 shadow-[0_0_8px_rgba(255,255,255,0.15)]"></div>
+        {/* Grid Overlay */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundSize: '50px 50px'
+        }}></div>
         
-        {/* Geometric Light Shapes */}
-        <div className="absolute top-1/4 right-1/4 w-8 h-8 border border-gray-400/30 rounded-lg opacity-40 animate-pulse delay-1200 shadow-[0_0_20px_rgba(255,255,255,0.1)]"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-6 h-6 border border-gray-300/40 rounded-full opacity-35 animate-pulse delay-900 shadow-[0_0_15px_rgba(255,255,255,0.1)]"></div>
-        
-        {/* Connecting Light Lines */}
-        <svg className="absolute inset-0 w-full h-full opacity-20">
-          <defs>
-            <linearGradient id="lightGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(255,255,255,0.1)" />
-              <stop offset="50%" stopColor="rgba(255,255,255,0.3)" />
-              <stop offset="100%" stopColor="rgba(255,255,255,0.1)" />
-            </linearGradient>
-          </defs>
-          <line x1="20%" y1="20%" x2="80%" y2="32%" stroke="url(#lightGradient)" strokeWidth="1" opacity="0.3" className="animate-pulse delay-1000" />
-          <line x1="16%" y1="40%" x2="33%" y2="25%" stroke="url(#lightGradient)" strokeWidth="1" opacity="0.2" className="animate-pulse delay-500" />
-          <line x1="80%" y1="80%" x2="75%" y2="33%" stroke="url(#lightGradient)" strokeWidth="1" opacity="0.25" className="animate-pulse delay-700" />
-        </svg>
+        {/* Data Streams */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#6AFFAE]/30 to-transparent animate-pulse"></div>
+          <div className="absolute top-3/4 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#6AFFAE]/20 to-transparent animate-pulse delay-1000"></div>
+          <div className="absolute left-1/4 top-0 w-0.5 h-full bg-gradient-to-b from-transparent via-[#6AFFAE]/20 to-transparent animate-pulse delay-500"></div>
+        </div>
       </div>
 
-      {/* Enhanced Animated Background with Light Effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Large Gradient Orbs */}
-        <div className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-gradient-to-r from-gray-700/8 to-gray-600/8 rounded-full blur-3xl animate-pulse duration-[8s] shadow-[0_0_100px_rgba(255,255,255,0.02)]"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-gradient-to-r from-gray-800/6 to-gray-700/6 rounded-full blur-3xl animate-pulse delay-[4s] duration-[10s] shadow-[0_0_80px_rgba(255,255,255,0.015)]"></div>
-        
-        {/* Medium Glowing Elements */}
-        <div className="absolute top-1/3 right-1/2 w-[400px] h-[400px] bg-gradient-to-r from-white/3 to-gray-300/3 rounded-full blur-2xl animate-pulse delay-[2s] duration-[12s] shadow-[0_0_60px_rgba(255,255,255,0.01)]"></div>
-        <div className="absolute bottom-1/2 left-1/4 w-[300px] h-[300px] bg-gradient-to-r from-gray-200/4 to-white/4 rounded-full blur-2xl animate-pulse delay-[6s] duration-[9s] shadow-[0_0_50px_rgba(255,255,255,0.01)]"></div>
-        
-        {/* Subtle Light Rays */}
-        <div className="absolute top-0 left-1/2 w-[2px] h-[200px] bg-gradient-to-b from-white/10 to-transparent opacity-30 animate-pulse delay-[3s] blur-sm"></div>
-        <div className="absolute bottom-0 right-1/3 w-[1px] h-[150px] bg-gradient-to-t from-gray-300/15 to-transparent opacity-25 animate-pulse delay-[5s] blur-sm"></div>
-      </div>
-      
       {/* Header */}
-      <header className="relative z-10 border-b border-gray-800/30 bg-black/80 backdrop-blur-sm">
-        <div className="container mx-auto px-8 py-6">
+      <header className="relative z-10 border-b border-gray-800/50 backdrop-blur-sm">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Video className="h-6 w-6 text-white" />
-              <h1 className="text-xl font-semibold text-white">Vivid AI</h1>
-              <span className="text-sm text-gray-400">Revolutionary AI Video Editor</span>
+              <TrendingUp className="h-8 w-8 text-[#6AFFAE]" />
+              <h1 className="text-2xl font-bold text-white">Fxology</h1>
             </div>
-            <div className="flex items-center space-x-6">
-              <span className="text-sm text-gray-400">5 videos left this month</span>
-              <button className="bg-white text-black px-6 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                Upgrade Pro
+            <nav className="hidden md:flex items-center space-x-8">
+              <a href="#" className="text-gray-300 hover:text-[#6AFFAE] transition-colors">Home</a>
+              <a href="#" className="text-gray-300 hover:text-[#6AFFAE] transition-colors">About</a>
+              <a href="#" className="text-gray-300 hover:text-[#6AFFAE] transition-colors">Pricing</a>
+              <a href="#" className="text-gray-300 hover:text-[#6AFFAE] transition-colors">FAQ</a>
+              <button className="bg-[#6AFFAE] text-black px-6 py-2 rounded-lg font-semibold hover:bg-[#5AEF9E] transition-colors">
+                Start Challenge
               </button>
-            </div>
+            </nav>
           </div>
         </div>
       </header>
 
-      {/* Main Hero Section */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-[80vh] px-8 text-center">
-        {/* Hero Content */}
-        <div className="max-w-4xl mx-auto space-y-8">
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-tight">
-            One-click for Video
-            <br />
-            <span className="bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
-              Creation
-            </span>
-          </h1>
+      {/* Hero Section */}
+      <section className="relative z-10 flex items-center justify-center min-h-screen px-6">
+        <div className="text-center max-w-4xl mx-auto">
+          <div className="space-y-6">
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-tight animate-kinetic-reveal">
+              No Time Limit
+              <br />
+              <span className="text-[#6AFFAE]">Prop Firm</span>
+            </h1>
+            <p className="text-2xl md:text-3xl text-gray-300 font-medium animate-kinetic-reveal delay-300">
+              Conquer the market
+            </p>
+            <div className="pt-8 animate-kinetic-reveal delay-500">
+              <button className="bg-[#6AFFAE] text-black px-12 py-4 rounded-lg text-xl font-bold hover:bg-[#5AEF9E] transform hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(106,255,174,0.3)]">
+                Start a challenge
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How Does It Work Section */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-16">How Does It Work?</h2>
           
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Dive into the art of video creation, where innovative AI technology meets creative expertise
+          {/* Waveform Background */}
+          <div className="relative overflow-hidden rounded-2xl bg-gray-900/30 backdrop-blur-sm border border-gray-800">
+            <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 400 200">
+              <path
+                d="M0,100 Q100,50 200,100 T400,100"
+                stroke="#6AFFAE"
+                strokeWidth="2"
+                fill="none"
+                className="animate-wave"
+              />
+              <path
+                d="M0,120 Q150,80 300,120 T600,120"
+                stroke="#6AFFAE"
+                strokeWidth="1"
+                fill="none"
+                opacity="0.6"
+                className="animate-wave-delayed"
+              />
+            </svg>
+            
+            <div className="relative z-10 p-8">
+              {/* Step Navigation */}
+              <div className="flex justify-center mb-12">
+                <div className="flex space-x-8">
+                  {[1, 2, 3].map((step) => (
+                    <button
+                      key={step}
+                      onClick={() => setActiveStep(step)}
+                      className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                        activeStep === step
+                          ? 'bg-[#6AFFAE] text-black'
+                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                      }`}
+                    >
+                      Step {step}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Step Content */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6">
+                  {activeStep === 1 && (
+                    <>
+                      <h3 className="text-3xl font-bold text-white">Choose Your Challenge</h3>
+                      <p className="text-gray-300 text-lg leading-relaxed">
+                        Select from our range of trading challenges based on your experience level and risk tolerance. 
+                        From $10K to $100K accounts, all with no time limits.
+                      </p>
+                      <ul className="space-y-2 text-gray-400">
+                        <li>• Multiple account sizes available</li>
+                        <li>• Flexible profit targets</li>
+                        <li>• No time pressure</li>
+                      </ul>
+                    </>
+                  )}
+                  {activeStep === 2 && (
+                    <>
+                      <h3 className="text-3xl font-bold text-white">Trade & Prove Your Skills</h3>
+                      <p className="text-gray-300 text-lg leading-relaxed">
+                        Demonstrate your trading skills by reaching the profit target while staying within 
+                        the maximum drawdown limits. Trade at your own pace with our advanced platform.
+                      </p>
+                      <ul className="space-y-2 text-gray-400">
+                        <li>• Real market conditions</li>
+                        <li>• Professional trading tools</li>
+                        <li>• Risk management focus</li>
+                      </ul>
+                    </>
+                  )}
+                  {activeStep === 3 && (
+                    <>
+                      <h3 className="text-3xl font-bold text-white">Get Funded & Keep 90%</h3>
+                      <p className="text-gray-300 text-lg leading-relaxed">
+                        Once you pass the evaluation, receive a funded account and keep up to 90% of your profits. 
+                        Scale your account based on consistent performance.
+                      </p>
+                      <ul className="space-y-2 text-gray-400">
+                        <li>• Keep up to 90% of profits</li>
+                        <li>• Monthly payouts</li>
+                        <li>• Account scaling opportunities</li>
+                      </ul>
+                    </>
+                  )}
+                </div>
+                
+                <div className="flex justify-center">
+                  <div className="w-96 h-64 bg-gray-800/50 rounded-xl border border-gray-700 flex items-center justify-center">
+                    <div className="text-gray-400 text-center">
+                      <div className="w-16 h-16 bg-[#6AFFAE]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        {activeStep === 1 && <DollarSign className="h-8 w-8 text-[#6AFFAE]" />}
+                        {activeStep === 2 && <TrendingUp className="h-8 w-8 text-[#6AFFAE]" />}
+                        {activeStep === 3 && <Award className="h-8 w-8 text-[#6AFFAE]" />}
+                      </div>
+                      <p>Step {activeStep} Visualization</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Payouts & Certificates Section */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="container mx-auto max-w-4xl">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+            <div className="text-center lg:text-right">
+              <h2 className="text-4xl font-bold text-white mb-4">Payouts</h2>
+              <p className="text-gray-400">Real money, real results</p>
+            </div>
+            
+            <div className="flex justify-center">
+              <div className="relative group">
+                {/* Wireframe Grid Background */}
+                <div className="absolute inset-0 opacity-30 transform rotate-45 scale-110">
+                  <div className="grid grid-cols-8 grid-rows-8 gap-1 w-full h-full">
+                    {[...Array(64)].map((_, i) => (
+                      <div key={i} className="border border-[#6AFFAE]/20"></div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Certificate Card */}
+                <div className="relative bg-gray-900/40 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 transform group-hover:scale-105 transition-all duration-500 shadow-[0_0_50px_rgba(106,255,174,0.1)]">
+                  <div className="text-center space-y-4">
+                    <div className="w-16 h-16 bg-[#6AFFAE]/20 rounded-full flex items-center justify-center mx-auto">
+                      <Award className="h-8 w-8 text-[#6AFFAE]" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white">Payout Certificate</h3>
+                    <div className="text-2xl font-bold text-[#6AFFAE]">$12,500</div>
+                    <p className="text-gray-400 text-sm">Monthly Payout</p>
+                    <div className="pt-4 border-t border-gray-700">
+                      <p className="text-xs text-gray-500">Certified Trader Program</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-center lg:text-left">
+              <h2 className="text-4xl font-bold text-white mb-4">Certificates</h2>
+              <p className="text-gray-400">Verified achievements</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Plans Section */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="container mx-auto max-w-7xl">
+          <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-16">Choose Your Challenge</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {pricingPlans.map((plan, index) => (
+              <div
+                key={index}
+                className={`relative group cursor-pointer transition-all duration-300 transform hover:scale-105 ${
+                  plan.popular ? 'lg:-mt-4' : ''
+                }`}
+              >
+                {/* Glassmorphism Card */}
+                <div className={`relative bg-gray-900/40 backdrop-blur-sm border rounded-2xl p-6 h-full transition-all duration-300 ${
+                  plan.popular
+                    ? 'border-[#6AFFAE] shadow-[0_0_30px_rgba(106,255,174,0.2)]'
+                    : 'border-gray-700/50 group-hover:border-[#6AFFAE] group-hover:shadow-[0_0_30px_rgba(106,255,174,0.1)]'
+                }`}>
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                      <div className="bg-[#6AFFAE] text-black px-4 py-1 rounded-full text-sm font-semibold">
+                        Most Popular
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="text-center space-y-6">
+                    <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
+                    <div>
+                      <span className="text-4xl font-bold text-[#6AFFAE]">{plan.price}</span>
+                      <span className="text-gray-400 ml-2">{plan.period}</span>
+                    </div>
+                    
+                    <ul className="space-y-3 text-left">
+                      {plan.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-center text-gray-300">
+                          <div className="w-2 h-2 bg-[#6AFFAE] rounded-full mr-3"></div>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    
+                    <button className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 ${
+                      plan.popular
+                        ? 'bg-[#6AFFAE] text-black hover:bg-[#5AEF9E]'
+                        : 'bg-gray-800 text-white group-hover:bg-[#6AFFAE] group-hover:text-black'
+                    }`}>
+                      Start Challenge
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA & Countdown Section */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Traders from more than 150 countries trust Fxology
+          </h2>
+          <p className="text-gray-400 text-lg mb-12">
+            Join thousands of successful traders who have already started their journey with us
           </p>
           
-          <div className="flex items-center justify-center space-x-4 pt-6">
-            <button className="bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center space-x-2">
-              <span>Open App</span>
-              <Play className="h-4 w-4" />
-            </button>
-            <button className="border border-gray-600 text-white px-8 py-3 rounded-lg font-semibold hover:border-gray-500 hover:bg-gray-900/50 transition-all">
-              Discover More
-            </button>
-          </div>
-        </div>
-        
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <div className="flex items-center space-x-2 text-gray-500 text-sm">
-            <div className="w-6 h-6 border border-gray-600 rounded-full flex items-center justify-center">
-              <div className="w-1 h-3 bg-gray-600 rounded-full animate-bounce"></div>
-            </div>
-            <span>Scroll down</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Secondary Content */}
-      <div className="relative z-10 container mx-auto px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
-          {/* Upload Section */}
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-white mb-8">Upload Your Video</h2>
-            
-            <div className="border-2 border-dashed border-gray-700 rounded-2xl p-12 text-center hover:border-gray-600 transition-all duration-300 bg-gray-900/20">
-              <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Upload className="h-8 w-8 text-gray-400" />
+          {/* Countdown Timer */}
+          <div className="mb-12">
+            <p className="text-[#6AFFAE] text-sm font-semibold mb-4">LIMITED TIME OFFER ENDS IN:</p>
+            <div className="flex justify-center space-x-8">
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.days.toString().padStart(2, '0')}</div>
+                <div className="text-gray-400 text-sm">DAYS</div>
               </div>
-              <p className="text-gray-300 mb-2 text-lg">Drop your video here or click to browse</p>
-              <p className="text-sm text-gray-500 mb-8">Supports MP4, MOV, AVI up to 500MB</p>
-              
-              <input
-                type="file"
-                accept="video/*"
-                onChange={handleFileUpload}
-                className="hidden"
-                id="video-upload"
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.hours.toString().padStart(2, '0')}</div>
+                <div className="text-gray-400 text-sm">HOURS</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.minutes.toString().padStart(2, '0')}</div>
+                <div className="text-gray-400 text-sm">MINUTES</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.seconds.toString().padStart(2, '0')}</div>
+                <div className="text-gray-400 text-sm">SECONDS</div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Planet Arc with Shooting Stars */}
+          <div className="relative mb-12">
+            <svg className="w-full h-32 opacity-30" viewBox="0 0 400 100">
+              <defs>
+                <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#6AFFAE" stopOpacity="0" />
+                  <stop offset="50%" stopColor="#6AFFAE" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#6AFFAE" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M50,80 Q200,20 350,80"
+                stroke="url(#arcGradient)"
+                strokeWidth="2"
+                fill="none"
               />
-              <label
-                htmlFor="video-upload"
-                className="inline-block bg-white text-black px-8 py-3 rounded-lg font-semibold cursor-pointer hover:bg-gray-100 transition-colors"
-              >
-                Choose File
-              </label>
-              
-              {isUploading && (
-                <div className="mt-8">
-                  <div className="bg-gray-800 rounded-full h-2 overflow-hidden">
-                    <div 
-                      className="bg-white h-full transition-all duration-300"
-                      style={{ width: `${uploadProgress}%` }}
-                    />
-                  </div>
-                  <p className="text-sm text-gray-400 mt-3">Uploading... {uploadProgress}%</p>
-                </div>
-              )}
-            </div>
+              {/* Shooting Stars */}
+              <circle r="2" fill="#6AFFAE" opacity="0.8">
+                <animateMotion dur="3s" repeatCount="indefinite">
+                  <path d="M0,60 Q200,10 400,60" />
+                </animateMotion>
+              </circle>
+              <circle r="1.5" fill="#6AFFAE" opacity="0.6">
+                <animateMotion dur="4s" repeatCount="indefinite" begin="1s">
+                  <path d="M0,70 Q200,15 400,70" />
+                </animateMotion>
+              </circle>
+            </svg>
           </div>
+          
+          <button className="bg-[#6AFFAE] text-black px-12 py-4 rounded-lg text-xl font-bold hover:bg-[#5AEF9E] transform hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(106,255,174,0.3)]">
+            Start Your Challenge Now
+          </button>
+        </div>
+      </section>
 
-          {/* AI Processing Modes */}
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-white mb-8">Choose AI Processing Mode</h2>
+      {/* FAQ Section */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-16">Frequently Asked Questions</h2>
+          
+          <div className="space-y-4">
+            {faqData.map((faq, index) => (
+              <div key={index} className="bg-gray-900/40 backdrop-blur-sm border border-gray-700/50 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                  className="w-full px-6 py-6 text-left flex items-center justify-between hover:bg-gray-800/50 transition-colors"
+                >
+                  <span className="text-lg font-semibold text-white">{faq.question}</span>
+                  <div className={`transform transition-transform duration-300 ${openFaq === index ? 'rotate-45' : ''}`}>
+                    {openFaq === index ? (
+                      <ChevronUp className="h-6 w-6 text-[#6AFFAE]" />
+                    ) : (
+                      <ChevronDown className="h-6 w-6 text-gray-400" />
+                    )}
+                  </div>
+                </button>
+                
+                <div className={`overflow-hidden transition-all duration-300 ${
+                  openFaq === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                }`}>
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Who We Are Section */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl md:text-6xl font-bold text-white mb-8 animate-kinetic-reveal">
+              Who we are?
+            </h2>
+            <h3 className="text-3xl md:text-4xl font-bold text-[#6AFFAE] animate-kinetic-reveal delay-300">
+              And how it all started?
+            </h3>
+          </div>
+          
+          {/* Flowing Line Graph */}
+          <div className="relative">
+            <svg className="w-full h-64 opacity-60" viewBox="0 0 800 200">
+              <defs>
+                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#6AFFAE" stopOpacity="0.2" />
+                  <stop offset="50%" stopColor="#6AFFAE" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#6AFFAE" stopOpacity="0.2" />
+                </linearGradient>
+              </defs>
+              
+              {/* Main Chart Line */}
+              <path
+                d="M50,150 Q200,100 350,80 T750,60"
+                stroke="url(#lineGradient)"
+                strokeWidth="3"
+                fill="none"
+                className="animate-draw-line"
+              />
+              
+              {/* Data Points */}
+              <circle cx="200" cy="100" r="4" fill="#6AFFAE" opacity="0.8">
+                <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1s" />
+              </circle>
+              <circle cx="350" cy="80" r="4" fill="#6AFFAE" opacity="0.8">
+                <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1.5s" />
+              </circle>
+              <circle cx="500" cy="75" r="4" fill="#6AFFAE" opacity="0.8">
+                <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="2s" />
+              </circle>
+              
+              {/* Floating Numbers */}
+              <text x="200" y="90" fill="#6AFFAE" fontSize="12" textAnchor="middle" opacity="0.8">$2.5M</text>
+              <text x="350" y="70" fill="#6AFFAE" fontSize="12" textAnchor="middle" opacity="0.8">$5.1M</text>
+              <text x="500" y="65" fill="#6AFFAE" fontSize="12" textAnchor="middle" opacity="0.8">$8.7M</text>
+            </svg>
+          </div>
+          
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-xl text-gray-300 leading-relaxed mb-8">
+              Founded by professional traders with over 15 years of combined experience in the financial markets, 
+              Fxology was created to democratize access to trading capital and provide opportunities for skilled 
+              traders worldwide.
+            </p>
+            <p className="text-lg text-gray-400">
+              Our mission is to identify and fund talented traders while providing them with the tools, 
+              support, and capital needed to succeed in today's dynamic financial markets.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-gray-800/50 bg-gray-900/20 backdrop-blur-sm">
+        <div className="container mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Programs */}
+            <div>
+              <h4 className="text-lg font-semibold text-white mb-6">Programs</h4>
+              <ul className="space-y-3">
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Trading Challenges</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Funded Accounts</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Educational Resources</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Trading Platform</a></li>
+              </ul>
+            </div>
             
-            <div className="grid grid-cols-1 gap-4">
-              <button
-                onClick={() => setActiveMode('style')}
-                className={`p-6 rounded-xl border transition-all duration-300 text-left ${
-                  activeMode === 'style'
-                    ? 'border-white bg-gray-900/40 text-white'
-                    : 'border-gray-700 bg-gray-900/20 text-gray-300 hover:border-gray-600'
-                }`}
-              >
-                <div className="flex items-center space-x-4">
-                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                    activeMode === 'style' ? 'bg-white text-black' : 'bg-gray-700 text-gray-400'
-                  }`}>
-                    <Zap className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Style Synthesis</h3>
-                    <p className="text-sm opacity-70">Transfer style from reference video</p>
-                  </div>
-                </div>
-              </button>
-              
-              <button
-                onClick={() => setActiveMode('director')}
-                className={`p-6 rounded-xl border transition-all duration-300 text-left ${
-                  activeMode === 'director'
-                    ? 'border-white bg-gray-900/40 text-white'
-                    : 'border-gray-700 bg-gray-900/20 text-gray-300 hover:border-gray-600'
-                }`}
-              >
-                <div className="flex items-center space-x-4">
-                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                    activeMode === 'director' ? 'bg-white text-black' : 'bg-gray-700 text-gray-400'
-                  }`}>
-                    <Brain className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">AI Director</h3>
-                    <p className="text-sm opacity-70">Create effects from text prompts</p>
-                  </div>
-                </div>
-              </button>
-              
-              <button
-                onClick={() => setActiveMode('discovery')}
-                className={`p-6 rounded-xl border transition-all duration-300 text-left ${
-                  activeMode === 'discovery'
-                    ? 'border-white bg-gray-900/40 text-white'
-                    : 'border-gray-700 bg-gray-900/20 text-gray-300 hover:border-gray-600'
-                }`}
-              >
-                <div className="flex items-center space-x-4">
-                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                    activeMode === 'discovery' ? 'bg-white text-black' : 'bg-gray-700 text-gray-400'
-                  }`}>
-                    <Sparkles className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Aesthetic Discovery</h3>
-                    <p className="text-sm opacity-70">AI suggests novel aesthetics</p>
-                  </div>
-                </div>
-              </button>
+            {/* About Us */}
+            <div>
+              <h4 className="text-lg font-semibold text-white mb-6">About Us</h4>
+              <ul className="space-y-3">
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Our Story</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Team</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Careers</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Contact</a></li>
+              </ul>
             </div>
-
-            {/* Mode-specific Controls */}
-            {activeMode === 'director' && (
-              <div className="mt-8 space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-3">
-                    Creative Prompt
-                  </label>
-                  <textarea
-                    value={creativePrompt}
-                    onChange={(e) => setCreativePrompt(e.target.value)}
-                    placeholder="Describe your vision... e.g., 'Make this travel vlog look like a dreamy, vintage 8mm film with light leaks and nostalgic feel'"
-                    className="w-full bg-gray-900/40 border border-gray-700 rounded-xl px-4 py-4 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-gray-500 transition-all duration-200"
-                    rows={4}
-                  />
-                </div>
-                <div className="flex items-center space-x-6">
-                  <label className="flex items-center space-x-3 text-sm text-gray-400 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 rounded border-gray-600 text-white focus:ring-white bg-gray-800" />
-                    <span>Sync to audio beats</span>
-                  </label>
-                  <label className="flex items-center space-x-3 text-sm text-gray-400 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 rounded border-gray-600 text-white focus:ring-white bg-gray-800" />
-                    <span>Allow duration changes</span>
-                  </label>
-                </div>
+            
+            {/* Legal */}
+            <div>
+              <h4 className="text-lg font-semibold text-white mb-6">Legal</h4>
+              <ul className="space-y-3">
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Terms of Service</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Risk Disclosure</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Compliance</a></li>
+              </ul>
+            </div>
+            
+            {/* Social & Brand */}
+            <div>
+              <div className="flex items-center space-x-3 mb-6">
+                <TrendingUp className="h-8 w-8 text-[#6AFFAE]" />
+                <h4 className="text-2xl font-bold text-white">Fxology</h4>
               </div>
-            )}
-
-            <button
-              onClick={handleProcessVideo}
-              className="w-full bg-white text-black font-semibold py-4 px-8 rounded-xl hover:bg-gray-100 transition-colors text-lg mt-8"
-            >
-              Process with AI ✨
-            </button>
-          </div>
-        </div>
-
-        {/* Bottom Section - Stats */}
-        <div className="mt-24 text-center">
-          <h2 className="text-2xl font-bold text-white mb-12">Viral Prediction</h2>
-          <div className="max-w-md mx-auto bg-gray-900/30 rounded-2xl p-8 border border-gray-800">
-            <div className="text-6xl font-bold text-white mb-4">87%</div>
-            <p className="text-gray-400 mb-6">Predicted viral potential for your latest video</p>
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Visual Appeal</span>
-                <span className="text-white font-semibold">95%</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Trend Alignment</span>
-                <span className="text-white font-semibold">78%</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Engagement</span>
-                <span className="text-white font-semibold">89%</span>
+              <p className="text-gray-400 mb-6">Empowering traders worldwide with capital and opportunity.</p>
+              <div className="flex space-x-4">
+                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#6AFFAE] hover:text-black transition-all">
+                  <Users className="h-5 w-5" />
+                </a>
+                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#6AFFAE] hover:text-black transition-all">
+                  <Globe className="h-5 w-5" />
+                </a>
+                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#6AFFAE] hover:text-black transition-all">
+                  <Shield className="h-5 w-5" />
+                </a>
               </div>
             </div>
           </div>
+          
+          <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+            <p className="text-gray-500">© 2024 Fxology. All rights reserved. Trading involves risk of loss.</p>
+          </div>
         </div>
-      </div>
+      </footer>
     </div>
   )
 }
