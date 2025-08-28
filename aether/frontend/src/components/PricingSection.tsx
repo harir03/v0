@@ -66,8 +66,8 @@ export default function PricingSection() {
       price: "Custom",
       description: "For large organizations requiring maximum security and scale",
       icon: Crown,
-      color: "border-aether-gray-400",
-      buttonColor: "bg-gradient-to-r from-aether-gray-400 to-aether-blue hover:shadow-lg hover:shadow-aether-gray-400/50",
+      color: "border-aether-green",
+      buttonColor: "bg-gradient-to-r from-aether-green to-aether-blue hover:shadow-lg hover:shadow-aether-green/50",
       popular: false,
       features: [
         "Unlimited User Seats & Tasks",
@@ -122,7 +122,7 @@ export default function PricingSection() {
             <br />
             <span className="text-white">Scale as You Grow</span>
           </h2>
-          <p className="text-xl text-aether-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-aether-beige max-w-3xl mx-auto">
             Start free and upgrade when you need more power. All plans include our core features 
             with transparent pricing and no hidden fees.
           </p>
@@ -151,13 +151,13 @@ export default function PricingSection() {
 
               <div className="text-center mb-6">
                 <div className="flex justify-center mb-4">
-                  <div className={`p-3 rounded-lg ${plan.color === 'border-aether-blue' ? 'bg-aether-blue/10' : plan.color === 'border-aether-purple' ? 'bg-aether-purple/10' : plan.color === 'border-aether-gray-400' ? 'bg-aether-gray-400/10' : 'bg-aether-gray-700'}`}>
-                    <plan.icon className={`h-8 w-8 ${plan.color === 'border-aether-blue' ? 'text-aether-blue' : plan.color === 'border-aether-purple' ? 'text-aether-purple' : plan.color === 'border-aether-gray-400' ? 'text-aether-gray-400' : 'text-aether-gray-300'}`} />
+                  <div className={`p-3 rounded-lg ${plan.color === 'border-aether-blue' ? 'bg-aether-blue/10' : plan.color === 'border-aether-purple' ? 'bg-aether-purple/10' : plan.color === 'border-aether-green' ? 'bg-aether-green/10' : 'bg-aether-gray-700'}`}>
+                    <plan.icon className={`h-8 w-8 ${plan.color === 'border-aether-blue' ? 'text-aether-blue' : plan.color === 'border-aether-purple' ? 'text-aether-purple' : plan.color === 'border-aether-green' ? 'text-aether-green' : 'text-aether-gray-300'}`} />
                   </div>
                 </div>
                 
                 <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
-                <p className="text-aether-gray-400 text-sm mb-4">{plan.description}</p>
+                <p className="text-aether-beige text-sm mb-4">{plan.description}</p>
                 
                 <div className="mb-6">
                   <span className="text-4xl font-bold text-white">{plan.price}</span>
@@ -168,8 +168,8 @@ export default function PricingSection() {
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start space-x-3">
-                    <Check className="h-5 w-5 text-aether-gray-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-aether-gray-300 text-sm">{feature}</span>
+                    <Check className="h-5 w-5 text-aether-green mt-0.5 flex-shrink-0" />
+                    <span className="text-aether-beige text-sm">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -188,10 +188,10 @@ export default function PricingSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
         >
-          <p className="text-aether-gray-400 mb-4">
+          <p className="text-aether-beige mb-4">
             All plans include 14-day free trial • No credit card required • Cancel anytime
           </p>
-          <div className="flex justify-center space-x-8 text-sm text-aether-gray-500">
+          <div className="flex justify-center space-x-8 text-sm text-aether-green">
             <span>✓ 99.9% SLA</span>
             <span>✓ 24/7 Support</span>
             <span>✓ SOC 2 Compliant</span>

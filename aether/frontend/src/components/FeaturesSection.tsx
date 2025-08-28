@@ -23,8 +23,8 @@ export default function FeaturesSection() {
       icon: Users,
       title: "Multi-Agent Collaboration",
       description: "Create agent societies where specialized agents delegate tasks to each other, forming sophisticated workflows and teams.",
-      color: "text-aether-gray-400",
-      bgColor: "bg-aether-gray-400/10",
+      color: "text-aether-green",
+      bgColor: "bg-aether-green/10",
     },
     {
       icon: Workflow,
@@ -37,8 +37,8 @@ export default function FeaturesSection() {
       icon: Zap,
       title: "Lightning Fast",
       description: "Powered by the latest AI models with optimized infrastructure. Your agents respond in seconds, not minutes.",
-      color: "text-aether-gray-400",
-      bgColor: "bg-aether-gray-400/10",
+      color: "text-aether-green",
+      bgColor: "bg-aether-green/10",
     },
     {
       icon: Shield,
@@ -90,7 +90,7 @@ export default function FeaturesSection() {
             <br />
             <span className="text-white">Built for Scale</span>
           </h2>
-          <p className="text-xl text-aether-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-aether-beige max-w-3xl mx-auto">
             Everything you need to build, deploy, and manage AI agents that work 
             like human employees but never take a break.
           </p>
@@ -118,7 +118,7 @@ export default function FeaturesSection() {
                   {feature.title}
                 </h3>
                 
-                <p className="text-aether-gray-300 leading-relaxed">
+                <p className="text-aether-beige leading-relaxed">
                   {feature.description}
                 </p>
 

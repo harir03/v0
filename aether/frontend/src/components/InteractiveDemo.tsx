@@ -46,15 +46,15 @@ export default function InteractiveDemo() {
               <div className="bg-aether-dark p-3 rounded border-l-4 border-aether-blue">
                 <div className="flex items-center space-x-2 mb-2">
                   <Mail className="h-4 w-4 text-aether-blue" />
-                  <span className="text-sm text-aether-gray-300">New Ticket #1234</span>
+                  <span className="text-sm text-aether-beige">New Ticket #1234</span>
                 </div>
                 <p className="text-sm text-white">Login issues with account verification...</p>
               </div>
               
-              <div className="bg-aether-dark p-3 rounded border-l-4 border-aether-gray-400">
+              <div className="bg-aether-dark p-3 rounded border-l-4 border-aether-green">
                 <div className="flex items-center space-x-2 mb-2">
-                  <Mail className="h-4 w-4 text-aether-gray-400" />
-                  <span className="text-sm text-aether-gray-300">Ticket #1233 - Resolved</span>
+                  <Mail className="h-4 w-4 text-aether-green" />
+                  <span className="text-sm text-aether-beige">Ticket #1233 - Resolved</span>
                 </div>
                 <p className="text-sm text-white">Billing question resolved automatically...</p>
               </div>
@@ -106,7 +106,7 @@ export default function InteractiveDemo() {
             <br />
             <span className="text-white">Build an Agent Now</span>
           </h2>
-          <p className="text-xl text-aether-gray-300 max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-aether-beige max-w-3xl mx-auto mb-8">
             Describe what you want your agent to do, and watch as Aether creates 
             the interface and logic in real-time.
           </p>
@@ -178,7 +178,7 @@ export default function InteractiveDemo() {
                     <div className="w-2 h-2 bg-aether-blue rounded-full animate-bounce neon-glow"></div>
                     <div className="w-2 h-2 bg-aether-purple rounded-full animate-bounce neon-glow" style={{ animationDelay: '0.1s' }}></div>
                     <div className="w-2 h-2 bg-aether-cyan rounded-full animate-bounce neon-glow" style={{ animationDelay: '0.2s' }}></div>
-                    <span className="text-aether-gray-300 ml-2">AI is creating your interface...</span>
+                    <span className="text-aether-beige ml-2">AI is creating your interface...</span>
                   </div>
                   <MockGeneratedInterface prompt="" />
                 </div>

@@ -92,25 +92,25 @@ export default function VividAIPage() {
   }, [activeMode, creativePrompt])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-aether-dark">
       {/* Header */}
-      <header className="border-b border-slate-700/50 bg-slate-900/50 backdrop-blur-sm">
+      <header className="border-b border-aether-medium/50 bg-aether-dark/50 backdrop-blur-sm">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <Video className="h-8 w-8 text-purple-400" />
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                <Video className="h-8 w-8 text-aether-green" />
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-aether-green to-aether-pink bg-clip-text text-transparent">
                   Vivid AI
                 </h1>
               </div>
-              <span className="text-sm text-slate-400">Revolutionary AI Video Editor</span>
+              <span className="text-sm text-aether-beige">Revolutionary AI Video Editor</span>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="text-sm text-slate-300">
-                <span className="text-purple-400 font-semibold">5</span> videos left this month
+              <div className="text-sm text-aether-light">
+                <span className="text-aether-green font-semibold">5</span> videos left this month
               </div>
-              <button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200">
+              <button className="bg-gradient-to-r from-aether-green to-aether-pink hover:from-aether-green/80 hover:to-aether-pink/80 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200">
                 Upgrade Pro
               </button>
             </div>
@@ -123,13 +123,13 @@ export default function VividAIPage() {
           {/* Main Editor Area */}
           <div className="lg:col-span-2 space-y-6">
             {/* Upload Area */}
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700/50 p-6">
+            <div className="bg-aether-gray-800/50 backdrop-blur-sm rounded-xl border border-aether-medium/50 p-6">
               <h2 className="text-xl font-semibold text-white mb-4">Upload Your Video</h2>
               
-              <div className="border-2 border-dashed border-slate-600 rounded-lg p-8 text-center hover:border-purple-500 transition-colors duration-200">
-                <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                <p className="text-slate-300 mb-2">Drop your video here or click to browse</p>
-                <p className="text-sm text-slate-500">Supports MP4, MOV, AVI up to 500MB</p>
+              <div className="border-2 border-dashed border-aether-medium rounded-lg p-8 text-center hover:border-aether-green transition-colors duration-200">
+                <Upload className="h-12 w-12 text-aether-beige mx-auto mb-4" />
+                <p className="text-aether-light mb-2">Drop your video here or click to browse</p>
+                <p className="text-sm text-aether-medium">Supports MP4, MOV, AVI up to 500MB</p>
                 
                 <input
                   type="file"
@@ -140,27 +140,27 @@ export default function VividAIPage() {
                 />
                 <label
                   htmlFor="video-upload"
-                  className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg mt-4 cursor-pointer transition-colors duration-200"
+                  className="inline-block bg-aether-green hover:bg-aether-green/80 text-white px-6 py-2 rounded-lg mt-4 cursor-pointer transition-colors duration-200"
                 >
                   Choose File
                 </label>
                 
                 {isUploading && (
                   <div className="mt-4">
-                    <div className="bg-slate-700 rounded-full h-2 overflow-hidden">
+                    <div className="bg-aether-medium rounded-full h-2 overflow-hidden">
                       <div 
-                        className="bg-gradient-to-r from-purple-500 to-pink-500 h-full transition-all duration-300"
+                        className="bg-gradient-to-r from-aether-green to-aether-pink h-full transition-all duration-300"
                         style={{ width: `${uploadProgress}%` }}
                       />
                     </div>
-                    <p className="text-sm text-slate-400 mt-2">Uploading... {uploadProgress}%</p>
+                    <p className="text-sm text-aether-beige mt-2">Uploading... {uploadProgress}%</p>
                   </div>
                 )}
               </div>
             </div>
 
             {/* AI Processing Modes */}
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-slate-700/50 p-6">
+            <div className="bg-aether-gray-800/50 backdrop-blur-sm rounded-xl border border-aether-medium/50 p-6">
               <h2 className="text-xl font-semibold text-white mb-4">Choose AI Processing Mode</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -168,8 +168,8 @@ export default function VividAIPage() {
                   onClick={() => setActiveMode('style')}
                   className={`p-4 rounded-lg border transition-all duration-200 ${
                     activeMode === 'style'
-                      ? 'border-purple-500 bg-purple-500/20 text-purple-300'
-                      : 'border-slate-600 bg-slate-700/50 text-slate-300 hover:border-slate-500'
+                      ? 'border-aether-green bg-aether-green/20 text-aether-green'
+                      : 'border-aether-medium bg-aether-gray-700/50 text-aether-light hover:border-aether-beige'
                   }`}
                 >
                   <Zap className="h-6 w-6 mb-2" />
@@ -181,8 +181,8 @@ export default function VividAIPage() {
                   onClick={() => setActiveMode('director')}
                   className={`p-4 rounded-lg border transition-all duration-200 ${
                     activeMode === 'director'
-                      ? 'border-purple-500 bg-purple-500/20 text-purple-300'
-                      : 'border-slate-600 bg-slate-700/50 text-slate-300 hover:border-slate-500'
+                      ? 'border-aether-green bg-aether-green/20 text-aether-green'
+                      : 'border-aether-medium bg-aether-gray-700/50 text-aether-light hover:border-aether-beige'
                   }`}
                 >
                   <Brain className="h-6 w-6 mb-2" />
@@ -194,8 +194,8 @@ export default function VividAIPage() {
                   onClick={() => setActiveMode('discovery')}
                   className={`p-4 rounded-lg border transition-all duration-200 ${
                     activeMode === 'discovery'
-                      ? 'border-purple-500 bg-purple-500/20 text-purple-300'
-                      : 'border-slate-600 bg-slate-700/50 text-slate-300 hover:border-slate-500'
+                      ? 'border-aether-green bg-aether-green/20 text-aether-green'
+                      : 'border-aether-medium bg-aether-gray-700/50 text-aether-light hover:border-aether-beige'
                   }`}
                 >
                   <Sparkles className="h-6 w-6 mb-2" />

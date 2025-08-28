@@ -9,27 +9,30 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Enhanced Futuristic theme colors
-        'aether-dark': '#000814',
-        'aether-darker': '#001122',
+        // Sophisticated expensive color palette
+        'aether-dark': '#262626', // Dark charcoal base
+        'aether-darker': '#1a1a1a', // Even darker for depth
         'aether-blue': '#00d9ff',
         'aether-purple': '#6366f1',
-        'aether-green': '#64748b', // Changed from green to grey
+        'aether-green': '#888C79', // Muted olive grey
         'aether-orange': '#ff6b35',
         'aether-cyan': '#06ffa5',
         'aether-pink': '#ec4899',
         'aether-gold': '#fbbf24',
+        'aether-light': '#F0F1F2', // Off-white
+        'aether-beige': '#D9D3C7', // Warm beige
+        'aether-medium': '#595959', // Medium grey
         'aether-gray': {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#94a3b8',
-          400: '#64748b',
-          500: '#475569',
-          600: '#334155',
-          700: '#1e293b',
-          800: '#0f172a',
-          900: '#020617',
+          50: '#F0F1F2', // Off-white
+          100: '#D9D3C7', // Warm beige
+          200: '#c4bbb1',
+          300: '#888C79', // Olive grey
+          400: '#6b6b6b',
+          500: '#595959', // Medium grey
+          600: '#4a4a4a',
+          700: '#3a3a3a',
+          800: '#262626', // Dark charcoal
+          900: '#1a1a1a',
         }
       },
       backgroundImage: {

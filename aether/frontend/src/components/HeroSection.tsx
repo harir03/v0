@@ -71,12 +71,12 @@ export default function HeroSection() {
         </motion.div>
 
         <motion.p
-          className="text-xl md:text-2xl text-aether-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed"
+          className="text-xl md:text-2xl text-aether-beige mb-8 max-w-4xl mx-auto leading-relaxed"
           variants={itemVariants}
         >
           Aether Agents is the no-code/low-code platform that empowers anyone to build 
           sophisticated AI agents. Move beyond simple automation with agentic coding, 
-          revolutionary prompt-to-interface builders, and now featuring <strong className="text-purple-400">Vivid AI</strong> - 
+          revolutionary prompt-to-interface builders, and now featuring <strong className="text-aether-green">Vivid AI</strong> - 
           the ultimate AI-powered video editing platform.
         </motion.p>
 
@@ -104,15 +104,15 @@ export default function HeroSection() {
         >
           <div className="cyber-card p-6 data-stream group">
             <div className="text-3xl font-bold text-aether-cyan mb-2 transition-all duration-300 group-hover:scale-110">2M+</div>
-            <div className="text-aether-gray-300">Tasks Automated</div>
+            <div className="text-aether-beige">Tasks Automated</div>
           </div>
           <div className="cyber-card p-6 data-stream group">
             <div className="text-3xl font-bold text-aether-blue mb-2 transition-all duration-300 group-hover:scale-110">500+</div>
-            <div className="text-aether-gray-300">Active Agents</div>
+            <div className="text-aether-beige">Active Agents</div>
           </div>
           <div className="cyber-card p-6 data-stream group">
             <div className="text-3xl font-bold text-aether-purple mb-2 transition-all duration-300 group-hover:scale-110">99.9%</div>
-            <div className="text-aether-gray-300">Uptime</div>
+            <div className="text-aether-beige">Uptime</div>
           </div>
         </motion.div>
       </motion.div>
