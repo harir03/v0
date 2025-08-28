@@ -100,7 +100,7 @@ export default function FxologyPage() {
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {/* Floating Numbers and Equations */}
         <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
+          {[...Array(30)].map((_, i) => (
             <div
               key={i}
               className="absolute text-gray-600/30 text-sm font-mono animate-float"
@@ -115,18 +115,51 @@ export default function FxologyPage() {
             </div>
           ))}
         </div>
-        
-        {/* Grid Overlay */}
+
+        {/* Additional Particle Effects */}
+        <div className="absolute inset-0">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={`particle-${i}`}
+              className="absolute w-1 h-1 bg-gray-500/20 rounded-full animate-particle-drift"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 12}s`,
+                animationDuration: `${10 + Math.random() * 8}s`
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Enhanced Grid Overlay */}
         <div className="absolute inset-0 opacity-5" style={{
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
           backgroundSize: '50px 50px'
         }}></div>
         
+        {/* Pulsing Dots */}
+        <div className="absolute inset-0">
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={`dot-${i}`}
+              className="absolute w-2 h-2 bg-gray-400/20 rounded-full animate-pulse"
+              style={{
+                left: `${10 + (i * 12)}%`,
+                top: `${20 + Math.sin(i) * 30}%`,
+                animationDelay: `${i * 0.5}s`,
+                animationDuration: `${2 + Math.random() * 1}s`
+              }}
+            />
+          ))}
+        </div>
+        
         {/* Data Streams */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#6AFFAE]/30 to-transparent animate-pulse"></div>
-          <div className="absolute top-3/4 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#6AFFAE]/20 to-transparent animate-pulse delay-1000"></div>
-          <div className="absolute left-1/4 top-0 w-0.5 h-full bg-gradient-to-b from-transparent via-[#6AFFAE]/20 to-transparent animate-pulse delay-500"></div>
+          <div className="absolute top-1/4 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#9CA3AF]/30 to-transparent animate-pulse"></div>
+          <div className="absolute top-3/4 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#9CA3AF]/20 to-transparent animate-pulse delay-1000"></div>
+          <div className="absolute left-1/4 top-0 w-0.5 h-full bg-gradient-to-b from-transparent via-[#9CA3AF]/20 to-transparent animate-pulse delay-500"></div>
+          <div className="absolute left-3/4 top-0 w-0.5 h-full bg-gradient-to-b from-transparent via-[#9CA3AF]/15 to-transparent animate-pulse delay-1500"></div>
         </div>
       </div>
 
@@ -135,15 +168,15 @@ export default function FxologyPage() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <TrendingUp className="h-8 w-8 text-[#6AFFAE]" />
+              <TrendingUp className="h-8 w-8 text-[#9CA3AF] animate-pulse" />
               <h1 className="text-2xl font-bold text-white">Fxology</h1>
             </div>
             <nav className="hidden md:flex items-center space-x-8">
-              <a href="#" className="text-gray-300 hover:text-[#6AFFAE] transition-colors">Home</a>
-              <a href="#" className="text-gray-300 hover:text-[#6AFFAE] transition-colors">About</a>
-              <a href="#" className="text-gray-300 hover:text-[#6AFFAE] transition-colors">Pricing</a>
-              <a href="#" className="text-gray-300 hover:text-[#6AFFAE] transition-colors">FAQ</a>
-              <button className="bg-[#6AFFAE] text-black px-6 py-2 rounded-lg font-semibold hover:bg-[#5AEF9E] transition-colors">
+              <a href="#" className="text-gray-300 hover:text-[#9CA3AF] transition-colors">Home</a>
+              <a href="#" className="text-gray-300 hover:text-[#9CA3AF] transition-colors">About</a>
+              <a href="#" className="text-gray-300 hover:text-[#9CA3AF] transition-colors">Pricing</a>
+              <a href="#" className="text-gray-300 hover:text-[#9CA3AF] transition-colors">FAQ</a>
+              <button className="bg-[#9CA3AF] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#6B7280] transition-all duration-300 transform hover:scale-105">
                 Start Challenge
               </button>
             </nav>
@@ -158,15 +191,39 @@ export default function FxologyPage() {
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-tight animate-kinetic-reveal">
               No Time Limit
               <br />
-              <span className="text-[#6AFFAE]">Prop Firm</span>
+              <span className="text-[#9CA3AF] animate-pulse">Prop Firm</span>
             </h1>
             <p className="text-2xl md:text-3xl text-gray-300 font-medium animate-kinetic-reveal delay-300">
               Conquer the market
             </p>
             <div className="pt-8 animate-kinetic-reveal delay-500">
-              <button className="bg-[#6AFFAE] text-black px-12 py-4 rounded-lg text-xl font-bold hover:bg-[#5AEF9E] transform hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(106,255,174,0.3)]">
+              <button className="bg-[#9CA3AF] text-white px-12 py-4 rounded-lg text-xl font-bold hover:bg-[#6B7280] transform hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(156,163,175,0.3)] animate-breathing">
                 Start a challenge
               </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof Metrics Section */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center animate-counter-bounce">
+              <div className="text-4xl md:text-5xl font-bold text-[#9CA3AF] mb-2">$400K+</div>
+              <p className="text-gray-400">Paid out to Traders</p>
+            </div>
+            <div className="text-center animate-counter-bounce delay-300">
+              <div className="text-4xl md:text-5xl font-bold text-[#9CA3AF] mb-2">15K+</div>
+              <p className="text-gray-400">Active Traders</p>
+            </div>
+            <div className="text-center animate-counter-bounce delay-500">
+              <div className="text-4xl md:text-5xl font-bold text-[#9CA3AF] mb-2">150+</div>
+              <p className="text-gray-400">Countries</p>
+            </div>
+            <div className="text-center animate-counter-bounce delay-700">
+              <div className="text-4xl md:text-5xl font-bold text-[#9CA3AF] mb-2">99.2%</div>
+              <p className="text-gray-400">Uptime</p>
             </div>
           </div>
         </div>
@@ -182,14 +239,14 @@ export default function FxologyPage() {
             <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 400 200">
               <path
                 d="M0,100 Q100,50 200,100 T400,100"
-                stroke="#6AFFAE"
+                stroke="#9CA3AF"
                 strokeWidth="2"
                 fill="none"
                 className="animate-wave"
               />
               <path
                 d="M0,120 Q150,80 300,120 T600,120"
-                stroke="#6AFFAE"
+                stroke="#9CA3AF"
                 strokeWidth="1"
                 fill="none"
                 opacity="0.6"
@@ -205,9 +262,9 @@ export default function FxologyPage() {
                     <button
                       key={step}
                       onClick={() => setActiveStep(step)}
-                      className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                      className={`px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 ${
                         activeStep === step
-                          ? 'bg-[#6AFFAE] text-black'
+                          ? 'bg-[#9CA3AF] text-white animate-pulse'
                           : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                       }`}
                     >
@@ -267,10 +324,10 @@ export default function FxologyPage() {
                 <div className="flex justify-center">
                   <div className="w-96 h-64 bg-gray-800/50 rounded-xl border border-gray-700 flex items-center justify-center">
                     <div className="text-gray-400 text-center">
-                      <div className="w-16 h-16 bg-[#6AFFAE]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        {activeStep === 1 && <DollarSign className="h-8 w-8 text-[#6AFFAE]" />}
-                        {activeStep === 2 && <TrendingUp className="h-8 w-8 text-[#6AFFAE]" />}
-                        {activeStep === 3 && <Award className="h-8 w-8 text-[#6AFFAE]" />}
+                      <div className="w-16 h-16 bg-[#9CA3AF]/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-spin-slow">
+                        {activeStep === 1 && <DollarSign className="h-8 w-8 text-[#9CA3AF]" />}
+                        {activeStep === 2 && <TrendingUp className="h-8 w-8 text-[#9CA3AF]" />}
+                        {activeStep === 3 && <Award className="h-8 w-8 text-[#9CA3AF]" />}
                       </div>
                       <p>Step {activeStep} Visualization</p>
                     </div>
@@ -294,22 +351,22 @@ export default function FxologyPage() {
             <div className="flex justify-center">
               <div className="relative group">
                 {/* Wireframe Grid Background */}
-                <div className="absolute inset-0 opacity-30 transform rotate-45 scale-110">
+                <div className="absolute inset-0 opacity-30 transform rotate-45 scale-110 animate-spin-very-slow">
                   <div className="grid grid-cols-8 grid-rows-8 gap-1 w-full h-full">
                     {[...Array(64)].map((_, i) => (
-                      <div key={i} className="border border-[#6AFFAE]/20"></div>
+                      <div key={i} className="border border-[#9CA3AF]/20"></div>
                     ))}
                   </div>
                 </div>
                 
                 {/* Certificate Card */}
-                <div className="relative bg-gray-900/40 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 transform group-hover:scale-105 transition-all duration-500 shadow-[0_0_50px_rgba(106,255,174,0.1)]">
+                <div className="relative bg-gray-900/40 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 transform group-hover:scale-105 transition-all duration-500 shadow-[0_0_50px_rgba(156,163,175,0.1)] animate-card-float">
                   <div className="text-center space-y-4">
-                    <div className="w-16 h-16 bg-[#6AFFAE]/20 rounded-full flex items-center justify-center mx-auto">
-                      <Award className="h-8 w-8 text-[#6AFFAE]" />
+                    <div className="w-16 h-16 bg-[#9CA3AF]/20 rounded-full flex items-center justify-center mx-auto animate-pulse">
+                      <Award className="h-8 w-8 text-[#9CA3AF]" />
                     </div>
                     <h3 className="text-xl font-bold text-white">Payout Certificate</h3>
-                    <div className="text-2xl font-bold text-[#6AFFAE]">$12,500</div>
+                    <div className="text-2xl font-bold text-[#9CA3AF]">$12,500</div>
                     <p className="text-gray-400 text-sm">Monthly Payout</p>
                     <div className="pt-4 border-t border-gray-700">
                       <p className="text-xs text-gray-500">Certified Trader Program</p>
@@ -341,14 +398,14 @@ export default function FxologyPage() {
                 }`}
               >
                 {/* Glassmorphism Card */}
-                <div className={`relative bg-gray-900/40 backdrop-blur-sm border rounded-2xl p-6 h-full transition-all duration-300 ${
+                <div className={`relative bg-gray-900/40 backdrop-blur-sm border rounded-2xl p-6 h-full transition-all duration-300 animate-card-bounce ${
                   plan.popular
-                    ? 'border-[#6AFFAE] shadow-[0_0_30px_rgba(106,255,174,0.2)]'
-                    : 'border-gray-700/50 group-hover:border-[#6AFFAE] group-hover:shadow-[0_0_30px_rgba(106,255,174,0.1)]'
+                    ? 'border-[#9CA3AF] shadow-[0_0_30px_rgba(156,163,175,0.2)]'
+                    : 'border-gray-700/50 group-hover:border-[#9CA3AF] group-hover:shadow-[0_0_30px_rgba(156,163,175,0.1)]'
                 }`}>
                   {plan.popular && (
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <div className="bg-[#6AFFAE] text-black px-4 py-1 rounded-full text-sm font-semibold">
+                      <div className="bg-[#9CA3AF] text-white px-4 py-1 rounded-full text-sm font-semibold animate-pulse">
                         Most Popular
                       </div>
                     </div>
@@ -357,23 +414,23 @@ export default function FxologyPage() {
                   <div className="text-center space-y-6">
                     <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
                     <div>
-                      <span className="text-4xl font-bold text-[#6AFFAE]">{plan.price}</span>
+                      <span className="text-4xl font-bold text-[#9CA3AF]">{plan.price}</span>
                       <span className="text-gray-400 ml-2">{plan.period}</span>
                     </div>
                     
                     <ul className="space-y-3 text-left">
                       {plan.features.map((feature, idx) => (
                         <li key={idx} className="flex items-center text-gray-300">
-                          <div className="w-2 h-2 bg-[#6AFFAE] rounded-full mr-3"></div>
+                          <div className="w-2 h-2 bg-[#9CA3AF] rounded-full mr-3 animate-pulse"></div>
                           {feature}
                         </li>
                       ))}
                     </ul>
                     
-                    <button className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 ${
+                    <button className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 ${
                       plan.popular
-                        ? 'bg-[#6AFFAE] text-black hover:bg-[#5AEF9E]'
-                        : 'bg-gray-800 text-white group-hover:bg-[#6AFFAE] group-hover:text-black'
+                        ? 'bg-[#9CA3AF] text-white hover:bg-[#6B7280] animate-breathing'
+                        : 'bg-gray-800 text-white group-hover:bg-[#9CA3AF] group-hover:text-white'
                     }`}>
                       Start Challenge
                     </button>
@@ -397,21 +454,21 @@ export default function FxologyPage() {
           
           {/* Countdown Timer */}
           <div className="mb-12">
-            <p className="text-[#6AFFAE] text-sm font-semibold mb-4">LIMITED TIME OFFER ENDS IN:</p>
+            <p className="text-[#9CA3AF] text-sm font-semibold mb-4 animate-pulse">LIMITED TIME OFFER ENDS IN:</p>
             <div className="flex justify-center space-x-8">
-              <div className="text-center">
+              <div className="text-center animate-counter-bounce">
                 <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.days.toString().padStart(2, '0')}</div>
                 <div className="text-gray-400 text-sm">DAYS</div>
               </div>
-              <div className="text-center">
+              <div className="text-center animate-counter-bounce">
                 <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.hours.toString().padStart(2, '0')}</div>
                 <div className="text-gray-400 text-sm">HOURS</div>
               </div>
-              <div className="text-center">
+              <div className="text-center animate-counter-bounce">
                 <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.minutes.toString().padStart(2, '0')}</div>
                 <div className="text-gray-400 text-sm">MINUTES</div>
               </div>
-              <div className="text-center">
+              <div className="text-center animate-counter-bounce">
                 <div className="text-4xl md:text-5xl font-bold text-white mb-2">{countdown.seconds.toString().padStart(2, '0')}</div>
                 <div className="text-gray-400 text-sm">SECONDS</div>
               </div>
@@ -423,9 +480,9 @@ export default function FxologyPage() {
             <svg className="w-full h-32 opacity-30" viewBox="0 0 400 100">
               <defs>
                 <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#6AFFAE" stopOpacity="0" />
-                  <stop offset="50%" stopColor="#6AFFAE" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#6AFFAE" stopOpacity="0" />
+                  <stop offset="0%" stopColor="#9CA3AF" stopOpacity="0" />
+                  <stop offset="50%" stopColor="#9CA3AF" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#9CA3AF" stopOpacity="0" />
                 </linearGradient>
               </defs>
               <path
@@ -435,12 +492,12 @@ export default function FxologyPage() {
                 fill="none"
               />
               {/* Shooting Stars */}
-              <circle r="2" fill="#6AFFAE" opacity="0.8">
+              <circle r="2" fill="#9CA3AF" opacity="0.8">
                 <animateMotion dur="3s" repeatCount="indefinite">
                   <path d="M0,60 Q200,10 400,60" />
                 </animateMotion>
               </circle>
-              <circle r="1.5" fill="#6AFFAE" opacity="0.6">
+              <circle r="1.5" fill="#9CA3AF" opacity="0.6">
                 <animateMotion dur="4s" repeatCount="indefinite" begin="1s">
                   <path d="M0,70 Q200,15 400,70" />
                 </animateMotion>
@@ -448,7 +505,7 @@ export default function FxologyPage() {
             </svg>
           </div>
           
-          <button className="bg-[#6AFFAE] text-black px-12 py-4 rounded-lg text-xl font-bold hover:bg-[#5AEF9E] transform hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(106,255,174,0.3)]">
+          <button className="bg-[#9CA3AF] text-white px-12 py-4 rounded-lg text-xl font-bold hover:bg-[#6B7280] transform hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(156,163,175,0.3)] animate-breathing">
             Start Your Challenge Now
           </button>
         </div>
@@ -469,9 +526,9 @@ export default function FxologyPage() {
                   <span className="text-lg font-semibold text-white">{faq.question}</span>
                   <div className={`transform transition-transform duration-300 ${openFaq === index ? 'rotate-45' : ''}`}>
                     {openFaq === index ? (
-                      <ChevronUp className="h-6 w-6 text-[#6AFFAE]" />
+                      <ChevronUp className="h-6 w-6 text-[#9CA3AF] animate-spin-slow" />
                     ) : (
-                      <ChevronDown className="h-6 w-6 text-gray-400" />
+                      <ChevronDown className="h-6 w-6 text-gray-400 hover:text-[#9CA3AF] transition-colors" />
                     )}
                   </div>
                 </button>
@@ -496,7 +553,7 @@ export default function FxologyPage() {
             <h2 className="text-5xl md:text-6xl font-bold text-white mb-8 animate-kinetic-reveal">
               Who we are?
             </h2>
-            <h3 className="text-3xl md:text-4xl font-bold text-[#6AFFAE] animate-kinetic-reveal delay-300">
+            <h3 className="text-3xl md:text-4xl font-bold text-[#9CA3AF] animate-kinetic-reveal delay-300">
               And how it all started?
             </h3>
           </div>
@@ -506,9 +563,9 @@ export default function FxologyPage() {
             <svg className="w-full h-64 opacity-60" viewBox="0 0 800 200">
               <defs>
                 <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#6AFFAE" stopOpacity="0.2" />
-                  <stop offset="50%" stopColor="#6AFFAE" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#6AFFAE" stopOpacity="0.2" />
+                  <stop offset="0%" stopColor="#9CA3AF" stopOpacity="0.2" />
+                  <stop offset="50%" stopColor="#9CA3AF" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#9CA3AF" stopOpacity="0.2" />
                 </linearGradient>
               </defs>
               
@@ -522,20 +579,20 @@ export default function FxologyPage() {
               />
               
               {/* Data Points */}
-              <circle cx="200" cy="100" r="4" fill="#6AFFAE" opacity="0.8">
+              <circle cx="200" cy="100" r="4" fill="#9CA3AF" opacity="0.8">
                 <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1s" />
               </circle>
-              <circle cx="350" cy="80" r="4" fill="#6AFFAE" opacity="0.8">
+              <circle cx="350" cy="80" r="4" fill="#9CA3AF" opacity="0.8">
                 <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1.5s" />
               </circle>
-              <circle cx="500" cy="75" r="4" fill="#6AFFAE" opacity="0.8">
+              <circle cx="500" cy="75" r="4" fill="#9CA3AF" opacity="0.8">
                 <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="2s" />
               </circle>
               
               {/* Floating Numbers */}
-              <text x="200" y="90" fill="#6AFFAE" fontSize="12" textAnchor="middle" opacity="0.8">$2.5M</text>
-              <text x="350" y="70" fill="#6AFFAE" fontSize="12" textAnchor="middle" opacity="0.8">$5.1M</text>
-              <text x="500" y="65" fill="#6AFFAE" fontSize="12" textAnchor="middle" opacity="0.8">$8.7M</text>
+              <text x="200" y="90" fill="#9CA3AF" fontSize="12" textAnchor="middle" opacity="0.8">$2.5M</text>
+              <text x="350" y="70" fill="#9CA3AF" fontSize="12" textAnchor="middle" opacity="0.8">$5.1M</text>
+              <text x="500" y="65" fill="#9CA3AF" fontSize="12" textAnchor="middle" opacity="0.8">$8.7M</text>
             </svg>
           </div>
           
@@ -561,10 +618,10 @@ export default function FxologyPage() {
             <div>
               <h4 className="text-lg font-semibold text-white mb-6">Programs</h4>
               <ul className="space-y-3">
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Trading Challenges</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Funded Accounts</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Educational Resources</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Trading Platform</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Trading Challenges</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Funded Accounts</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Educational Resources</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Trading Platform</a></li>
               </ul>
             </div>
             
@@ -572,10 +629,10 @@ export default function FxologyPage() {
             <div>
               <h4 className="text-lg font-semibold text-white mb-6">About Us</h4>
               <ul className="space-y-3">
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Our Story</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Team</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Careers</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Contact</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Our Story</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Team</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Careers</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Contact</a></li>
               </ul>
             </div>
             
@@ -583,28 +640,28 @@ export default function FxologyPage() {
             <div>
               <h4 className="text-lg font-semibold text-white mb-6">Legal</h4>
               <ul className="space-y-3">
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Risk Disclosure</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#6AFFAE] transition-colors">Compliance</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Terms of Service</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Risk Disclosure</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-[#9CA3AF] transition-colors">Compliance</a></li>
               </ul>
             </div>
             
             {/* Social & Brand */}
             <div>
               <div className="flex items-center space-x-3 mb-6">
-                <TrendingUp className="h-8 w-8 text-[#6AFFAE]" />
+                <TrendingUp className="h-8 w-8 text-[#9CA3AF] animate-pulse" />
                 <h4 className="text-2xl font-bold text-white">Fxology</h4>
               </div>
               <p className="text-gray-400 mb-6">Empowering traders worldwide with capital and opportunity.</p>
               <div className="flex space-x-4">
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#6AFFAE] hover:text-black transition-all">
+                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#9CA3AF] hover:text-white transition-all transform hover:scale-110">
                   <Users className="h-5 w-5" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#6AFFAE] hover:text-black transition-all">
+                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#9CA3AF] hover:text-white transition-all transform hover:scale-110">
                   <Globe className="h-5 w-5" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#6AFFAE] hover:text-black transition-all">
+                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#9CA3AF] hover:text-white transition-all transform hover:scale-110">
                   <Shield className="h-5 w-5" />
                 </a>
               </div>

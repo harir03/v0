@@ -35,12 +35,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #6AFFAE;
+  background: #9CA3AF;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5AEF9E;
+  background: #6B7280;
 }
 
 /* Fxology Animations */
@@ -186,8 +186,129 @@ body {
   }
 }
 
+/* New animations for enhanced visual effects */
+@keyframes breathing {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-very-slow {
+  from {
+    transform: rotate(0deg) scale(1.1);
+  }
+  to {
+    transform: rotate(360deg) scale(1.1);
+  }
+}
+
+@keyframes card-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes card-bounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes counter-bounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes particle-drift {
+  0% {
+    transform: translateX(-10px) translateY(0px);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateX(5px) translateY(-5px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(-3px) translateY(-10px);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateX(8px) translateY(-15px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(-10px) translateY(-20px);
+    opacity: 0.2;
+  }
+}
+
 .glitch {
   animation: glitch 0.3s ease-in-out;
+}
+
+/* New animation classes */
+.animate-breathing {
+  animation: breathing 3s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+.animate-spin-very-slow {
+  animation: spin-very-slow 20s linear infinite;
+}
+
+.animate-card-float {
+  animation: card-float 4s ease-in-out infinite;
+}
+
+.animate-card-bounce {
+  animation: card-bounce 2s ease-in-out infinite;
+}
+
+.animate-counter-bounce {
+  animation: counter-bounce 1s ease-in-out infinite;
+}
+
+.animate-gradient-shift {
+  animation: gradient-shift 4s ease infinite;
+  background-size: 200% 200%;
+}
+
+.animate-particle-drift {
+  animation: particle-drift 12s ease-in-out infinite;
 }
 
 /* Utility classes */
@@ -197,14 +318,23 @@ body {
   }
   
   .bg-grid {
-    background-image: radial-gradient(circle at 1px 1px, rgba(106, 255, 174, 0.15) 1px, transparent 0);
+    background-image: radial-gradient(circle at 1px 1px, rgba(156, 163, 175, 0.15) 1px, transparent 0);
     background-size: 20px 20px;
   }
   
   .gradient-text {
-    background: linear-gradient(135deg, #6AFFAE, #5AEF9E);
+    background: linear-gradient(135deg, #9CA3AF, #6B7280);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  .enhanced-bg {
+    background: linear-gradient(
+      135deg,
+      rgba(156, 163, 175, 0.05) 0%,
+      rgba(107, 114, 128, 0.1) 50%,
+      rgba(156, 163, 175, 0.05) 100%
+    );
   }
 }
