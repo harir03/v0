@@ -25,14 +25,17 @@ import PerformanceDashboardPanel from '@/components/builder/PerformanceDashboard
 import TemplateLibraryPanel from '@/components/builder/TemplateLibraryPanel'
 import ComponentDesignPanel from '@/components/builder/ComponentDesignPanel'
 import BackendBuilderPanel from '@/components/builder/BackendBuilderPanel'
+import ThemePreviewPanel from '@/components/builder/ThemePreviewPanel'
 import { FrameworkSelector } from '@/components/builder/FrameworkSelector'
-import { InterfaceSpec, CodeGenerationOptions, ComponentSpec } from '@/types/builder'
+import { InterfaceSpec, CodeGenerationOptions, ComponentSpec, ThemeSpec } from '@/types/builder'
 import { ComponentVariant } from '@/types/component-variants'
 
 export default function BuilderPage() {
   const [activeTab, setActiveTab] = useState<'preview' | 'code' | 'components' | 'theme' | 'templates' | 'brand' | 'github' | 'performance' | 'backend'>('preview')
   const [currentFramework, setCurrentFramework] = useState<CodeGenerationOptions['framework']>('next')
   const [selectedComponent, setSelectedComponent] = useState<ComponentSpec | null>(null)
+  const [isThemePreviewOpen, setIsThemePreviewOpen] = useState(false)
+  const [previewTheme, setPreviewTheme] = useState<ThemeSpec | null>(null)
   const [currentSpec, setCurrentSpec] = useState<InterfaceSpec>({
     id: 'demo-landing',
     name: 'Demo Landing Page',
@@ -212,6 +215,24 @@ export default function BuilderPage() {
     setSelectedComponent(null)
   }
 
+  const handleThemePreview = (theme: ThemeSpec | null) => {
+    setPreviewTheme(theme)
+  }
+
+  const handleThemeSelect = (theme: ThemeSpec) => {
+    setCurrentSpec(prev => ({ ...prev, theme }))
+    setPreviewTheme(null)
+  }
+
+  const handleThemePreviewClose = () => {
+    setIsThemePreviewOpen(false)
+    setPreviewTheme(null)
+  }
+
+  // Get the effective theme (preview theme or current theme)
+  const effectiveTheme = previewTheme || currentSpec.theme
+  const specWithPreviewTheme = { ...currentSpec, theme: effectiveTheme }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -340,10 +361,33 @@ export default function BuilderPage() {
           {/* Right Panel - Always Preview */}
           <div className="w-1/2 relative">
             <LivePreview 
-              spec={currentSpec} 
+              spec={specWithPreviewTheme} 
               onComponentSelect={handleComponentSelect}
               selectedComponent={selectedComponent}
             />
+            
+            {/* Theme Preview Button - floating action */}
+            <button
+              onClick={() => setIsThemePreviewOpen(true)}
+              className="absolute top-4 right-4 p-3 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg hover:shadow-xl transition-all border border-gray-200 z-10"
+              title="Browse Themes"
+            >
+              <Palette className="w-5 h-5 text-gray-700" />
+            </button>
+            
+            {/* Theme Preview Indicator */}
+            {previewTheme && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute top-16 right-4 bg-indigo-600 text-white px-3 py-2 rounded-lg shadow-lg text-sm font-medium z-10"
+              >
+                <div className="flex items-center space-x-2">
+                  <Eye className="w-4 h-4" />
+                  <span>Theme Preview</span>
+                </div>
+              </motion.div>
+            )}
           </div>
         </div>
 
@@ -355,6 +399,15 @@ export default function BuilderPage() {
             onClose={handleDesignPanelClose}
           />
         )}
+
+        {/* Theme Preview Panel - Overlay */}
+        <ThemePreviewPanel
+          currentTheme={currentSpec.theme}
+          onThemeSelect={handleThemeSelect}
+          onThemePreview={handleThemePreview}
+          isVisible={isThemePreviewOpen}
+          onClose={handleThemePreviewClose}
+        />
       </div>
     </div>
   )
