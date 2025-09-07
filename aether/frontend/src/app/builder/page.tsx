@@ -22,10 +22,12 @@ import GitHubIntegrationPanel from '@/components/builder/GitHubIntegrationPanel'
 import BrandIngestionPanel from '@/components/builder/BrandIngestionPanel'
 import PerformanceDashboardPanel from '@/components/builder/PerformanceDashboardPanel'
 import TemplateLibraryPanel from '@/components/builder/TemplateLibraryPanel'
-import { InterfaceSpec } from '@/types/builder'
+import { FrameworkSelector } from '@/components/builder/FrameworkSelector'
+import { InterfaceSpec, CodeGenerationOptions } from '@/types/builder'
 
 export default function BuilderPage() {
   const [activeTab, setActiveTab] = useState<'preview' | 'code' | 'components' | 'theme' | 'templates' | 'brand' | 'github' | 'performance'>('preview')
+  const [currentFramework, setCurrentFramework] = useState<CodeGenerationOptions['framework']>('next')
   const [currentSpec, setCurrentSpec] = useState<InterfaceSpec>({
     id: 'demo-landing',
     name: 'Demo Landing Page',
@@ -95,6 +97,10 @@ export default function BuilderPage() {
             </div>
           </div>
           <div className="flex items-center space-x-3">
+            <FrameworkSelector 
+              currentFramework={currentFramework}
+              onFrameworkChange={setCurrentFramework}
+            />
             <div className="text-sm text-gray-600">
               {currentSpec.components.length} components • {currentSpec.theme.fontFamily}
             </div>
@@ -153,7 +159,11 @@ export default function BuilderPage() {
                 <TemplateLibraryPanel onTemplateSelect={handleTemplateSelect} />
               )}
               {activeTab === 'code' && (
-                <CodeEditor spec={currentSpec} onChange={setCurrentSpec} />
+                <CodeEditor 
+                  spec={currentSpec} 
+                  framework={currentFramework}
+                  onChange={setCurrentSpec} 
+                />
               )}
               {activeTab === 'components' && (
                 <ComponentLibrary onAddComponent={(component) => {

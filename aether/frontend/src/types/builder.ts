@@ -70,6 +70,11 @@ export interface ComponentStyling {
     duration?: string
     easing?: string
   }
+  responsive?: {
+    mobile?: string
+    tablet?: string
+    desktop?: string
+  }
 }
 
 export interface ThemeSpec {
@@ -100,14 +105,16 @@ export interface GeneratedCode {
   css?: string
   dependencies: string[]
   imports: string[]
+  additionalFiles?: Record<string, string> // For frameworks like Angular that need separate files
 }
 
 export interface CodeGenerationOptions {
-  framework: 'next' | 'react' | 'vue' | 'svelte'
+  framework: 'next' | 'react' | 'vue' | 'svelte' | 'angular'
   styling: 'tailwind' | 'css-modules' | 'styled-components'
   typescript: boolean
   accessibility: boolean
   responsive: boolean
+  version?: string // Framework version (e.g., 'vue-3', 'angular-17', 'svelte-4')
 }
 
 // Template Types
