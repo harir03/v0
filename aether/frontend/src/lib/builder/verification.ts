@@ -63,16 +63,6 @@ export class CodeVerifier {
       })
     }
 
-    // Check for type annotations
-    const functionMatches = code.match(/function\s+\w+\s*\(/g)
-    if (functionMatches && !code.includes(': JSX.Element') && !code.includes(': React.')) {
-      warnings.push({
-        type: 'typescript',
-        message: 'Consider adding return type annotations',
-        file: 'generated.tsx'
-      })
-    }
-
     return errors
   }
 
@@ -86,7 +76,7 @@ export class CodeVerifier {
       const variable = match[1]
       if (!code.includes(variable, match.index + match[0].length)) {
         warnings.push({
-          type: 'eslint',
+          type: 'best-practice',
           message: `Unused variable: ${variable}`,
           severity: 'low'
         })
@@ -96,7 +86,7 @@ export class CodeVerifier {
     // Check for console.log statements
     if (code.includes('console.log')) {
       warnings.push({
-        type: 'eslint',
+        type: 'best-practice',
         message: 'Remove console.log statements from production code',
         severity: 'medium'
       })

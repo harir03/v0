@@ -35,6 +35,15 @@ export type ComponentType =
   | 'container'
   | 'grid'
   | 'flex'
+  | 'gallery'
+  | 'carousel'
+  | 'form'
+  | 'dashboard'
+  | 'product-grid'
+  | 'portfolio-grid'
+  | 'about'
+  | 'contact'
+  | 'services'
 
 export interface ComponentStyling {
   spacing?: {
@@ -56,11 +65,17 @@ export interface ComponentStyling {
     height?: string
     display?: string
   }
+  animations?: {
+    type?: string
+    duration?: string
+    easing?: string
+  }
 }
 
 export interface ThemeSpec {
   primaryColor: string
   secondaryColor?: string
+  accentColor?: string
   backgroundColor: string
   textColor: string
   fontFamily: string
@@ -72,7 +87,7 @@ export interface ThemeSpec {
     lg: string
     xl: string
   }
-  shadows?: {
+  shadows?: string | {
     sm: string
     md: string
     lg: string
