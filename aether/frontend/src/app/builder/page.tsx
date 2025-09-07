@@ -12,7 +12,8 @@ import {
   Activity,
   Image,
   Layout,
-  Zap
+  Zap,
+  Server
 } from 'lucide-react'
 import CodeEditor from '@/components/builder/CodeEditor'
 import LivePreview from '@/components/builder/LivePreview'
@@ -23,12 +24,13 @@ import BrandIngestionPanel from '@/components/builder/BrandIngestionPanel'
 import PerformanceDashboardPanel from '@/components/builder/PerformanceDashboardPanel'
 import TemplateLibraryPanel from '@/components/builder/TemplateLibraryPanel'
 import ComponentDesignPanel from '@/components/builder/ComponentDesignPanel'
+import BackendBuilderPanel from '@/components/builder/BackendBuilderPanel'
 import { FrameworkSelector } from '@/components/builder/FrameworkSelector'
 import { InterfaceSpec, CodeGenerationOptions, ComponentSpec } from '@/types/builder'
 import { ComponentVariant } from '@/types/component-variants'
 
 export default function BuilderPage() {
-  const [activeTab, setActiveTab] = useState<'preview' | 'code' | 'components' | 'theme' | 'templates' | 'brand' | 'github' | 'performance'>('preview')
+  const [activeTab, setActiveTab] = useState<'preview' | 'code' | 'components' | 'theme' | 'templates' | 'brand' | 'github' | 'performance' | 'backend'>('preview')
   const [currentFramework, setCurrentFramework] = useState<CodeGenerationOptions['framework']>('next')
   const [selectedComponent, setSelectedComponent] = useState<ComponentSpec | null>(null)
   const [currentSpec, setCurrentSpec] = useState<InterfaceSpec>({
@@ -140,6 +142,7 @@ export default function BuilderPage() {
     { id: 'components' as const, label: 'Components', icon: Settings },
     { id: 'theme' as const, label: 'Theme', icon: Palette },
     { id: 'brand' as const, label: 'Brand', icon: Image },
+    { id: 'backend' as const, label: 'Backend', icon: Server },
     { id: 'code' as const, label: 'Code', icon: Code },
     { id: 'performance' as const, label: 'Performance', icon: Activity },
     { id: 'github' as const, label: 'Deploy', icon: Github }
@@ -313,6 +316,11 @@ export default function BuilderPage() {
               )}
               {activeTab === 'brand' && (
                 <BrandIngestionPanel onThemeGenerated={handleThemeGenerated} />
+              )}
+              {activeTab === 'backend' && (
+                <BackendBuilderPanel onBackendGenerated={(code) => {
+                  console.log('Backend generated:', code)
+                }} />
               )}
               {activeTab === 'github' && (
                 <GitHubIntegrationPanel 
