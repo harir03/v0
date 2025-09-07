@@ -55,7 +55,7 @@ export default function NeuralNetworkAnimation() {
 
     // Animation loop
     const animate = () => {
-      ctx.fillStyle = 'rgba(10, 15, 31, 0.05)'
+      ctx.fillStyle = 'rgba(0, 8, 20, 0.05)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       // Update and draw nodes
@@ -84,10 +84,14 @@ export default function NeuralNetworkAnimation() {
             if (distance < 120) {
               node.connections.push(j)
               
-              // Draw connection line
+              // Draw connection line with gradient colors
               const opacity = (120 - distance) / 120
-              ctx.strokeStyle = `rgba(0, 191, 255, ${opacity * 0.3})`
-              ctx.lineWidth = 0.5
+              const colors = ['#00d9ff', '#6366f1', '#ec4899']
+              const colorIndex = Math.floor((distance / 120) * colors.length)
+              const color = colors[colorIndex] || colors[0]
+              
+              ctx.strokeStyle = `${color}${Math.floor(opacity * 80).toString(16).padStart(2, '0')}`
+              ctx.lineWidth = 0.8
               ctx.beginPath()
               ctx.moveTo(node.x, node.y)
               ctx.lineTo(otherNode.x, otherNode.y)
@@ -96,22 +100,27 @@ export default function NeuralNetworkAnimation() {
           }
         })
 
-        // Draw node
-        const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.radius * 2)
-        gradient.addColorStop(0, '#00BFFF')
-        gradient.addColorStop(1, 'rgba(0, 191, 255, 0)')
+        // Draw node with enhanced gradient
+        const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.radius * 3)
+        gradient.addColorStop(0, '#00d9ff')
+        gradient.addColorStop(0.5, '#6366f1')
+        gradient.addColorStop(1, 'rgba(0, 217, 255, 0)')
         
         ctx.fillStyle = gradient
         ctx.beginPath()
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2)
         ctx.fill()
 
-        // Add glow effect
-        ctx.shadowColor = '#00BFFF'
-        ctx.shadowBlur = 10
-        ctx.fillStyle = '#00BFFF'
+        // Add enhanced glow effect
+        const glowColors = ['#00d9ff', '#6366f1', '#ec4899']
+        const time = Date.now() * 0.001
+        const colorIndex = Math.floor((Math.sin(time + i * 0.1) + 1) * 1.5) % glowColors.length
+        
+        ctx.shadowColor = glowColors[colorIndex]
+        ctx.shadowBlur = 15 + Math.sin(time + i * 0.1) * 5
+        ctx.fillStyle = glowColors[colorIndex]
         ctx.beginPath()
-        ctx.arc(node.x, node.y, node.radius * 0.5, 0, Math.PI * 2)
+        ctx.arc(node.x, node.y, node.radius * 0.6, 0, Math.PI * 2)
         ctx.fill()
         ctx.shadowBlur = 0
       })
