@@ -22,17 +22,30 @@ import GitHubIntegrationPanel from '@/components/builder/GitHubIntegrationPanel'
 import BrandIngestionPanel from '@/components/builder/BrandIngestionPanel'
 import PerformanceDashboardPanel from '@/components/builder/PerformanceDashboardPanel'
 import TemplateLibraryPanel from '@/components/builder/TemplateLibraryPanel'
+import ComponentDesignPanel from '@/components/builder/ComponentDesignPanel'
 import { FrameworkSelector } from '@/components/builder/FrameworkSelector'
-import { InterfaceSpec, CodeGenerationOptions } from '@/types/builder'
+import { InterfaceSpec, CodeGenerationOptions, ComponentSpec } from '@/types/builder'
+import { ComponentVariant } from '@/types/component-variants'
 
 export default function BuilderPage() {
   const [activeTab, setActiveTab] = useState<'preview' | 'code' | 'components' | 'theme' | 'templates' | 'brand' | 'github' | 'performance'>('preview')
   const [currentFramework, setCurrentFramework] = useState<CodeGenerationOptions['framework']>('next')
+  const [selectedComponent, setSelectedComponent] = useState<ComponentSpec | null>(null)
   const [currentSpec, setCurrentSpec] = useState<InterfaceSpec>({
     id: 'demo-landing',
     name: 'Demo Landing Page',
     type: 'page',
     components: [
+      {
+        id: 'navbar-1',
+        type: 'navbar',
+        props: {
+          logoText: 'Aether',
+          menuItems: ['Features', 'Pricing', 'About', 'Contact'],
+          ctaButton: true,
+          ctaText: 'Get Started'
+        }
+      },
       {
         id: 'hero-1',
         type: 'hero',
@@ -41,6 +54,74 @@ export default function BuilderPage() {
           subtitle: 'Create beautiful, responsive websites with our AI-powered builder',
           ctaText: 'Get Started',
           ctaVariant: 'primary'
+        }
+      },
+      {
+        id: 'features-1',
+        type: 'features',
+        props: {
+          title: 'Amazing Features',
+          features: [
+            {
+              title: 'AI-Powered',
+              description: 'Leverage artificial intelligence to build better websites faster'
+            },
+            {
+              title: 'Responsive Design',
+              description: 'Your websites look great on all devices automatically'
+            },
+            {
+              title: 'Modern Stack',
+              description: 'Built with the latest web technologies and best practices'
+            }
+          ]
+        }
+      },
+      {
+        id: 'pricing-1',
+        type: 'pricing',
+        props: {
+          title: 'Simple Pricing',
+          plans: [
+            {
+              name: 'Starter',
+              price: 9,
+              features: ['5 Projects', 'Basic Support', 'Templates'],
+              featured: false
+            },
+            {
+              name: 'Pro',
+              price: 29,
+              features: ['Unlimited Projects', 'Priority Support', 'Custom Components', 'AI Features'],
+              featured: true
+            },
+            {
+              name: 'Enterprise',
+              price: 99,
+              features: ['Everything in Pro', 'White Label', 'Custom Integrations', 'Dedicated Support'],
+              featured: false
+            }
+          ]
+        }
+      },
+      {
+        id: 'cta-1',
+        type: 'cta',
+        props: {
+          title: 'Ready to Get Started?',
+          subtitle: 'Join thousands of developers building amazing websites',
+          ctaText: 'Start Building Now'
+        }
+      },
+      {
+        id: 'footer-1',
+        type: 'footer',
+        props: {
+          companyName: 'Aether',
+          description: 'Building the future of web development with AI-powered tools.',
+          links: ['About', 'Privacy', 'Terms', 'Support'],
+          email: 'hello@aether.ai',
+          phone: '+1 (555) 123-4567'
         }
       }
     ],
@@ -79,6 +160,53 @@ export default function BuilderPage() {
       setDeploymentUrl(deployUrl)
     }
     setActiveTab('performance')
+  }
+
+  const handleComponentSelect = (component: ComponentSpec) => {
+    setSelectedComponent(component)
+  }
+
+  const handleVariantSelect = (variant: ComponentVariant) => {
+    if (!selectedComponent) return
+    
+    // Convert variant styling to component styling format
+    const convertedStyling: import('@/types/builder').ComponentStyling | undefined = variant.styling ? {
+      spacing: variant.styling.spacing ? {
+        padding: variant.styling.spacing === 'tight' ? '0.5rem' : 
+                variant.styling.spacing === 'loose' ? '2rem' : '1rem',
+        margin: variant.styling.spacing === 'tight' ? '0.25rem' : 
+               variant.styling.spacing === 'loose' ? '1rem' : '0.5rem'
+      } : undefined,
+      colors: {
+        background: variant.styling.background,
+        text: variant.styling.textColor
+      },
+      layout: {
+        display: variant.styling.layout === 'grid' ? 'grid' : 
+                variant.styling.layout === 'flex' ? 'flex' : 'block'
+      }
+    } : undefined
+    
+    // Apply variant to the selected component
+    const updatedSpec = {
+      ...currentSpec,
+      components: currentSpec.components.map(comp => 
+        comp.id === selectedComponent.id 
+          ? {
+              ...comp,
+              props: { ...comp.props, ...variant.props },
+              styling: convertedStyling
+            }
+          : comp
+      )
+    }
+    
+    setCurrentSpec(updatedSpec)
+    // Keep the component selected so user can see the changes
+  }
+
+  const handleDesignPanelClose = () => {
+    setSelectedComponent(null)
   }
 
   return (
@@ -153,7 +281,11 @@ export default function BuilderPage() {
               className="h-full"
             >
               {activeTab === 'preview' && (
-                <LivePreview spec={currentSpec} />
+                <LivePreview 
+                  spec={currentSpec} 
+                  onComponentSelect={handleComponentSelect}
+                  selectedComponent={selectedComponent}
+                />
               )}
               {activeTab === 'templates' && (
                 <TemplateLibraryPanel onTemplateSelect={handleTemplateSelect} />
@@ -198,10 +330,23 @@ export default function BuilderPage() {
           </div>
 
           {/* Right Panel - Always Preview */}
-          <div className="w-1/2">
-            <LivePreview spec={currentSpec} />
+          <div className="w-1/2 relative">
+            <LivePreview 
+              spec={currentSpec} 
+              onComponentSelect={handleComponentSelect}
+              selectedComponent={selectedComponent}
+            />
           </div>
         </div>
+
+        {/* Component Design Panel - Overlay */}
+        {selectedComponent && (
+          <ComponentDesignPanel
+            selectedComponent={selectedComponent}
+            onVariantSelect={handleVariantSelect}
+            onClose={handleDesignPanelClose}
+          />
+        )}
       </div>
     </div>
   )
