@@ -1,23 +1,96 @@
-# VS Code temporary file
-tempCodeRunnerFile.python
-
-# Screenshot folder (optional, see explanation)
-screenshots/
-
-# Python specific files
+# Byte-compiled / optimized / DLL files
 __pycache__/
-venv/
-*.pyc
-# Python virtual environment
-venv/
-__pycache__/
+*.py[cod]
+*$py.class
 
-# Screenshots and logs
-screenshots/
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# Logs
 logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# node_modules
+node_modules/
+jspm_packages/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# dotenv environment variable files
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Next.js build output
+.next
+out
+
+# IDE
+.vscode/
+.idea/
+
+# MacOS
+.DS_Store
+
+# Screenshots
+screenshots/
+
+# Account histories
+account_histories/
+
+# Local data
+*.db
+*.sqlite
+*.sqlite3
 
 # History and config files
 comment_history.json
 accounts_config.json
 scheduler_config.json
-*.db
+
+# VS Code temporary file
+tempCodeRunnerFile.python
+
+# Temporary files
+tmp/
+temp/
