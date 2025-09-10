@@ -20,8 +20,8 @@ SEARCH_URL_TEMPLATE = "https://www.linkedin.com/search/results/content/?keywords
 OLLAMA_URL = "http://localhost:11434/api/generate"  # Default Ollama endpoint
 
 # Ensure screenshots directory exists
-if not os.path.exists("screenshots"):
-    os.makedirs("screenshots")
+if not os.path.exists("screenshotsssinha"):
+    os.makedirs("screenshotsssinha")
 
 # --- Post Tracking Class ---
 class PostTracker:

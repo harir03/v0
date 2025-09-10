@@ -1,0 +1,28 @@
+{
+  "proxy_pools": {
+    "premium_residential": {
+      "name": "Premium Residential Proxies",
+      "rotation_method": "health_based",
+      "proxies": [
+        {
+          "url": "http://username:password@proxy1.provider.com:8080",
+          "location": "US-East",
+          "type": "residential",
+          "enabled": true
+        },
+        {
+          "url": "http://username:password@proxy2.provider.com:8080",
+          "location": "US-West",
+          "type": "residential",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  "proxy_settings": {
+    "global_enabled": true,
+    "health_check_url": "https://httpbin.org/ip",
+    "rotation_strategy": "health_based",
+    "fallback_to_direct": true
+  }
+}

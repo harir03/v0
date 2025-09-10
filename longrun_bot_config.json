@@ -1,0 +1,45 @@
+{
+  "long_run_config": {
+    "max_comments_per_account": 150,
+    "session_management": {
+      "comments_per_session": 25,
+      "session_break_duration": [
+        900,
+        1800
+      ],
+      "daily_session_limit": 6
+    },
+    "stealth_timing": {
+      "min_comment_interval": [
+        120,
+        300
+      ],
+      "typing_speed": {
+        "min_chars_per_second": 2,
+        "max_chars_per_second": 8
+      }
+    }
+  },
+  "accounts": [
+    {
+      "name": "account1",
+      "username": "your-email@example.com",
+      "password": "your-password",
+      "proxy_pool": "premium_residential",
+      "daily_comment_target": 150,
+      "keywords": [
+        "artificial intelligence",
+        "machine learning",
+        "data science",
+        "python programming",
+        "software engineering"
+      ],
+      "enabled": true
+    }
+  ],
+  "ollama_config": {
+    "enabled": true,
+    "api_url": "http://localhost:11434/api/generate",
+    "model": "llama3:8b"
+  }
+}

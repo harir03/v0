@@ -1,0 +1,13 @@
+{
+  "hari": {
+    "name": "hari",
+    "keywords": [
+      "Ai/Ml"
+    ],
+    "max_comments_per_day": 100,
+    "created_at": "2025-09-09T16:01:51.430902",
+    "last_used": null,
+    "total_comments": 0,
+    "active": true
+  }
+}

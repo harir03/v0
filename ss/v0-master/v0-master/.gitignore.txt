@@ -1,0 +1,34 @@
+# VS Code temporary file
+tempCodeRunnerFile.python
+
+# Screenshot folder (optional, see explanation)
+screenshots/
+
+# Python specific files
+__pycache__/
+venv/
+*.pyc
+
+# v1 Bot specific files
+logs/
+account_histories/
+*.log
+
+# Configuration files with sensitive data (optional)
+# Uncomment if you want to exclude config files from version control
+# accounts_config.json
+# scheduler_config.json
+
+# Temporary files
+tmp/
+temp/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# IDE specific
+.vscode/
+.idea/
+*.swp
+*.swo__pycache__/
